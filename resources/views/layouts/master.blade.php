@@ -204,15 +204,24 @@
                         <li class="menu-title">
                             <span>Main Menu</span>
                         </li>
+                        <!-- Admin Dashboard: Visible only to admin users -->
+                        @role('admin')
                         <li>
                             <a href="kict-dashboard"><i class="feather-grid"></i> <span> Admin Dashboard</span> </a>
                         </li>
+                        @endrole
+                        <!-- Teacher Dashboard: Visible only to teacher users -->
+                        @role('advisor')
                         <li>
-                            <a href="teacher-dashboard"><i class="feather-grid"></i> <span> Teacher Dashboard</span> </a>
+                            <a href="teacher-dashboard"><i class="feather-grid"></i> <span> Advisor Dashboard</span> </a>
                         </li>
+                        @endrole
+                        <!-- Student Dashboard: Visible only to student users -->
+                        @role('student')
                         <li>
                             <a href="dashboard"><i class="feather-grid"></i> <span> Student Dashboard</span> </a>
                         </li>
+                        @endrole
                         <li class="submenu">
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span> Students</span> <span
                             class="menu-arrow"></span></a>
@@ -243,12 +252,15 @@
                             </ul>
                         </li> -->
                         <li class="submenu">
-                            <a href="#"><i class="fas fa-book-reader"></i> <span> Subjects</span> <span
+                            <a href="#"><i class="fas fa-book-reader"></i> <span> Course</span> <span
                                     class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="subjects">Subject List</a></li>
-                                <li><a href="add-course">Subject Add</a></li>
-                                <li><a href="edit-subject">Subject Edit</a></li>
+                                <li><a href="{{ route('course.index') }}">Course List</a></li>
+                                @role('admin')
+                                <li><a href="{{ route('course.create') }}">Course Add</a></li>
+                                @endrole
+
+                                <li><a href="edit-subject">Course Edit</a></li>
                             </ul>
                         </li>
                         <li class="submenu">

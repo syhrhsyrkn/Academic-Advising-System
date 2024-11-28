@@ -4,82 +4,45 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CourseController extends Controller
 {
-    public function __construct()
+    // Show the form to add a new course (only for admins)
+    public function addCourse()
     {
-        // Define middleware for role-specific access
-        $this->middleware('role:admin')->only(['create', 'store', 'edit', 'update', 'destroy']);
-        $this->middleware('role:admin|advisor|student')->only(['index', 'show']);
+        return view('course.add-course'); // A view where admin can add a course
     }
 
-    // View all courses (accessible to admin, advisor, and student)
+    // Store the new course (only for admins)
+    public function store(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'course_code' => 'required|string|max:50|unique:courses',
+            'prerequisite' => 'nullable|string|max:255',
+            'credit_hour' => 'required|integer|min:1',
+            'description' => 'required|string',
+        ]);
+
+        // Create a new course
+        Course::create([
+            'name' => $request->name,
+            'course_code' => $request->course_code,
+            'prerequisite' => $request->prerequisite,
+            'credit_hour' => $request->credit_hour,
+            'description' => $request->description,
+        ]);
+
+        // Redirect with a success message
+        return redirect()->route('course.index')->with('success', 'Course added successfully');
+    }
+
+    // Display the list of courses (for admin, advisor, and student)
     public function index()
     {
         $courses = Course::all();
-        return view('course.index-course', compact('courses'));
+        return view('course.index-course', compact('courses')); // Adjust the view name to 'index-course'
     }
-
-    // View a specific course (accessible to admin, advisor, and student)
-    public function show(Course $course)
-    {
-        return view('course.show', compact('course'));
-    }
-
-
-    public function create()
-    {
-        return view('course.add-course'); 
-    }
-
-    // Store a new course (accessible to admin only)
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:courses',
-            'description' => 'nullable|string',
-            'prerequisite' => 'nullable|string',
-        ]);
-
-        Course::create([
-            'name' => $request->name,
-            'code' => $request->code,
-            'description' => $request->description,
-            'prerequisite' => $request->prerequisite,
-        ]);
-
-        return redirect()->route('course.index')->with('success', 'Course created successfully.');
-    }
-
-    // Show the page to edit a course (accessible to admin only)
-    public function edit(Course $course)
-    {
-        return view('course.edit', compact('course'));
-    }
-
-    // Update an existing course (accessible to admin only)
-    public function update(Request $request, Course $course)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50',
-            'description' => 'nullable|string',
-            'prerequisite' => 'nullable|string',
-        ]);
-
-        $course->update($request->all());
-
-        return redirect()->route('course.index')->with('success', 'Course updated successfully.');
-    }
-    
-    // Allow only admins to delete a course.
-    public function destroy(Course $course)
-    {
-        $course->delete();
-        return redirect()->route('course.index')->with('success', 'Course deleted successfully.');
-    }
-    
-
 }

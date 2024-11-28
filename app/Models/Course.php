@@ -11,9 +11,9 @@ class Course extends Model
 
     protected $fillable = [
         'name',
-        'code',
+        'course_code',
+        'prerequisite',
+        'credit_hour',
         'description',
-        'prerequisite', // Add prerequisite to fillable
-
     ];
 }
