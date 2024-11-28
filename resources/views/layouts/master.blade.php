@@ -185,9 +185,9 @@
                         </div>
                         <a class="dropdown-item" href="profile">My Profile</a>
                         <a class="dropdown-item" href="inbox.html">Inbox</a>
-                        <form method="POST" action="{{ route('logout') }}" class="dropdown-item" style="display: inline;">
+                        <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
-                            <button type="submit"  style="background: none; border: none; padding: 0; text-align: left;">Logout</button>
                         </form>
                     </div>
                 </li>
