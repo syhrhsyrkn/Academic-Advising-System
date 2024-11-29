@@ -38,9 +38,20 @@
 
                         <!-- Course Code -->
                         <div class="form-group">
-                            <label for="code">Course Code</label>
-                            <input type="text" name="code" class="form-control @error('code') is-invalid @enderror" required value="{{ old('code') }}">
-                            @error('code')
+                            <label for="course_code">Course Code</label>
+                            <input type="text" name="course_code" class="form-control @error('course_code') is-invalid @enderror" required value="{{ old('course_code') }}">
+                            @error('course_code')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        
+                        <!-- Credit Hour (CHR) -->
+                        <div class="form-group">
+                            <label for="credit_hour">Credit Hour</label>
+                            <input type="number" name="credit_hour" id="credit_hour" class="form-control @error('credit_hour') is-invalid @enderror" value="{{ old('credit_hour') }}" min="0">
+                            @error('credit_hour')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>

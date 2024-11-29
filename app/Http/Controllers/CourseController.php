@@ -11,10 +11,10 @@ class CourseController extends Controller
     // Show the form to add a new course (only for admins)
     public function addCourse()
     {
-        return view('course.add-course'); // A view where admin can add a course
+        return view('course.add-course');
     }
 
-    // Store the new course (only for admins)
+    // Store the new course and redirect back to the add-course page
     public function store(Request $request)
     {
         // Validate the request
@@ -34,15 +34,22 @@ class CourseController extends Controller
             'credit_hour' => $request->credit_hour,
             'description' => $request->description,
         ]);
+        Course::create($request->all());
 
-        // Redirect with a success message
-        return redirect()->route('course.index')->with('success', 'Course added successfully');
+        // Redirect to the same page with a success message
+        return redirect()->route('course.create')->with('success', 'Course added successfully');
     }
 
-    // Display the list of courses (for admin, advisor, and student)
+    // Display the list of courses
     public function index()
     {
         $courses = Course::all();
-        return view('course.index-course', compact('courses')); // Adjust the view name to 'index-course'
+        return view('course.index-course', compact('courses'));
+    }
+
+    // Show a single course
+    public function show(Course $course)
+    {
+        return view('course.show-course', compact('course'));
     }
 }

@@ -54,16 +54,15 @@ Route::middleware([
 
 
     Route::middleware(['role:admin'])->group(function () {
-        // Admin can access the add-course page and store new courses
-        Route::get('/add-course', [CourseController::class, 'addCourse'])->name('course.create');
-        Route::post('/add-course', [CourseController::class, 'store'])->name('course.store');
+        Route::get('/course/add-course', [CourseController::class, 'addCourse'])->name('course.create');
+        Route::post('/course/add-course', [CourseController::class, 'store'])->name('course.store');
     });
-
+    
     Route::middleware(['role:admin|advisor|student'])->group(function () {
-        // All roles (admin, advisor, student) can view the course list
-        Route::get('/course', [CourseController::class, 'index'])->name('course.index');
+        Route::get('/course', [CourseController::class, 'index'])->name('course.index-course');
+        Route::get('/course/{course}', [CourseController::class, 'show'])->name('course.show');
     });
-
+    
     //logout
     Route::post('/logout', [LogoutController::class, 'destroy'])->name('logout');
 });
