@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\CourseController;
+use App\Models\Course;
 
 
 Route::get('/', function () {
@@ -24,8 +25,12 @@ Route::middleware([
     //sidebar
     //dashboard
     Route::get('/kict-dashboard', function () {
-        return view('admin/kict-dashboard');
+        // Retrieve all courses
+        $courses = Course::all();
+
+        return view('admin.kict-dashboard', compact('courses'));
     })->name('kict-dashboard');
+
 
     Route::get('/teacher-dashboard', function () {
         return view('advisor/teacher-dashboard');
@@ -57,7 +62,7 @@ Route::middleware([
         Route::post('/course/add-course', [CourseController::class, 'store'])->name('course.store');
         Route::get('/course/{course}/edit', [CourseController::class, 'edit'])->name('course.edit');
         Route::put('/course/{course}', [CourseController::class, 'update'])->name('course.update');
-        Route::delete('/course/{course}', [CourseController::class, 'destroy'])->name('course.destroy');
+        Route::post('/course/delete/{course}', [CourseController::class, 'destroy'])->name('course.destroy');
 
     });
 

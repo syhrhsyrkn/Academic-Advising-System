@@ -41,14 +41,15 @@
                                         @role('admin|advisor|student')
                                             <a href="{{ route('course.show', $course->id) }}" class="btn btn-info btn-sm">View</a>
                                         @endrole
-                                        @role('admin')                                            
+                                        @role('admin')
                                             <a href="{{ route('course.edit', $course->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                            <form action="{{ route('course.index', $course->id) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('course.destroy', $course->id) }}" method="POST">
                                                 @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this course?')">Delete</button>
+                                                <button type="submit" class="btn btn-danger">Delete</button>
                                             </form>
-                                        @endrole
+                                        @elseif(auth()->user()->hasRole('advisor') || auth()->user()->hasRole('student'))
+                                            <a href="{{ route('course.show', $course->id) }}" class="btn btn-info btn-sm">View</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
