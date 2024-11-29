@@ -52,17 +52,16 @@ Route::middleware([
         return view('edit-student');
     })->name('edit-student');
 
-
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/course/add-course', [CourseController::class, 'addCourse'])->name('course.create');
         Route::post('/course/add-course', [CourseController::class, 'store'])->name('course.store');
     });
-    
+
     Route::middleware(['role:admin|advisor|student'])->group(function () {
-        Route::get('/course', [CourseController::class, 'index'])->name('course.index-course');
+        Route::get('/course', [CourseController::class, 'index'])->name('course.index');
         Route::get('/course/{course}', [CourseController::class, 'show'])->name('course.show');
     });
-    
+
     //logout
     Route::post('/logout', [LogoutController::class, 'destroy'])->name('logout');
 });

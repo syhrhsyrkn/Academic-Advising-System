@@ -28,7 +28,7 @@ class RegisteredUserController extends Controller
         ]);
 
         // Assign the role
-        $user->assignRole($data['role']);
+        // $user->assignRole($data['role']);
 
         // Dispatch Registered event
         event(new Registered($user));
