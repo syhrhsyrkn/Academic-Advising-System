@@ -5,14 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <title>KICT Dashboard</title>
-    <link rel="shortcut icon" href="assets/img/favicon.png">
+    <link rel="shortcut icon" href="{{asset('assets/img/favicon.png')}}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap"rel="stylesheet">
-    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/plugins/feather/feather.css">
-    <link rel="stylesheet" href="assets/plugins/icons/flags/flags.css">
-    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
-    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugins/feather/feather.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugins/icons/flags/flags.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <!-- Bootstrap CSS -->
 <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
@@ -29,10 +29,10 @@
 
             <div class="header-left">
                 <a href="/dashboard" class="logo">
-                    <img src="assets/img/logo.png" alt="Logo">
+                    <img src="{{asset('assets/img/logo.png')}}" alt="Logo">
                 </a>
                 <a href="/dashboard" class="logo logo-small">
-                    <img src="assets/img/logo-small.png" alt="Logo" width="30" height="30">
+                    <img src="{{asset('assets/img/logo-small.png')}}" alt="Logo" width="30" height="30">
                 </a>
             </div>
             <div class="menu-toggle">
@@ -54,7 +54,7 @@
             <ul class="nav user-menu">
                 <li class="nav-item dropdown noti-dropdown language-drop me-2">
                     <a href="#" class="dropdown-toggle nav-link header-nav-list" data-bs-toggle="dropdown">
-                        <img src="assets/img/icons/header-icon-01.svg" alt="">
+                        <img src="{{asset('assets/img/icons/header-icon-01.svg')}}" alt="">
                     </a>
                     <div class="dropdown-menu ">
                         <div class="noti-content">
@@ -71,7 +71,7 @@
 
                 <li class="nav-item dropdown noti-dropdown me-2">
                     <a href="#" class="dropdown-toggle nav-link header-nav-list" data-bs-toggle="dropdown">
-                        <img src="assets/img/icons/header-icon-05.svg" alt="">
+                        <img src="{{asset('assets/img/icons/header-icon-05.svg')}}" alt="">
                     </a>
                     <div class="dropdown-menu notifications">
                         <div class="topnav-dropdown-header">
@@ -85,7 +85,7 @@
                                         <div class="media d-flex">
                                             <span class="avatar avatar-sm flex-shrink-0">
                                                 <img class="avatar-img rounded-circle" alt="User Image"
-                                                    src="assets/img/profiles/avatar-02.jpg">
+                                                    src="{{asset('assets/img/profiles/avatar-02.jpg')}}">
                                             </span>
                                             <div class="media-body flex-grow-1">
                                                 <p class="noti-details"><span class="noti-title">Carlson Tech</span> has
@@ -101,7 +101,7 @@
                                         <div class="media d-flex">
                                             <span class="avatar avatar-sm flex-shrink-0">
                                                 <img class="avatar-img rounded-circle" alt="User Image"
-                                                    src="assets/img/profiles/avatar-11.jpg">
+                                                    src="{{asset('assets/img/profiles/avatar-11.jpg')}}">
                                             </span>
                                             <div class="media-body flex-grow-1">
                                                 <p class="noti-details"><span class="noti-title">International Software
@@ -118,7 +118,7 @@
                                         <div class="media d-flex">
                                             <span class="avatar avatar-sm flex-shrink-0">
                                                 <img class="avatar-img rounded-circle" alt="User Image"
-                                                    src="assets/img/profiles/avatar-17.jpg">
+                                                    src="{{asset('assets/img/profiles/avatar-17.jpg')}}">
                                             </span>
                                             <div class="media-body flex-grow-1">
                                                 <p class="noti-details"><span class="noti-title">John Hendry</span> sent
@@ -135,7 +135,7 @@
                                         <div class="media d-flex">
                                             <span class="avatar avatar-sm flex-shrink-0">
                                                 <img class="avatar-img rounded-circle" alt="User Image"
-                                                    src="assets/img/profiles/avatar-13.jpg">
+                                                    src="{{asset('assets/img/profiles/avatar-13.jpg')}}">
                                             </span>
                                             <div class="media-body flex-grow-1">
                                                 <p class="noti-details"><span class="noti-title">Mercury Software
@@ -157,7 +157,7 @@
 
                 <li class="nav-item zoom-screen me-2">
                     <a href="#" class="nav-link header-nav-list win-maximize">
-                        <img src="assets/img/icons/header-icon-04.svg" alt="">
+                        <img src="{{asset('assets/img/icons/header-icon-04.svg')}}" alt="">
                     </a>
                 </li>
 
@@ -258,7 +258,7 @@
                                 <li><a href="{{ route('course.index') }}">Course List</a></li>
                                 @role('admin')
                                 <li><a href="{{ route('course.create') }}">Course Add</a></li>
-                                <li><a href="{{ route('course.edit') }}">Course Edit</a></li>
+                                <li><a href="{{ route('course.edit', $course->id) }}">Course Edit</a></li>
                                 @endrole
                             </ul>
                         </li>
@@ -507,13 +507,13 @@
 
 
 
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
-    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/feather.min.js"></script>
-    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="assets/plugins/apexchart/apexcharts.min.js"></script>
-    <script src="assets/plugins/apexchart/chart-data.js"></script>
-    <script src="assets/js/script.js"></script>
+    <script src="{{asset('assets/js/jquery-3.6.0.min.js')}}"></script>
+    <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('assets/js/feather.min.js')}}"></script>
+    <script src="{{asset('assets/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+    <script src="{{asset('assets/plugins/apexchart/apexcharts.min.js')}}"></script>
+    <script src="{{asset('assets/plugins/apexchart/chart-data.js')}}"></script>
+    <script src="{{asset('assets/js/script.js')}}"></script>
 
     {{-- <script src="assets/plugins/simple-calendar/jquery.simple-calendar.js"></script>
     <script src="assets/js/calander.js"></script>

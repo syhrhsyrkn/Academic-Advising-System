@@ -1,13 +1,14 @@
 @extends('layouts.master')
-@section('content')
 
-<!DOCTYPE html>
-<html>
 <head>
     <title>Add New Course</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body>
+
+@section('content')
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -46,7 +47,7 @@
                                 </span>
                             @enderror
                         </div>
-                        
+
                         <!-- Credit Hour (CHR) -->
                         <div class="form-group">
                             <label for="credit_hour">Credit Hour</label>
@@ -88,6 +89,7 @@
         </div>
     </div>
 </div>
+@endsection
 
 <!-- Bootstrap JS and dependencies (Optional) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
