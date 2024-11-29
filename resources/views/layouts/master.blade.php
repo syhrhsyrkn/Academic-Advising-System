@@ -258,7 +258,6 @@
                                 <li><a href="{{ route('course.index') }}">Course List</a></li>
                                 @role('admin')
                                 <li><a href="{{ route('course.create') }}">Course Add</a></li>
-                                <li><a href="{{ route('course.edit', $course->id) }}">Course Edit</a></li>
                                 @endrole
                             </ul>
                         </li>
