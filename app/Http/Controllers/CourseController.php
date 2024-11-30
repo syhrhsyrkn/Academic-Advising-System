@@ -34,7 +34,6 @@ class CourseController extends Controller
             'credit_hour' => $request->credit_hour,
             'description' => $request->description,
         ]);
-        Course::create($request->all());
 
         // Redirect to the same page with a success message
         return redirect()->route('course.create')->with('success', 'Course added successfully');

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -28,7 +29,7 @@ class RegisteredUserController extends Controller
         ]);
 
         // Assign the role
-        // $user->assignRole($data['role']);
+        $user->assignRole('student');
 
         // Dispatch Registered event
         event(new Registered($user));
