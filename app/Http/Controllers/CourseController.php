@@ -25,7 +25,6 @@ class CourseController extends Controller
             'credit_hour' => 'required|integer|min:1',
             'description' => 'required|string',
         ]);
-
         // Create a new course
         Course::create([
             'name' => $request->name,
@@ -45,10 +44,10 @@ class CourseController extends Controller
         // Get sorting parameters
         $sortBy = $request->get('sort_by', 'name'); // Default sort by 'name'
         $order = $request->get('order', 'asc'); // Default order 'asc'
-    
+
         // Get search query
         $search = $request->get('search'); // Get search parameter
-    
+
         // Fetch courses, with optional search and sorting
         $courses = Course::query()
             ->when($search, function ($query) use ($search) {
@@ -57,11 +56,11 @@ class CourseController extends Controller
             })
             ->orderBy($sortBy, $order)
             ->get();
-    
+
         // Pass current sorting and search parameters to the view
         return view('course.index-course', compact('courses', 'sortBy', 'order', 'search'));
     }
-    
+
     // Show a single course
     public function show(Course $course)
     {
