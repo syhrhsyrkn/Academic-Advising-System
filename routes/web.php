@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\ProfileController;
 use App\Models\Course;
 
 
@@ -19,15 +20,13 @@ Route::middleware([
     {
     //taskbar
     Route::get('/profile', function () {
-        return view('profile');
+        return view('/profile/profile');
     })->name('profile');
 
     //sidebar
     //dashboard
     Route::get('/kict-dashboard', function () {
-        // Retrieve all courses
         $courses = Course::all();
-
         return view('admin.kict-dashboard', compact('courses'));
     })->name('kict-dashboard');
 
@@ -56,6 +55,14 @@ Route::middleware([
         return view('edit-student');
     })->name('edit-student');
 
+    //profile
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    });
+
+    //course
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/course/add-course', [CourseController::class, 'addCourse'])->name('course.create');
         Route::post('/course/add-course', [CourseController::class, 'store'])->name('course.store');
