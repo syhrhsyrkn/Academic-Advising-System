@@ -41,12 +41,28 @@ class CourseController extends Controller
     }
 
     // Display the list of courses
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::all();
-        return view('course.index-course', compact('courses'));
+        // Get sorting parameters
+        $sortBy = $request->get('sort_by', 'name'); // Default sort by 'name'
+        $order = $request->get('order', 'asc'); // Default order 'asc'
+    
+        // Get search query
+        $search = $request->get('search'); // Get search parameter
+    
+        // Fetch courses, with optional search and sorting
+        $courses = Course::query()
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('course_code', 'like', '%' . $search . '%');
+            })
+            ->orderBy($sortBy, $order)
+            ->get();
+    
+        // Pass current sorting and search parameters to the view
+        return view('course.index-course', compact('courses', 'sortBy', 'order', 'search'));
     }
-
+    
     // Show a single course
     public function show(Course $course)
     {

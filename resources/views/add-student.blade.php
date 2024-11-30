@@ -166,4 +166,3 @@ Choose File <input type="file">
 
 <script src="assets/js/script.js"></script>
 </body>
-</html>

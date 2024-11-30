@@ -31,7 +31,6 @@ Route::middleware([
         return view('admin.kict-dashboard', compact('courses'));
     })->name('kict-dashboard');
 
-
     Route::get('/teacher-dashboard', function () {
         return view('advisor/teacher-dashboard');
     })->name('teacher-dashboard');
@@ -63,7 +62,6 @@ Route::middleware([
         Route::get('/course/{course}/edit', [CourseController::class, 'edit'])->name('course.edit');
         Route::put('/course/{course}', [CourseController::class, 'update'])->name('course.update');
         Route::post('/course/delete/{course}', [CourseController::class, 'destroy'])->name('course.destroy');
-
     });
 
     Route::middleware(['role:admin|advisor|student'])->group(function () {
