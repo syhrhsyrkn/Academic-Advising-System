@@ -46,6 +46,7 @@ class CourseController extends Controller
         $sortBy = $request->get('sort_by', 'name'); // Default sort by 'name'
         $order = $request->get('order', 'asc'); // Default order 'asc'
     
+
         // Get search query
         $search = $request->get('search'); // Get search parameter
     
