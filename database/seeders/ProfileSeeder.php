@@ -15,6 +15,7 @@ class ProfileSeeder extends Seeder
         if ($adminUser && !$adminUser->profile) {
             Profile::create([
                 'user_id' => $adminUser->id,
+                'email' => 'admin@gmail.com',
                 'full_name' => 'Admin Full Name',
                 'contact_number' => '0123456789',
                 'kulliyyah' => 'Kulliyyah of ICT',
@@ -28,6 +29,7 @@ class ProfileSeeder extends Seeder
         if ($studentUser && !$studentUser->profile) {
             Profile::create([
                 'user_id' => $studentUser->id,
+                'email'=> 'student@gmail.com',
                 'full_name' => 'Student Full Name',
                 'contact_number' => '0987654321',
                 'kulliyyah' => 'Kulliyyah of ICT',
@@ -44,6 +46,7 @@ class ProfileSeeder extends Seeder
         if ($advisorUser && !$advisorUser->profile) {
             Profile::create([
                 'user_id' => $advisorUser->id,
+                'email'=> 'advisor@gmail.com',
                 'full_name' => 'Advisor Full Name',
                 'contact_number' => '0198765432',
                 'kulliyyah' => 'Kulliyyah of ICT',
