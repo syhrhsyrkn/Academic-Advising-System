@@ -13,16 +13,26 @@
             <input type="text" name="full_name" class="form-control" value="{{ $profile->full_name }}" required>
         </div>
 
+        @role(student)
+            <div class="form-group">
+                <label>Matric No</label>
+                <input type="text" name="matric_no" class="form-control" value="{{ $profile->matric_no }}">
+            </div>
+        @endrole
+
+        @role('admin'|'advisor')
+            <div class="form-group">
+                <label>Staff ID</label>
+                <input type="text" name="staff_id" class="form-control" value="{{ $profile->staff_id }}">
+            </div>
+        @endrole
+        
         <div class="form-group">
             <label>Contact Number</label>
             <input type="text" name="contact_number" class="form-control" value="{{ $profile->contact_number }}" required>
         </div>
 
-        @if(auth()->user()->hasRole('student'))
-            <div class="form-group">
-                <label>Matric No</label>
-                <input type="text" name="matric_no" class="form-control" value="{{ $profile->matric_no }}">
-            </div>
+        @role(student)
             <div class="form-group">
                 <label>Specialisation</label>
                 <input type="text" name="specialisation" class="form-control" value="{{ $profile->specialisation }}">
@@ -35,7 +45,7 @@
                 <label>Semester</label>
                 <input type="number" name="semester" class="form-control" value="{{ $profile->semester }}">
             </div>
-        @endif
+        @endrole
         
         <div class="form-group">
             <label>Kulliyyah</label>
@@ -46,13 +56,6 @@
             <label>Department</label>
             <input type="text" name="department" class="form-control" value="{{ $profile->department }}" required>
         </div>
-
-        @if(auth()->user()->hasRole(['advisor', 'admin']))
-            <div class="form-group">
-                <label>Staff ID</label>
-                <input type="text" name="staff_id" class="form-control" value="{{ $profile->staff_id }}">
-            </div>
-        @endif
 
         <button type="submit" class="btn btn-primary">Save Changes</button>
     </form>

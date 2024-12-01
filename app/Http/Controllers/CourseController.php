@@ -19,18 +19,20 @@ class CourseController extends Controller
     {
         // Validate the request
         $request->validate([
-            'name' => 'required|string|max:255',
             'course_code' => 'required|string|max:50|unique:courses',
-            'prerequisite' => 'nullable|string|max:255',
+            'name' => 'required|string|max:255',
             'credit_hour' => 'required|integer|min:1',
+            'classification' => 'required|in:KRC,DRC,Unicore,DS',
+            'prerequisite' => 'nullable|string|max:255',
             'description' => 'required|string',
         ]);
         // Create a new course
         Course::create([
-            'name' => $request->name,
             'course_code' => $request->course_code,
-            'prerequisite' => $request->prerequisite,
+            'name' => $request->name,
             'credit_hour' => $request->credit_hour,
+            'classification' => $request->classification,
+            'prerequisite' => $request->prerequisite,
             'description' => $request->description,
         ]);
 
@@ -78,19 +80,21 @@ class CourseController extends Controller
     {
         // Validate the request
         $request->validate([
-            'name' => 'required|string|max:255',
             'course_code' => 'required|string|max:50|unique:courses,course_code,' . $course->id,
-            'prerequisite' => 'nullable|string|max:255',
+            'name' => 'required|string|max:255',
             'credit_hour' => 'required|integer|min:1',
+            'classification' => 'required|in:KRC,DRC,Unicore,DS', 
+            'prerequisite' => 'nullable|string|max:255',
             'description' => 'required|string',
         ]);
 
         // Update the course
         $course->update([
-            'name' => $request->name,
             'course_code' => $request->course_code,
-            'prerequisite' => $request->prerequisite,
+            'name' => $request->name,
             'credit_hour' => $request->credit_hour,
+            'classification' => $request->classification,
+            'prerequisite' => $request->prerequisite,
             'description' => $request->description,
         ]);
 

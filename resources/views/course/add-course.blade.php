@@ -26,17 +26,6 @@
                     <form action="{{ route('course.store') }}" method="POST">
                         @csrf
 
-                        <!-- Course Name -->
-                        <div class="form-group">
-                            <label for="name">Course Name</label>
-                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" required value="{{ old('name') }}">
-                            @error('name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-
                         <!-- Course Code -->
                         <div class="form-group">
                             <label for="course_code">Course Code</label>
@@ -48,11 +37,39 @@
                             @enderror
                         </div>
 
+                        <!-- Course Name -->
+                        <div class="form-group">
+                            <label for="name">Course Name</label>
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" required value="{{ old('name') }}">
+                            @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+
                         <!-- Credit Hour (CHR) -->
                         <div class="form-group">
                             <label for="credit_hour">Credit Hour</label>
                             <input type="number" name="credit_hour" id="credit_hour" class="form-control @error('credit_hour') is-invalid @enderror" value="{{ old('credit_hour') }}" min="0">
                             @error('credit_hour')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <!-- Course Classification -->
+                        <div class="form-group">
+                            <label for="classification">Classification</label>
+                            <select name="classification" class="form-control @error('classification') is-invalid @enderror" required>
+                                <option value="">Select Classification</option>
+                                <option value="KRC" {{ old('classification', $course->classification ?? '') === 'KRC' ? 'selected' : '' }}>Kuliyyah Required Course (KRC)</option>
+                                <option value="DRC" {{ old('classification', $course->classification ?? '') === 'DRC' ? 'selected' : '' }}>Department Required Course (DRC)</option>
+                                <option value="Unicore" {{ old('classification', $course->classification ?? '') === 'Unicore' ? 'selected' : '' }}>Unicore</option>
+                                <option value="DS" {{ old('classification', $course->classification ?? '') === 'DS' ? 'selected' : '' }}>Department Specialisation (DS)</option>
+                            </select>
+                            @error('classification')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>

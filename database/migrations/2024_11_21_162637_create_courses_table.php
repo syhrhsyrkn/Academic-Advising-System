@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('course_code')->unique(); 
+            $table->string('name');
             $table->string('credit_hour');
-            $table->string('prerequisite');
+            $table->string('prerequisite')->nullable();
+            $table->enum('classification', ['KRC', 'DRC', 'Unicore', 'DS']);
             $table->text('description')->nullable();
             $table->timestamps();
         });

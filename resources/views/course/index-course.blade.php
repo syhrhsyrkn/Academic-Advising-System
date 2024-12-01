@@ -34,14 +34,6 @@
                         <thead>
                             <tr>
                                 <th>
-                                    <a href="{{ route('course.index', ['sort_by' => 'name', 'order' => $sortBy === 'name' && $order === 'asc' ? 'desc' : 'asc', 'search' => $search]) }}">
-                                        Course Name
-                                        @if($sortBy === 'name')
-                                            <i class="fas fa-sort-{{ $order === 'asc' ? 'up' : 'down' }}"></i>
-                                        @endif
-                                    </a>
-                                </th>
-                                <th>
                                     <a href="{{ route('course.index', ['sort_by' => 'course_code', 'order' => $sortBy === 'course_code' && $order === 'asc' ? 'desc' : 'asc', 'search' => $search]) }}">
                                         Course Code
                                         @if($sortBy === 'course_code')
@@ -49,7 +41,16 @@
                                         @endif
                                     </a>
                                 </th>
+                                <th>
+                                    <a href="{{ route('course.index', ['sort_by' => 'name', 'order' => $sortBy === 'name' && $order === 'asc' ? 'desc' : 'asc', 'search' => $search]) }}">
+                                        Course Name
+                                        @if($sortBy === 'name')
+                                            <i class="fas fa-sort-{{ $order === 'asc' ? 'up' : 'down' }}"></i>
+                                        @endif
+                                    </a>
+                                </th>
                                 <th>Credit Hour</th>
+                                <th>Classification</th>
                                 <th>Prerequisite</th>
                                 <th>Description</th>
                                 <th>Actions</th>
@@ -58,9 +59,10 @@
                         <tbody>
                             @forelse($courses as $course)
                                 <tr class="{{ $search && (stripos($course->name, $search) !== false || stripos($course->course_code, $search) !== false) ? 'table-primary' : '' }}">
-                                    <td>{{ $course->name }}</td>
                                     <td>{{ $course->course_code }}</td>
+                                    <td>{{ $course->name }}</td>
                                     <td>{{ $course->credit_hour }}</td>
+                                    <td>{{ $course->classification }}</td>
                                     <td>{{ $course->prerequisite }}</td>
                                     <td>{{ $course->description }}</td>
                                     <td>
