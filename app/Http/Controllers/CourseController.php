@@ -22,7 +22,7 @@ class CourseController extends Controller
             'course_code' => 'required|string|max:50|unique:courses',
             'name' => 'required|string|max:255',
             'credit_hour' => 'required|integer|min:1',
-            'classification' => 'required|in:KRC,DRC,Unicore,DS',
+            'classification' => 'required|in:URC,CCC,DCC,Field Electives,Free Electives, FYP, IAP',
             'prerequisite' => 'nullable|string|max:255',
             'description' => 'required|string',
         ]);
@@ -83,7 +83,7 @@ class CourseController extends Controller
             'course_code' => 'required|string|max:50|unique:courses,course_code,' . $course->id,
             'name' => 'required|string|max:255',
             'credit_hour' => 'required|integer|min:1',
-            'classification' => 'required|in:KRC,DRC,Unicore,DS', 
+            'classification' => 'required|in:URC,CCC,DCC,Field Electives,Free Electives, FYP, IAP',
             'prerequisite' => 'nullable|string|max:255',
             'description' => 'required|string',
         ]);

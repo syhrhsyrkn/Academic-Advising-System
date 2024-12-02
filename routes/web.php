@@ -4,9 +4,13 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\ProfileController;
+
 use App\Models\Course;
+use App\Http\Controllers\CourseController;
+
+use App\Http\Controllers\ProfileController;
+
+use App\Http\Controllers\CourseScheduleController;
 
 
 Route::get('/', function () {

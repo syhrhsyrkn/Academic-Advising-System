@@ -6,26 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('courses', function (Blueprint $table) {
-            $table->id();
-            $table->string('course_code')->unique(); 
+            $table->string('course_code')->primary();
             $table->string('name');
-            $table->string('credit_hour');
+            $table->unsignedTinyInteger('credit_hour');
             $table->string('prerequisite')->nullable();
-            $table->enum('classification', ['KRC', 'DRC', 'Unicore', 'DS']);
+            $table->enum('classification', [ 'URC' , 'CCC', 'DCC' , 'Field Electives', 'Free Electives', 'FYP' , 'IAP',]);
             $table->text('description')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('courses');

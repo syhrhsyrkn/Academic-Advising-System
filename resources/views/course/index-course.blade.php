@@ -67,11 +67,11 @@
                                     <td>{{ $course->description }}</td>
                                     <td>
                                         @role('admin|advisor|student')
-                                            <a href="{{ route('course.show', $course->id) }}" class="btn btn-info btn-sm">View</a>
+                                            <a href="{{ route('course.show', $course->course_code) }}" class="btn btn-info btn-sm">View</a>
                                         @endrole
                                         @role('admin')
-                                            <a href="{{ route('course.edit', $course->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                            <form action="{{ route('course.destroy', $course->id) }}" method="POST" class="d-inline">
+                                            <a href="{{ route('course.edit', $course->course_code) }}" class="btn btn-warning btn-sm">Edit</a>
+                                            <form action="{{ route('course.destroy', $course->course_code) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this course?')">Delete</button>
                                             </form>

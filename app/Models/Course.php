@@ -9,6 +9,10 @@ class Course extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'course_code'; 
+    public $incrementing = false; 
+    protected $keyType = 'string'; 
+
     protected $fillable = [
         'course_code',
         'name',

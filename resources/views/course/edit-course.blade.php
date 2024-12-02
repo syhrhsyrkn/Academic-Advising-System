@@ -55,12 +55,15 @@
                         <!-- Course Classification -->
                         <div class="form-group">
                             <label for="classification">Classification</label>
-                            <select name="classification" class="form-control @error('classification') is-invalid @enderror" required>
-                                <option value="">Select Classification</option>
-                                <option value="KRC" {{ old('classification', $course->classification ?? '') === 'KRC' ? 'selected' : '' }}>Kuliyyah Required Course (KRC)</option>
-                                <option value="DRC" {{ old('classification', $course->classification ?? '') === 'DRC' ? 'selected' : '' }}>Department Required Course (DRC)</option>
-                                <option value="Unicore" {{ old('classification', $course->classification ?? '') === 'Unicore' ? 'selected' : '' }}>Unicore</option>
-                                <option value="DS" {{ old('classification', $course->classification ?? '') === 'DS' ? 'selected' : '' }}>Department Specialisation (DS)</option>
+                            <select name="classification" class="form-select" required>
+                                <option value="" disabled selected>Select Classification</option>
+                                <option value="URC" {{ old('classification', $course->classification ?? '') == 'URC' ? 'selected' : '' }}>University Required Courses (URC)</option>
+                                <option value="CCC" {{ old('classification', $course->classification ?? '') == 'CCC' ? 'selected' : '' }}>Core Computing Courses (CCC)</option>
+                                <option value="DCC" {{ old('classification', $course->classification ?? '') == 'DCC' ? 'selected' : '' }}>Discipline Core Courses (DCC)</option>
+                                <option value="Field Electives" {{ old('classification', $course->classification ?? '') == 'Field Electives' ? 'selected' : '' }}>Field Electives</option>
+                                <option value="Free Electives" {{ old('classification', $course->classification ?? '') == 'Free Electives' ? 'selected' : '' }}>Free Electives</option>
+                                <option value="FYP" {{ old('classification', $course->classification ?? '') == 'FYP' ? 'selected' : '' }}>Final Year Project (FYP)</option>
+                                <option value="IAP" {{ old('classification', $course->classification ?? '') == 'IAP' ? 'selected' : '' }}>Industrial Attachment (IAP)</option>
                             </select>
                             @error('classification')
                                 <span class="invalid-feedback" role="alert">
@@ -68,7 +71,6 @@
                                 </span>
                             @enderror
                         </div>
-
                         <!-- Prerequisite -->
                         <div class="form-group">
                             <label for="prerequisite">Prerequisite</label>
