@@ -84,7 +84,7 @@ class CourseSeeder extends Seeder
                 'course_code' => 'BICS 1304',
                 'name' => 'Object-Oriented Programming',
                 'credit_hour' => 3,
-                'classification' => 'DCS',
+                'classification' => 'DCC',
                 'prerequisite' => 'BICS 1301',
                 'description' => null,
             ],

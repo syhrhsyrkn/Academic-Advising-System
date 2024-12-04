@@ -77,8 +77,16 @@ Route::middleware([
         Route::get('/course', [CourseController::class, 'index'])->name('course.index');
         Route::get('/course/{course}', [CourseController::class, 'show'])->name('course.show');
     });
-    
 
+    //schedule
+    Route::prefix('student/{matricNo}/schedule')->middleware('role:student')->group(function () {
+        Route::get('/', [CourseScheduleController::class, 'index'])->name('course_schedule.index');
+        Route::get('/create', [CourseScheduleController::class, 'create'])->name('course_schedule.create');
+        Route::post('/store', [CourseScheduleController::class, 'store'])->name('course_schedule.store');
+        Route::delete('/{id}', [CourseScheduleController::class, 'remove'])->name('course_schedule.remove');
+        Route::get('/{id}', [CourseScheduleController::class, 'show'])->name('course_schedule.show');
+    });    
+    
     //logout
     Route::post('/logout', [LogoutController::class, 'destroy'])->name('logout');
 });

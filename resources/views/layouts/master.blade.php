@@ -206,19 +206,16 @@
                         <li class="menu-title">
                             <span>Main Menu</span>
                         </li>
-                        <!-- Admin Dashboard: Visible only to admin users -->
                         @role('admin')
                         <li>
                             <a href="kict-dashboard"><i class="feather-grid"></i> <span> Admin Dashboard</span> </a>
                         </li>
                         @endrole
-                        <!-- Teacher Dashboard: Visible only to teacher users -->
                         @role('advisor')
                         <li>
                             <a href="teacher-dashboard"><i class="feather-grid"></i> <span> Advisor Dashboard</span> </a>
                         </li>
                         @endrole
-                        <!-- Student Dashboard: Visible only to student users -->
                         @role('student')
                         <li>
                             <a href="dashboard"><i class="feather-grid"></i> <span> Student Dashboard</span> </a>
@@ -268,8 +265,7 @@
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span> Course Schedule</span> <span
                                     class="menu-arrow"></span></a>
                             <ul>
-                               <!-- kat sini ada course schedule link -->
-                            </ul>
+                            <li><a href="{{ route('course_schedule.index', ['matricNo' => auth()->user()->profile->matric_no]) }}">Course Schedule View</a></li>                            </ul>
                         </li>
                         @endrole
                         @role('student|advisor')

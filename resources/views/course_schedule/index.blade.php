@@ -1,16 +1,16 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
     <div class="container">
         <h2>Your Course Schedule</h2>
-        
+
         <!-- Display Success Message -->
         @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>
         @endif
-        
+
         <div class="mb-3">
             <h3>Current Semester Courses</h3>
             <p><strong>Credit Hours:</strong> {{ $totalCredits }} / 20</p>
@@ -50,6 +50,6 @@
         </table>
 
         <!-- Button to add new courses -->
-        <a href="{{ route('course_schedule.create') }}" class="btn btn-primary">Add New Courses</a>
+        <a href="{{ route('course_schedule.create', ['matricNo' => $profile->matric_no]) }}" class="btn btn-primary">Add New Courses</a>
     </div>
 @endsection

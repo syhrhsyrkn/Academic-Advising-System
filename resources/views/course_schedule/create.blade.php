@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
     <div class="container">
@@ -11,7 +11,7 @@
             </div>
         @endif
 
-        <form action="{{ route('course_schedule.store') }}" method="POST">
+        <form action="{{ route('course_schedule.store', ['matricNo' => $profile->matric_no]) }}" method="POST">
             @csrf
 
             <div class="mb-3">
@@ -35,3 +35,4 @@
         <p class="mt-3"><strong>Note:</strong> You must have at least 12 and no more than 20 credit hours in a semester.</p>
     </div>
 @endsection
+
