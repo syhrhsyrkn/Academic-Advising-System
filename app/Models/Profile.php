@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
         'full_name',
@@ -27,4 +25,10 @@ class Profile extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function courseSchedules()
+    {
+        return $this->hasMany(CourseSchedule::class, 'matric_no', 'matric_no');
+    }
 }
+

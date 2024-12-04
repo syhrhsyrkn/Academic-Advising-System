@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,8 +12,8 @@ return new class extends Migration
             $table->string('course_code')->primary();
             $table->string('name');
             $table->unsignedTinyInteger('credit_hour');
-            $table->string('prerequisite')->nullable();
-            $table->enum('classification', [ 'URC' , 'CCC', 'DCC' , 'Field Electives', 'Free Electives', 'FYP' , 'IAP',]);
+            $table->string('prerequisite')->nullable(); // Retain single prerequisite column
+            $table->enum('classification', ['URC', 'CCC', 'DCC', 'Field Electives', 'Free Electives', 'FYP', 'IAP']);
             $table->text('description')->nullable();
             $table->timestamps();
         });

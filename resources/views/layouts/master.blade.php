@@ -263,14 +263,16 @@
                                 @endrole
                             </ul>
                         </li>
+                        @role('student|advisor')
                         <li class="submenu">
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span> Course Schedule</span> <span
                                     class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="s.course-view.html">Course Schedule View</a></li>
-                                <li><a href="s.course-edit.html">Course Schedule Edit</a></li>
+                               <!-- kat sini ada course schedule link -->
                             </ul>
                         </li>
+                        @endrole
+                        @role('student|advisor')
                         <li class="submenu">
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span>Academic Result</span> <span
                                     class="menu-arrow"></span></a>
@@ -279,6 +281,7 @@
                                 <li><a href="s.result-edit.html">Academic Result Edit</a></li>
                             </ul>
                         </li>
+                        @endrole
 
                         <!-- <li class="submenu">
                             <a href="#"><i class="fas fa-clipboard"></i> <span> Invoices</span> <span

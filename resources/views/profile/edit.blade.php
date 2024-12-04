@@ -17,7 +17,7 @@
                         <div class="form-group">
                             <label>Full Name</label>
                             <input type="text" name="full_name" class="form-control" value="{{ $profile->full_name }}" required>
-                        </div>
+                            </div>
 
                         @role('student')
                             <div class="form-group">

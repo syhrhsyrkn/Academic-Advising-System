@@ -18,7 +18,24 @@ class Course extends Model
         'name',
         'credit_hour',
         'classification',
-        'prerequisite',
         'description',
     ];
+
+    // Define the prerequisites relationship
+    public function prerequisites()
+    {
+        return $this->belongsToMany(Course::class, 'course_prerequisite', 'course_code', 'prerequisite_code');
+    }
+
+    // Define the inverse relationship (courses for which this course is a prerequisite)
+    public function prerequisiteFor()
+    {
+        return $this->belongsToMany(Course::class, 'course_prerequisite', 'prerequisite_code', 'course_code');
+    }
+
+    // Define the relationship with the CourseSchedule model
+    public function courseSchedules()
+    {
+        return $this->hasMany(CourseSchedule::class, 'course_code', 'course_code');
+    }
 }

@@ -24,7 +24,7 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-
+    
         // Validation based on role
         if ($user->hasRole('student')) {
             $request->validate([
@@ -46,9 +46,11 @@ class ProfileController extends Controller
                 'staff_id' => 'required|string',
             ]);
         }
-
+    
+        // Fetch profile
         $profile = $user->profile;
-
+    
+        // Update profile with the requested fields
         $profile->update($request->only([
             'full_name',
             'contact_number',
@@ -60,7 +62,8 @@ class ProfileController extends Controller
             'semester',
             'staff_id',
         ]));
-
+    
         return redirect()->route('profile.show')->with('success', 'Profile updated successfully!');
     }
+    
 }

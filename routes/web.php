@@ -7,11 +7,9 @@ use App\Http\Controllers\Auth\LogoutController;
 
 use App\Models\Course;
 use App\Http\Controllers\CourseController;
-
-use App\Http\Controllers\ProfileController;
-
 use App\Http\Controllers\CourseScheduleController;
 
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -79,6 +77,7 @@ Route::middleware([
         Route::get('/course', [CourseController::class, 'index'])->name('course.index');
         Route::get('/course/{course}', [CourseController::class, 'show'])->name('course.show');
     });
+    
 
     //logout
     Route::post('/logout', [LogoutController::class, 'destroy'])->name('logout');

@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers;
 
@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Gate;
 
 class CourseController extends Controller
 {
-    // Show the form to add a new course (only for admins)
     public function addCourse()
     {
         return view('course.add-course');
@@ -17,24 +16,28 @@ class CourseController extends Controller
     // Store the new course
     public function store(Request $request)
     {
-        // Validate the request
         $request->validate([
-            'course_code' => 'required|string|max:50|unique:courses',
+            'course_code' => 'required|string|max:10|unique:courses',
             'name' => 'required|string|max:255',
             'credit_hour' => 'required|integer|min:1',
             'classification' => 'required|in:URC,CCC,DCC,Field Electives,Free Electives, FYP, IAP',
-            'prerequisite' => 'nullable|string|max:255',
+            'prerequisites' => 'array|exists:courses,course_code', // Change this validation to match course_code
             'description' => 'required|string',
         ]);
+
         // Create a new course
-        Course::create([
+        $course = Course::create([
             'course_code' => $request->course_code,
             'name' => $request->name,
             'credit_hour' => $request->credit_hour,
             'classification' => $request->classification,
-            'prerequisite' => $request->prerequisite,
             'description' => $request->description,
         ]);
+
+        // Attach prerequisites using the pivot table
+        if ($request->has('prerequisites')) {
+            $course->prerequisites()->attach($request->prerequisites);
+        }
 
         // Redirect to the same page with a success message
         return redirect()->route('course.create')->with('success', 'Course added successfully');
@@ -43,24 +46,19 @@ class CourseController extends Controller
     // Display the list of courses
     public function index(Request $request)
     {
-        // Get sorting parameters
-        $sortBy = $request->get('sort_by', 'name'); // Default sort by 'name'
-        $order = $request->get('order', 'asc'); // Default order 'asc'
+        $search = $request->get('search', '');
+        $sortBy = $request->get('sort_by', 'name');
+        $order = $request->get('order', 'asc');
 
-        // Get search query
-        $search = $request->get('search'); // Get search parameter
-
-        // Fetch courses, with optional search and sorting
         $courses = Course::query()
-            ->when($search, function ($query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%')
-                      ->orWhere('course_code', 'like', '%' . $search . '%');
+            ->when($search, function ($query, $search) {
+                $query->where('name', 'LIKE', "%{$search}%")
+                      ->orWhere('course_code', 'LIKE', "%{$search}%");
             })
             ->orderBy($sortBy, $order)
-            ->get();
+            ->paginate(10);
 
-        // Pass current sorting and search parameters to the view
-        return view('course.index-course', compact('courses', 'sortBy', 'order', 'search'));
+        return view('courses.index', compact('courses', 'search', 'sortBy', 'order'));
     }
 
     // Show a single course
@@ -84,7 +82,7 @@ class CourseController extends Controller
             'name' => 'required|string|max:255',
             'credit_hour' => 'required|integer|min:1',
             'classification' => 'required|in:URC,CCC,DCC,Field Electives,Free Electives, FYP, IAP',
-            'prerequisite' => 'nullable|string|max:255',
+            'prerequisites' => 'array|exists:courses,course_code', 
             'description' => 'required|string',
         ]);
 
@@ -94,9 +92,14 @@ class CourseController extends Controller
             'name' => $request->name,
             'credit_hour' => $request->credit_hour,
             'classification' => $request->classification,
-            'prerequisite' => $request->prerequisite,
             'description' => $request->description,
         ]);
+
+        if ($request->has('prerequisites')) {
+            $course->prerequisites()->sync($request->prerequisites); // Sync prerequisites to the course
+        } else {
+            $course->prerequisites()->detach(); // Detach all prerequisites if none are selected
+        }
 
         // Redirect with a success message
         return redirect()->route('course.index')->with('success', 'Course updated successfully');
@@ -105,11 +108,9 @@ class CourseController extends Controller
     // Delete a course
     public function destroy(Course $course)
     {
-        $course = Course::findOrFail($course->id);
         $course->delete();
 
         // Redirect with a success message
         return redirect()->route('course.index')->with('success', 'Course deleted successfully');
     }
 }
-

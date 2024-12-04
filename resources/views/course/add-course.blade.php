@@ -81,13 +81,14 @@
 
                         <!-- Prerequisite -->
                         <div class="form-group">
-                            <label for="prerequisite">Prerequisite</label>
-                            <input type="text" name="prerequisite" class="form-control @error('prerequisite') is-invalid @enderror" value="{{ old('prerequisite') }}">
-                            @error('prerequisite')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <label for="prerequisites">Prerequisites</label>
+                            <select name="prerequisites[]" id="prerequisites" class="form-control" multiple>
+                                @foreach($courses as $availableCourse)
+                                    <option value="{{ $availableCourse->id }}" {{ in_array($availableCourse->id, old('prerequisites', [])) ? 'selected' : '' }}>
+                                        {{ $availableCourse->name }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <!-- Description -->

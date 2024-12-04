@@ -30,7 +30,7 @@
                         <a href="{{ route('course.create') }}" class="btn btn-primary mb-3">Add New Course</a>
                     @endrole
 
-                    <table class="table table-striped">
+                    <table class="table table-striped"> 
                         <thead>
                             <tr>
                                 <th>
@@ -51,7 +51,7 @@
                                 </th>
                                 <th>Credit Hour</th>
                                 <th>Classification</th>
-                                <th>Prerequisite</th>
+                                <th>Prerequisites</th>
                                 <th>Description</th>
                                 <th>Actions</th>
                             </tr>
@@ -63,7 +63,17 @@
                                     <td>{{ $course->name }}</td>
                                     <td>{{ $course->credit_hour }}</td>
                                     <td>{{ $course->classification }}</td>
-                                    <td>{{ $course->prerequisite }}</td>
+                                    <td>
+                                        @if($course->prerequisites->isNotEmpty())
+                                            <ul>
+                                                @foreach($course->prerequisites as $prerequisite)
+                                                    <li>{{ $prerequisite->name }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            None
+                                        @endif
+                                    </td>
                                     <td>{{ $course->description }}</td>
                                     <td>
                                         @role('admin|advisor|student')
@@ -80,11 +90,12 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center">No courses available</td>
+                                    <td colspan="7" class="text-center">No courses available</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>
