@@ -69,47 +69,39 @@ class CourseController extends Controller
         return view('course.show-course', compact('course'));
     }
 
-    // Show the form for editing a course
-    public function edit(Course $course)
+    public function edit($course_code)
     {
+        $course = Course::where('course_code', $course_code)->firstOrFail();
         return view('course.edit-course', compact('course'));
     }
 
-    // Update the course in the database
-    public function update(Request $request, Course $course)
+
+    public function update(Request $request, $course_code)
     {
-        // Validate the request
-        $request->validate([
-            'course_code' => 'required|string|max:50|unique:courses,course_code,' . $course->id,
+        $validated = $request->validate([
+            'course_code' => 'required|string|max:10|unique:courses,course_code,' . $course_code . ',course_code',
             'name' => 'required|string|max:255',
             'credit_hour' => 'required|integer|min:1',
-            'classification' => 'required|in:URC,CCC,DCC,Field Electives,Free Electives, FYP, IAP',
-            'prerequisite' => 'nullable|string|max:255',
-            'description' => 'required|string',
+            'classification' => 'required|string',
+            'prerequisite' => 'nullable|string',
+            'description' => 'nullable|string',
         ]);
 
-        // Update the course
-        $course->update([
-            'course_code' => $request->course_code,
-            'name' => $request->name,
-            'credit_hour' => $request->credit_hour,
-            'classification' => $request->classification,
-            'prerequisite' => $request->prerequisite,
-            'description' => $request->description,
-        ]);
+        $course = Course::where('course_code', $course_code)->firstOrFail();
+        $course->update($validated);
 
-        // Redirect with a success message
-        return redirect()->route('course.index')->with('success', 'Course updated successfully');
+        return redirect()->route('course.index')->with('success', 'Course updated successfully.');
     }
 
-    // Delete a course
-    public function destroy(Course $course)
+
+    public function destroy($course_code)
     {
-        $course = Course::findOrFail($course->id);
+        $course = Course::where('course_code', $course_code)->firstOrFail();
         $course->delete();
 
         // Redirect with a success message
-        return redirect()->route('course.index')->with('success', 'Course deleted successfully');
+        return redirect()->route('course.index')->with('success', 'Course deleted successfully.');
     }
+
 }
 

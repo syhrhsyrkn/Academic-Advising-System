@@ -70,9 +70,9 @@ Route::middleware([
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/course/add-course', [CourseController::class, 'addCourse'])->name('course.create');
         Route::post('/course/add-course', [CourseController::class, 'store'])->name('course.store');
-        Route::get('/course/{course}/edit', [CourseController::class, 'edit'])->name('course.edit');
-        Route::put('/course/{course}', [CourseController::class, 'update'])->name('course.update');
-        Route::post('/course/delete/{course}', [CourseController::class, 'destroy'])->name('course.destroy');
+        Route::get('/course/{course_code}/edit', [CourseController::class, 'edit'])->name('course.edit');
+        Route::put('/course/{course_code}', [CourseController::class, 'update'])->name('course.update');
+        Route::post('/course/delete/{course_code}', [CourseController::class, 'destroy'])->name('course.destroy');
     });
 
     Route::middleware(['role:admin|advisor|student'])->group(function () {

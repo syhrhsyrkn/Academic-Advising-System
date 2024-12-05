@@ -18,6 +18,10 @@
                             <label>Full Name</label>
                             <input type="text" name="full_name" class="form-control" value="{{ $profile->full_name }}" required>
                         </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control" value="{{ $profile->email }}" required>
+                        </div>
 
                         @role('student')
                             <div class="form-group">

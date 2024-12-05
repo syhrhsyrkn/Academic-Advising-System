@@ -29,6 +29,7 @@ class ProfileController extends Controller
         if ($user->hasRole('student')) {
             $request->validate([
                 'full_name' => 'required|string',
+                'email' => 'required|string',
                 'contact_number' => 'required|string',
                 'kulliyyah' => 'required|string',
                 'department' => 'required|string',
@@ -40,6 +41,7 @@ class ProfileController extends Controller
         } elseif ($user->hasRole(['advisor', 'admin'])) {
             $request->validate([
                 'full_name' => 'required|string',
+                'email' => 'required|string',
                 'contact_number' => 'required|string',
                 'kulliyyah' => 'required|string',
                 'department' => 'required|string',
