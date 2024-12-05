@@ -23,46 +23,30 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-        $user = Auth::user();
+         // Get the currently authenticated user
+    $user = auth()->user();
 
-        // Validation based on role
-        if ($user->hasRole('student')) {
-            $request->validate([
-                'full_name' => 'required|string',
-                'email' => 'required|string',
-                'contact_number' => 'required|string',
-                'kulliyyah' => 'required|string',
-                'department' => 'required|string',
-                'matric_no' => 'required|string',
-                'specialisation' => 'nullable|string',
-                'year' => 'nullable|integer',
-                'semester' => 'nullable|integer',
-            ]);
-        } elseif ($user->hasRole(['advisor', 'admin'])) {
-            $request->validate([
-                'full_name' => 'required|string',
-                'email' => 'required|string',
-                'contact_number' => 'required|string',
-                'kulliyyah' => 'required|string',
-                'department' => 'required|string',
-                'staff_id' => 'required|string',
-            ]);
-        }
+    // Validate the input fields
+    $validated = $request->validate([
+        'full_name' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'contact_number' => 'required|string|max:15',
+        'kulliyyah' => 'required|string|max:255',
+        'department' => 'required|string|max:255',
+    ]);
 
-        $profile = $user->profile;
-
-        $profile->update($request->only([
-            'full_name',
-            'contact_number',
-            'kulliyyah',
-            'department',
-            'matric_no',
-            'specialisation',
-            'year',
-            'semester',
-            'staff_id',
-        ]));
-
-        return redirect()->route('profile.show')->with('success', 'Profile updated successfully!');
+    // Handle Student Role Fields
+    if ($user->hasRole('student')) {
+        $validated['matric_no'] = $request->input('matric_no');
+        $validated['specialisation'] = $request->input('specialisation');
+        $validated['year'] = $request->input('year');
+        $validated['semester'] = $request->input('semester');
     }
+
+    // Update the user's profile (assuming there's a relationship with Profile)
+    $user->profile->update($validated);
+
+    // Redirect with success message
+    return redirect()->route('profile.show')->with('success', 'Profile updated successfully!');
+}
 }
