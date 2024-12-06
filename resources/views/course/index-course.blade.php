@@ -63,7 +63,17 @@
                                     <td>{{ $course->name }}</td>
                                     <td>{{ $course->credit_hour }}</td>
                                     <td>{{ $course->classification }}</td>
-                                    <td>{{ $course->prerequisite }}</td>
+                                    <td>
+                                        @if($course->prerequisites->isNotEmpty())
+                                            <ul>
+                                                @foreach($course->prerequisites as $prerequisite)
+                                                    <li>{{ $prerequisite->course_code }} - {{ $prerequisite->name }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            None
+                                        @endif
+                                    </td>
                                     <td>{{ $course->description }}</td>
                                     <td>
                                         @role('admin|advisor|student')
@@ -73,6 +83,7 @@
                                             <a href="{{ route('course.edit', $course->course_code) }}" class="btn btn-warning btn-sm">Edit</a>
                                             <form action="{{ route('course.destroy', $course->course_code) }}" method="POST" class="d-inline">
                                                 @csrf
+                                                @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this course?')">Delete</button>
                                             </form>
                                         @endrole

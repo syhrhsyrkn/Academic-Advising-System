@@ -9,11 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('courses', function (Blueprint $table) {
-            $table->string('course_code')->primary();
+            $table->string('course_code')->primary(); // Primary key
             $table->string('name');
             $table->unsignedTinyInteger('credit_hour');
-            $table->string('prerequisite')->nullable();
-            $table->enum('classification', [ 'URC' , 'CCC', 'DCC' , 'Field Electives', 'Free Electives', 'FYP' , 'IAP',]);
+            $table->enum('classification', ['URC', 'CCC', 'DCC', 'Electives', 'FYP', 'IAP']);
             $table->text('description')->nullable();
             $table->timestamps();
         });

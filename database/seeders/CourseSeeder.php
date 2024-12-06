@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Course;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CourseSeeder extends Seeder
 {
@@ -13,12 +13,27 @@ class CourseSeeder extends Seeder
     public function run(): void
     {
         $courses = [
+            // URC
             [
                 'course_code' => 'UNGS 1301',
                 'name' => 'Basic Philosophy and Islamic Worldview',
                 'credit_hour' => 3,
                 'classification' => 'URC',
-                'prerequisite' => null,
+                'description' => null,
+            ],
+            // CCC
+            [
+                'course_code' => 'BIIT 1301',
+                'name' => 'Database Programming',
+                'credit_hour' => 3,
+                'classification' => 'CCC',
+                'description' => null,
+            ],
+            [
+                'course_code' => 'BIIT 3304',
+                'name' => 'ICT and Islam',
+                'credit_hour' => 3,
+                'classification' => 'CCC',
                 'description' => null,
             ],
             [
@@ -26,7 +41,13 @@ class CourseSeeder extends Seeder
                 'name' => 'Elements of Programming',
                 'credit_hour' => 3,
                 'classification' => 'CCC',
-                'prerequisite' => null,
+                'description' => null,
+            ],
+            [
+                'course_code' => 'BIIT 1303',
+                'name' => 'System Analysis and Design',
+                'credit_hour' => 3,
+                'classification' => 'CCC',
                 'description' => null,
             ],
             [
@@ -34,45 +55,41 @@ class CourseSeeder extends Seeder
                 'name' => 'Object-Oriented Programming',
                 'credit_hour' => 3,
                 'classification' => 'CCC',
-                'prerequisite' => 'BICS 1301',
-                'description' => null,
-            ],
-            [
-                'course_code' => 'BIIT 4330',
-                'name' => 'Cyber Risk Management',
-                'credit_hour' => 3,
-                'classification' => 'Field Electives',
-                'prerequisite' => null,
                 'description' => null,
             ],
             [
                 'course_code' => 'BIIT 4340',
                 'name' => 'Cloud Computing Services',
                 'credit_hour' => 3,
-                'classification' => 'Free Electives',
-                'prerequisite' => null,
+                'classification' => 'CCC',
                 'description' => null,
             ],
             [
                 'course_code' => 'BIIT 4321',
                 'name' => 'Final Year Project I',
                 'credit_hour' => 3,
-                'classification' => 'FYP',
-                'prerequisite' => null,
+                'classification' => 'CCC',
                 'description' => null,
             ],
+            // DCC
             [
-                'course_code' => 'BIIT 4901',
-                'name' => 'Industrial Attachment ',
-                'credit_hour' => 9,
-                'classification' => 'IAP',
-                'prerequisite' => null,
+                'course_code' => 'BICS 1304',
+                'name' => 'Object-Oriented Programming',
+                'credit_hour' => 3,
+                'classification' => 'DCC',
                 'description' => null,
             ],
         ];
 
-        foreach ($courses as $course) {
-            Course::create($course);
-        }
+        // Insert courses into the `courses` table
+        DB::table('courses')->insert($courses);
+
+        // Insert prerequisites into the `prerequisites` table
+        DB::table('prerequisites')->insert([
+            ['course_code' => 'BIIT 1303', 'prerequisite_code' => 'BICS 1301'],
+            ['course_code' => 'BICS 1304', 'prerequisite_code' => 'BICS 1301'],
+            ['course_code' => 'BICS 1303', 'prerequisite_code' => 'BICS 1302'],
+            ['course_code' => 'BICS 2305', 'prerequisite_code' => 'BICS 1302'],
+        ]);
     }
 }

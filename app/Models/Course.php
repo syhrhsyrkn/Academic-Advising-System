@@ -21,4 +21,16 @@ class Course extends Model
         'prerequisite',
         'description',
     ];
+
+    // Define the prerequisites relationship
+    public function prerequisites()
+    {
+        return $this->belongsToMany(Course::class, 'prerequisites', 'course_code', 'prerequisite_code');
+    }
+
+    // Define the relationship with the CourseSchedule model
+    public function courseSchedules()
+    {
+        return $this->hasMany(CourseSchedule::class, 'course_code', 'course_code');
+    }
 }
