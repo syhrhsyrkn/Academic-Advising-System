@@ -15,16 +15,9 @@
                         </div>
                     @endif
 
-                    <form method="GET" action="{{ route('course.index') }}" class="mb-3">
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="search" placeholder="Search by course name or course code" value="{{ $search }}">
-                            <button type="submit" class="btn btn-primary">Search</button>
-                        </div>
-                    </form>
-
-                    @if($search)
-                        <a href="{{ route('course.index') }}" class="btn btn-secondary mb-3">Clear Search</a>
-                    @endif
+                    @role('admin')
+                        <a href="{{ route('course.create') }}" class="btn btn-primary mb-3">Add New Course</a>
+                    @endrole
 
                     @role('admin')
                         <a href="{{ route('course.create') }}" class="btn btn-primary mb-3">Add New Course</a>
@@ -66,15 +59,17 @@
                                     <td>{{ $course->prerequisite }}</td>
                                     <td>{{ $course->description }}</td>
                                     <td>
-                                        @role('admin|advisor|student')
-                                            <a href="{{ route('course.show', $course->course_code) }}" class="btn btn-info btn-sm">View</a>
-                                        @endrole
                                         @role('admin')
-                                            <a href="{{ route('course.edit', $course->course_code) }}" class="btn btn-warning btn-sm">Edit</a>
-                                            <form action="{{ route('course.destroy', $course->course_code) }}" method="POST" class="d-inline">
+                                            <a href="{{ route('course.show', $course) }}" class="btn btn-info btn-sm">View</a>
+                                            <a href="{{ route('course.edit', $course) }}" class="btn btn-warning btn-sm">Edit</a>
+                                            <form action="{{ route('course.destroy', $course->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this course?')">Delete</button>
                                             </form>
+                                        @endrole
+
+                                        @role('advisor|student')
+                                            <a href="{{ route('course.show', $course) }}" class="btn btn-info btn-sm">View</a>
                                         @endrole
                                     </td>
                                 </tr>
