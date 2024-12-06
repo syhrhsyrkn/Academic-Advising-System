@@ -17,7 +17,7 @@
 
                     <form method="GET" action="{{ route('course.index') }}" class="mb-3">
                         <div class="input-group">
-                            <input type="text" class="form-control" name="search" placeholder="Search by course name or course code" value="{{ $search }}">
+                            <input type="text" class="form-control" name="search" placeholder="Search by course name or course code" value="{{ old('search', $search) }}">
                             <button type="submit" class="btn btn-primary">Search</button>
                         </div>
                     </form>
@@ -26,9 +26,9 @@
                         <a href="{{ route('course.index') }}" class="btn btn-secondary mb-3">Clear Search</a>
                     @endif
 
-                    @role('admin')
+                    @hasrole('admin')
                         <a href="{{ route('course.create') }}" class="btn btn-primary mb-3">Add New Course</a>
-                    @endrole
+                    @endhasrole
 
                     <table class="table table-striped"> 
                         <thead>
@@ -76,17 +76,17 @@
                                     </td>
                                     <td>{{ $course->description }}</td>
                                     <td>
-                                        @role('admin|advisor|student')
+                                        @hasanyrole('admin|advisor|student')
                                             <a href="{{ route('course.show', $course->course_code) }}" class="btn btn-info btn-sm">View</a>
-                                        @endrole
-                                        @role('admin')
+                                        @endhasanyrole
+                                        @hasrole('admin')
                                             <a href="{{ route('course.edit', $course->course_code) }}" class="btn btn-warning btn-sm">Edit</a>
                                             <form action="{{ route('course.destroy', $course->course_code) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this course?')">Delete</button>
                                             </form>
-                                        @endrole
+                                        @endhasrole
                                     </td>
                                 </tr>
                             @empty
@@ -97,6 +97,9 @@
                         </tbody>
                     </table>
 
+                    <div class="mt-3">
+                        {{ $courses->withQueryString()->links() }}
+                    </div>
                 </div>
             </div>
         </div>

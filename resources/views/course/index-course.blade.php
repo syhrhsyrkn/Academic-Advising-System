@@ -27,7 +27,7 @@
                     @endif
 
                     @role('admin')
-                        <a href="{{ route('course.create') }}" class="btn btn-primary mb-3">Add New Course</a>
+                    <a href="{{ route('course.create') }}" class="btn btn-primary mb-3">Add New Course</a>
                     @endrole
 
                     <table class="table table-striped">

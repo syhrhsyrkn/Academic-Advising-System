@@ -68,7 +68,7 @@ Route::middleware([
 
     //course
     Route::middleware(['role:admin'])->group(function () {
-        Route::get('/course/add-course', [CourseController::class, 'addCourse'])->name('course.create');
+        Route::get('/course/add-course', [CourseController::class, 'create'])->name('course.create');
         Route::post('/course/add-course', [CourseController::class, 'store'])->name('course.store');
         Route::get('/course/{course_code}/edit', [CourseController::class, 'edit'])->name('course.edit');
         Route::put('/course/{course_code}', [CourseController::class, 'update'])->name('course.update');
@@ -76,7 +76,7 @@ Route::middleware([
     });
     
     Route::middleware(['role:admin|advisor|student'])->group(function () {
-        Route::get('/course', [CourseController::class, 'index'])->name('course.index'); // List courses
+        Route::get('/course', [CourseController::class, 'index'])->name('course.index');
         Route::get('/course/{course}', [CourseController::class, 'show'])->name('course.show'); // Show course details
     });
 
