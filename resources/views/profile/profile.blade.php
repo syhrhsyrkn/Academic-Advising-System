@@ -29,14 +29,14 @@
                             </a>
                         </div>
                         <div class="col ms-md-n2 profile-user-info">
-                            <h4 class="user-name mb-0">{{ $profile->full_name }}</h4>
+                            <h4 class="user-name mb-0">{{ $profile->full_name ?? 'Guest' }}</h4>
                             <h6 class="text-muted">{{ auth()->user()->roles->pluck('name')->first() }}</h6>
-                            <div class="user-location"><i class="fas fa-map-marker-alt"></i> {{ $profile->kulliyyah }}, {{ $profile->department }}</div>
+                            <div class="user-location">
+                                <i class="fas fa-map-marker-alt"></i>{{ $profile->kulliyyah ?? 'N/A' }}, {{ $profile->department ?? 'N/A' }}
+                            </div>
                         </div>
                         <div class="col-auto profile-btn">
-                            <!-- <a href="{{ route('profile.edit') }}" class="btn btn-primary">
-                                Edit
-                            </a> -->
+                            <!-- Optional Edit Button -->
                         </div>
                     </div>
                 </div>
@@ -70,46 +70,46 @@
                                         </h5>
                                         <div class="row">
                                             <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Full Name</p>
-                                            <p class="col-sm-9">{{ $profile->full_name }}</p>
+                                            <p class="col-sm-9">{{ $profile->full_name ?? 'N/A' }}</p>
                                         </div>
+                                        @if(auth()->user()->hasRole(['advisor', 'admin']))
+                                            <div class="row">
+                                                <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Staff ID</p>
+                                                <p class="col-sm-9">{{ $profile->staff_id ?? 'N/A' }}</p>
+                                            </div>
+                                        @endif
                                         <div class="row">
                                             <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Contact Number</p>
-                                            <p class="col-sm-9">{{ $profile->contact_number }}</p>
+                                            <p class="col-sm-9">{{ $profile->contact_number ?? 'N/A' }}</p>
                                         </div>
                                         <div class="row">
                                             <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Kulliyyah</p>
-                                            <p class="col-sm-9">{{ $profile->kulliyyah }}</p>
+                                            <p class="col-sm-9">{{ $profile->kulliyyah ?? 'N/A' }}</p>
                                         </div>
                                         <div class="row">
                                             <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Department</p>
-                                            <p class="col-sm-9">{{ $profile->department }}</p>
+                                            <p class="col-sm-9">{{ $profile->department ?? 'N/A' }}</p>
                                         </div>
 
                                         @if(auth()->user()->hasRole('student'))
                                             <div class="row">
                                                 <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Matric No</p>
-                                                <p class="col-sm-9">{{ $profile->matric_no }}</p>
+                                                <p class="col-sm-9">{{ $profile->matric_no ?? 'N/A' }}</p>
                                             </div>
                                             <div class="row">
                                                 <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Specialisation</p>
-                                                <p class="col-sm-9">{{ $profile->specialisation }}</p>
+                                                <p class="col-sm-9">{{ $profile->specialisation ?? 'N/A' }}</p>
                                             </div>
                                             <div class="row">
                                                 <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Year</p>
-                                                <p class="col-sm-9">{{ $profile->year }}</p>
+                                                <p class="col-sm-9">{{ $profile->year ?? 'N/A' }}</p>
                                             </div>
                                             <div class="row">
                                                 <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Semester</p>
-                                                <p class="col-sm-9">{{ $profile->semester }}</p>
+                                                <p class="col-sm-9">{{ $profile->semester ?? 'N/A' }}</p>
                                             </div>
                                         @endif
 
-                                        @if(auth()->user()->hasRole(['advisor', 'admin']))
-                                            <div class="row">
-                                                <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Staff ID</p>
-                                                <p class="col-sm-9">{{ $profile->staff_id }}</p>
-                                            </div>
-                                        @endif
                                     </div>
                                 </div>
                             </div>

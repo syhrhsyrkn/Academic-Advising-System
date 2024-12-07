@@ -166,11 +166,10 @@
                 <li class="nav-item dropdown has-arrow new-user-menus">
                     <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                         <span class="user-img">
-                            <img class="rounded-circle" src="{{ asset('assets/img/profiles/avatar-01.jpg') }}" width="31"
-                                alt="Soeng Souy">
+                            <img class="rounded-circle" src="{{ asset('assets/img/profiles/avatar-01.jpg') }}" width="31" alt="{{ session('name') ?? 'User' }}">
                             <div class="user-text">
-                                <h6>Soeng Souy</h6>
-                                <p class="text-muted mb-0">Administrator</p>
+                            <h6>{{ Auth::user()->name ?? 'Guest' }}</h6>
+                            <p class="text-muted mb-0">{{ Auth::user()->getRoleNames()->first() ?? 'Role Not Assigned' }}</p>
                             </div>
                         </span>
                     </a>
@@ -181,8 +180,8 @@
                                     class="avatar-img rounded-circle">
                             </div>
                             <div class="user-text">
-                                <h6>Soeng Souy</h6>
-                                <p class="text-muted mb-0">Administrator</p>
+                                <h6>{{ Auth::user()->name ?? 'Guest' }}</h6>
+                                <p class="text-muted mb-0">{{ Auth::user()->getRoleNames()->first() ?? 'Role Not Assigned' }}</p>
                             </div>
                         </div>
                         <a class="dropdown-item" href="profile">My Profile</a>

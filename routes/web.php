@@ -14,7 +14,7 @@ use App\Http\Controllers\CourseScheduleController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth/login');
 });
 
 Route::middleware([
@@ -22,10 +22,6 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',])->group(function ()
     {
-    //taskbar
-    Route::get('/profile', function () {
-        return view('/profile/profile');
-    })->name('profile');
 
     //sidebar
     //dashboard
@@ -77,9 +73,9 @@ Route::middleware([
     
     Route::middleware(['role:admin|advisor|student'])->group(function () {
         Route::get('/course', [CourseController::class, 'index'])->name('course.index');
-        Route::get('/course/{course}', [CourseController::class, 'show'])->name('course.show'); // Show course details
+        Route::get('/course/{course}', [CourseController::class, 'show'])->name('course.show'); 
     });
 
-    //logout
+    //taskbar
     Route::post('/logout', [LogoutController::class, 'destroy'])->name('logout');
 });
