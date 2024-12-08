@@ -12,7 +12,6 @@ use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\CourseScheduleController;
 
-
 Route::get('/', function () {
     return view('auth/login');
 });
@@ -77,5 +76,9 @@ Route::middleware([
     });
 
     //taskbar
+    Route::get('/profile', function () {
+        return view('/profile/profile');
+    })->name('profile');
+    
     Route::post('/logout', [LogoutController::class, 'destroy'])->name('logout');
 });
