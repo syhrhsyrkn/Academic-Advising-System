@@ -75,6 +75,12 @@ Route::middleware([
         Route::get('/course/{course}', [CourseController::class, 'show'])->name('course.show'); 
     });
 
+    //course schedule
+    Route::middleware(['auth', 'role:student'])->group(function () {
+        Route::get('/course-schedule', [CourseScheduleController::class, 'index'])->name('course-schedule.index');
+        Route::post('/course-schedule', [CourseScheduleController::class, 'store'])->name('course-schedule.store');
+    });
+
     //taskbar
     Route::get('/profile', function () {
         return view('/profile/profile');

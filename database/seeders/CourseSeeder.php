@@ -12,7 +12,7 @@ class CourseSeeder extends Seeder
      */
     public function run(): void
     {
-        $courses = [
+        DB::table('courses')->insert([
             // URC
             [
                 'course_code' => 'UNGS 1301',
@@ -25,6 +25,13 @@ class CourseSeeder extends Seeder
             [
                 'course_code' => 'BIIT 1301',
                 'name' => 'Database Programming',
+                'credit_hour' => 3,
+                'classification' => 'CCC',
+                'description' => null,
+            ],
+            [
+                'course_code' => 'BIIT 1303',
+                'name' => 'System Analysis and Design',
                 'credit_hour' => 3,
                 'classification' => 'CCC',
                 'description' => null,
@@ -44,29 +51,22 @@ class CourseSeeder extends Seeder
                 'description' => null,
             ],
             [
-                'course_code' => 'BIIT 1303',
-                'name' => 'System Analysis and Design',
+                'course_code' => 'BICS 1302',
+                'name' => 'Introduction to Computer Organisation',
                 'credit_hour' => 3,
                 'classification' => 'CCC',
                 'description' => null,
             ],
             [
-                'course_code' => 'BICS 1304',
-                'name' => 'Object-Oriented Programming',
+                'course_code' => 'BICS 1303',
+                'name' => 'Computer Networking',
                 'credit_hour' => 3,
                 'classification' => 'CCC',
                 'description' => null,
             ],
             [
-                'course_code' => 'BIIT 4340',
-                'name' => 'Cloud Computing Services',
-                'credit_hour' => 3,
-                'classification' => 'CCC',
-                'description' => null,
-            ],
-            [
-                'course_code' => 'BIIT 4321',
-                'name' => 'Final Year Project I',
+                'course_code' => 'BICS 2305',
+                'name' => 'Operating Systems',
                 'credit_hour' => 3,
                 'classification' => 'CCC',
                 'description' => null,
@@ -79,17 +79,22 @@ class CourseSeeder extends Seeder
                 'classification' => 'DCC',
                 'description' => null,
             ],
-        ];
-
-        // Insert courses into the `courses` table
-        DB::table('courses')->insert($courses);
-
-        // Insert prerequisites into the `prerequisites` table
-        DB::table('prerequisites')->insert([
-            ['course_code' => 'BIIT 1303', 'prerequisite_code' => 'BICS 1301'],
-            ['course_code' => 'BICS 1304', 'prerequisite_code' => 'BICS 1301'],
-            ['course_code' => 'BICS 1303', 'prerequisite_code' => 'BICS 1302'],
-            ['course_code' => 'BICS 2305', 'prerequisite_code' => 'BICS 1302'],
+            //FYP
+            [
+                'course_code' => 'BIIT 4321',
+                'name' => 'Final Year Project I',
+                'credit_hour' => 3,
+                'classification' => 'CCC',
+                'description' => null,
+            ],
+            //IAP
+            [
+                'course_code' => 'BIIT 4901',
+                'name' => 'Industrial Attachment',
+                'credit_hour' => 9,
+                'classification' => 'IAP',
+                'description' => null,
+            ],
         ]);
     }
 }

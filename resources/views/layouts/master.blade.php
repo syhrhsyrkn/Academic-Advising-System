@@ -264,8 +264,7 @@
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span> Course Schedule</span> <span
                                     class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="s.course-view.html">Course Schedule View</a></li>
-                                <li><a href="s.course-edit.html">Course Schedule Edit</a></li>
+                                <li><a href="course-schedule">Course Schedule View</a></li>
                             </ul>
                         </li>
                         @endrole

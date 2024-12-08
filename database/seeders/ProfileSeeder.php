@@ -10,7 +10,6 @@ class ProfileSeeder extends Seeder
 {
     public function run()
     {
-        // Attach profile to admin user
         $adminUser = User::where('email', 'admin@gmail.com')->first();
         if ($adminUser && !$adminUser->profile) {
             Profile::create([
@@ -24,7 +23,6 @@ class ProfileSeeder extends Seeder
             ]);
         }
 
-        // Attach profile to student user
         $studentUser = User::where('email', 'student@gmail.com')->first();
         if ($studentUser && !$studentUser->profile) {
             Profile::create([
@@ -55,6 +53,5 @@ class ProfileSeeder extends Seeder
             ]);
         }
 
-        $this->command->info('Profiles for admin, student, and advisor seeded successfully!');
     }
 }

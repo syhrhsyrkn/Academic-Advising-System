@@ -17,7 +17,7 @@ class CreateProfilesTable extends Migration
         $table->string('kulliyyah');
         $table->string('department');
         $table->string('specialisation')->nullable(); // For students only
-        $table->string('matric_no')->nullable(); // For students only
+        $table->string('matric_no')->unique()->nullable();  // For students only
         $table->integer('year')->nullable(); // For students only
         $table->integer('semester')->nullable(); // For students only
         $table->string('staff_id')->nullable(); // For advisor/admin only

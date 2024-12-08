@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('prerequisites', function (Blueprint $table) {
             $table->id();
-            $table->string('course_code', 10); 
-            $table->string('prerequisite_code', 10);
+            $table->string('course_code'); 
+            $table->string('prerequisite_code');
 
             $table->foreign('course_code')->references('course_code')->on('courses')->onDelete('cascade');
             $table->foreign('prerequisite_code')->references('course_code')->on('courses')->onDelete('cascade');
+
+            $table->unique(['course_code', 'prerequisite_code']);
+
         });
     }
 
