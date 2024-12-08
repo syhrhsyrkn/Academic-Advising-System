@@ -73,6 +73,13 @@ class CourseSeeder extends Seeder
             ],
             // DCC
             [
+                'course_code' => 'BIIT 1302',
+                'name' => 'Organisational Informatics',
+                'credit_hour' => 3,
+                'classification' => 'DCC',
+                'description' => null,
+            ],
+            [
                 'course_code' => 'BICS 1304',
                 'name' => 'Object-Oriented Programming',
                 'credit_hour' => 3,

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\AcademicResult;
 use App\Models\CourseSchedule;
 use App\Models\Course;
-use App\Models\Semester;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -17,19 +16,22 @@ class CourseScheduleController extends Controller
     public function index()
     {
         $matricNo = auth()->user()->matric_no;
-    
-        // Fetch semesters and calculate Year of Study
-        $semesters = Semester::with(['courseSchedules' => function ($query) use ($matricNo) {
-            $query->where('matric_no', $matricNo)->with('course');
-        }])->get();
-    
+
+        // Fetch the course schedules and group them by academic year and semester number
+        $courseSchedules = CourseSchedule::with('course')
+            ->where('matric_no', $matricNo)
+            ->orderBy('academic_year')
+            ->orderBy('semester_number')
+            ->get()
+            ->groupBy('academic_year');
+
         // Calculate the year of study based on enrolled semesters
         $yearOfStudy = $this->getYearOfStudy($matricNo);
-    
+
         // Fetch all available courses for the student
         $courses = Course::all();
-    
-        return view('course-schedule.index', compact('semesters', 'yearOfStudy', 'courses'));
+
+        return view('course-schedule.index', compact('courseSchedules', 'yearOfStudy', 'courses'));
     }
 
     /**
@@ -59,7 +61,8 @@ class CourseScheduleController extends Controller
     {
         // Validate incoming request
         $request->validate([
-            'semester_id' => 'required|exists:semesters,id',
+            'semester_number' => 'required|in:1,2,3',
+            'academic_year' => 'required|in:Year 1,Year 2,Year 3,Year 4',
             'courses' => 'required|array',
             'courses.*' => 'exists:courses,course_code',
         ]);
@@ -91,16 +94,17 @@ class CourseScheduleController extends Controller
                 }
 
                 // Check if the student is already enrolled in the course for the selected semester
-                if ($this->isCourseAlreadyScheduled($matricNo, $request->semester_id, $courseCode)) {
+                if ($this->isCourseAlreadyScheduled($matricNo, $request->semester_number, $courseCode)) {
                     return back()->withErrors([ 
                         'message' => "You are already enrolled in {$course->name} for this semester."
                     ]);
                 }
 
-                // Add the course to the course schedule
+                // Add the course to the course schedule with semester_number and academic_year
                 CourseSchedule::create([
                     'matric_no' => $matricNo,
-                    'semester_id' => $request->semester_id,
+                    'semester_number' => $request->semester_number,
+                    'academic_year' => $request->academic_year,
                     'course_code' => $courseCode,
                 ]);
             }
@@ -140,10 +144,10 @@ class CourseScheduleController extends Controller
     /**
      * Helper method to check if the student is already enrolled in the course for the selected semester.
      */
-    private function isCourseAlreadyScheduled($matricNo, $semesterId, $courseCode)
+    private function isCourseAlreadyScheduled($matricNo, $semesterNumber, $courseCode)
     {
         return CourseSchedule::where('matric_no', $matricNo)
-            ->where('semester_id', $semesterId)
+            ->where('semester_number', $semesterNumber)
             ->where('course_code', $courseCode)
             ->exists();
     }

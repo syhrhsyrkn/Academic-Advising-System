@@ -9,20 +9,20 @@ class CourseSchedule extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['matric_no', 'course_code', 'semester_id'];
+    protected $fillable = [
+        'matric_no', 
+        'course_code', 
+        'academic_year',
+        'course_code',
+    ];
 
     public function student()
     {
         return $this->belongsTo(User::class, 'matric_no', 'matric_no');
     }
 
-    public function semester()
-    {
-        return $this->belongsTo(Semester::class, 'semester_id');
-    }
-
     public function course()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Course::class, 'course_code', 'course_code');
     }
 }

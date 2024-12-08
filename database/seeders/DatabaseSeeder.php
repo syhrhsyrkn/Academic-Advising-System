@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             CourseSeeder::class,
             ProfileSeeder::class,
             PrerequisiteSeeder::class,
-            SemesterSeeder::class,
+            CourseScheduleSeeder::class,
         ]);
     }
 }

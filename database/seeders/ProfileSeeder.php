@@ -29,12 +29,12 @@ class ProfileSeeder extends Seeder
                 'user_id' => $studentUser->id,
                 'email'=> $studentUser->email,
                 'full_name' => 'Student Full Name',
-                'contact_number' => '0987654321',
+                'contact_number' => '0123456789',
                 'kulliyyah' => 'Kulliyyah of ICT',
                 'department' => 'Computer Science',
-                'matric_no' => 'G1234567',
-                'specialisation' => 'Software Engineering',
-                'year' => 2,
+                'matric_no' => '2117277',
+                'specialisation' => null,
+                'year' => 1,
                 'semester' => 1,
             ]);
         }
