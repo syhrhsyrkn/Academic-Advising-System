@@ -81,8 +81,8 @@
                         <div class="form-group">
                             <label for="prerequisites">Prerequisites</label>
                             <select name="prerequisites[]" id="prerequisites" class="form-control @error('prerequisites') is-invalid @enderror" multiple>
-                                @foreach($courses as $availableCourse)
-                                    <option value="{{ $availableCourse->course_code }}" {{ in_array($availableCourse->course_code, old('prerequisites', [])) ? 'selected' : '' }}>
+                            @foreach($availableCourses as $availableCourse)
+                            <option value="{{ $availableCourse->course_code }}" {{ in_array($availableCourse->course_code, old('prerequisites', [])) ? 'selected' : '' }}>
                                         {{ $availableCourse->course_code }} - {{ $availableCourse->name }}
                                     </option>
                                 @endforeach
