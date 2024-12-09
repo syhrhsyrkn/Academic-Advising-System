@@ -50,7 +50,15 @@
                                     </a>
                                 </th>
                                 <th>Credit Hour</th>
-                                <th>Classification</th>
+                                <th>
+                                    <a href="{{ route('course.index', ['sort_by' => 'classification', 'order' => $sortBy === 'classification' && $order === 'asc' ? 'desc' : 'asc', 'search' => $search]) }}">
+                                        Classification
+                                        @if($sortBy === 'classification')
+                                            <i class="fas fa-sort-{{ $order === 'asc' ? 'up' : 'down' }}"></i>
+                                        @endif
+                                    </a>
+                                </th>
+
                                 <th>Prerequisite</th>
                                 <th>Description</th>
                                 <th>Actions</th>
@@ -95,6 +103,12 @@
                             @endforelse
                         </tbody>
                     </table>
+
+                    <!-- Pagination Links -->
+                    <div class="d-flex justify-content-center">
+                        {{ $courses->links() }}
+                    </div>
+
                 </div>
             </div>
         </div>

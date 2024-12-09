@@ -1,6 +1,6 @@
 @extends('layouts.master')
-@section('content')
 
+@section('content')
 <div class="page-wrapper">
     <div class="content container-fluid">
 
@@ -17,6 +17,15 @@
             </div>
         </div>
         <!-- /Page Header -->
+
+        <!-- Success Message -->
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+        <!-- /Success Message -->
 
         <div class="row">
             <div class="col-md-12">
@@ -35,9 +44,6 @@
                                 <i class="fas fa-map-marker-alt"></i>{{ $profile->kulliyyah ?? 'N/A' }}, {{ $profile->department ?? 'N/A' }}
                             </div>
                         </div>
-                        <div class="col-auto profile-btn">
-                            <!-- Optional Edit Button -->
-                        </div>
                     </div>
                 </div>
                 <!-- /Profile Header -->
@@ -47,9 +53,6 @@
                     <ul class="nav nav-tabs nav-tabs-solid">
                         <li class="nav-item">
                             <a class="nav-link active" data-bs-toggle="tab" href="#per_details_tab">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#password_tab">Password</a>
                         </li>
                     </ul>
                 </div>
@@ -68,16 +71,15 @@
                                             <span>Personal Details</span>
                                             <a class="edit-link" href="{{ route('profile.edit') }}"><i class="far fa-edit me-1"></i>Edit</a>
                                         </h5>
+
                                         <div class="row">
                                             <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Full Name</p>
                                             <p class="col-sm-9">{{ $profile->full_name ?? 'N/A' }}</p>
                                         </div>
-                                        @if(auth()->user()->hasRole(['advisor', 'admin']))
-                                            <div class="row">
-                                                <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Staff ID</p>
-                                                <p class="col-sm-9">{{ $profile->staff_id ?? 'N/A' }}</p>
-                                            </div>
-                                        @endif
+                                        <div class="row">
+                                            <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Email</p>
+                                            <p class="col-sm-9">{{ Auth::user()->email }}</p>
+                                        </div>
                                         <div class="row">
                                             <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Contact Number</p>
                                             <p class="col-sm-9">{{ $profile->contact_number ?? 'N/A' }}</p>
@@ -123,5 +125,4 @@
         </div>
     </div>
 </div>
-
 @endsection

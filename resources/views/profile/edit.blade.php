@@ -1,6 +1,6 @@
 @extends('layouts.master')
-@section('content')
 
+@section('content')
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -16,55 +16,51 @@
 
                         <div class="form-group">
                             <label>Full Name</label>
-                            <input type="text" name="full_name" class="form-control" value="{{ $profile->full_name }}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" name="email" class="form-control" value="{{ $profile->email }}" required>
+                            <input type="text" name="full_name" class="form-control" value="{{ old('full_name', $profile->full_name ?? '') }}" required>
                         </div>
 
                         @role('student')
                             <div class="form-group">
                                 <label>Matric No</label>
-                                <input type="text" name="matric_no" class="form-control" value="{{ $profile->matric_no }}">
+                                <input type="text" name="matric_no" class="form-control" value="{{ old('matric_no', $profile->matric_no ?? '') }}">
                             </div>
                         @endrole
 
-                        @role('admin'|'advisor')
+                        @role('admin|advisor')
                             <div class="form-group">
                                 <label>Staff ID</label>
-                                <input type="text" name="staff_id" class="form-control" value="{{ $profile->staff_id }}">
+                                <input type="text" name="staff_id" class="form-control" value="{{ old('staff_id', $profile->staff_id ?? '') }}">
                             </div>
                         @endrole
 
                         <div class="form-group">
                             <label>Contact Number</label>
-                            <input type="text" name="contact_number" class="form-control" value="{{ $profile->contact_number }}" required>
+                            <input type="text" name="contact_number" class="form-control" value="{{ old('contact_number', $profile->contact_number ?? '') }}" required>
                         </div>
 
                         @role('student')
                             <div class="form-group">
                                 <label>Specialisation</label>
-                                <input type="text" name="specialisation" class="form-control" value="{{ $profile->specialisation }}">
+                                <input type="text" name="specialisation" class="form-control" value="{{ old('specialisation', $profile->specialisation ?? '') }}">
                             </div>
                             <div class="form-group">
                                 <label>Year</label>
-                                <input type="number" name="year" class="form-control" value="{{ $profile->year }}">
+                                <input type="number" name="year" class="form-control" value="{{ old('year', $profile->year ?? '') }}">
                             </div>
                             <div class="form-group">
                                 <label>Semester</label>
-                                <input type="number" name="semester" class="form-control" value="{{ $profile->semester }}">
+                                <input type="number" name="semester" class="form-control" value="{{ old('semester', $profile->semester ?? '') }}">
                             </div>
                         @endrole
 
                         <div class="form-group">
                             <label>Kulliyyah</label>
-                            <input type="text" name="kulliyyah" class="form-control" value="{{ $profile->kulliyyah }}" required>
+                            <input type="text" name="kulliyyah" class="form-control" value="{{ old('kulliyyah', $profile->kulliyyah ?? '') }}" required>
                         </div>
 
                         <div class="form-group">
                             <label>Department</label>
-                            <input type="text" name="department" class="form-control" value="{{ $profile->department }}" required>
+                            <input type="text" name="department" class="form-control" value="{{ old('department', $profile->department ?? '') }}" required>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Save Changes</button>

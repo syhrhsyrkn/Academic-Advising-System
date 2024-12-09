@@ -91,7 +91,7 @@ class CourseSeeder extends Seeder
                 'course_code' => 'BIIT 4321',
                 'name' => 'Final Year Project I',
                 'credit_hour' => 3,
-                'classification' => 'CCC',
+                'classification' => 'FYP',
                 'description' => null,
             ],
             //IAP

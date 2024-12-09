@@ -1,76 +1,91 @@
 @extends('layouts.master')
+
 @section('content')
+<div class="container">
+    <h1>Course Schedule</h1>
+    <div class="course-schedule-container">
+        <!-- List of Courses -->
+        <div class="course-list-container">
+            <h3>List of Courses</h3>
+            <ul id="course-list" class="sortable-list">
+                @foreach($coursesByClassification as $classification => $courses)
+                    <li class="classification">{{ $classification }}</li>
+                    @foreach($courses as $course)
+                        <li data-course-code="{{ $course->course_code }}">
+                            {{ $course->name }} ({{ $course->credit_hour }} credits)
+                        </li>
+                    @endforeach
+                @endforeach
+            </ul>
+        </div>
 
-<h1>Course Schedule</h1>
-
-<!-- Display success or error message -->
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@elseif ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
+        <!-- Schedule (Years and Semesters) -->
+        <div class="year-container">
+            @foreach ($schedules as $year => $semesters)
+                <h3>{{ $year }}</h3>
+                @foreach ($semesters as $semesterNumber => $courses)
+                    <div class="semester-container">
+                        <h4>Semester {{ $semesterNumber }}</h4>
+                        <ul id="semester-{{ $year }}-{{ $semesterNumber }}" class="sortable-list semester-list">
+                            @foreach ($courses as $course)
+                                <li data-course-code="{{ $course->course->course_code }}">
+                                    {{ $course->course->name }} ({{ $course->course->credit_hour }} credits)
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endforeach
             @endforeach
-        </ul>
+        </div>
     </div>
-@endif
 
-<h2>Your Year of Study: {{ $yearOfStudy }}</h2>
+    <!-- Save Button -->
+    <div class="buttons">
+        <button id="save-schedule" class="btn btn-primary">Save Schedule</button>
+    </div>
+</div>
+@endsection
 
-<form action="{{ route('course-schedule.store') }}" method="POST">
-    @csrf
+@section('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize sortable lists
+        const courseList = document.getElementById('course-list');
+        const semesterLists = document.querySelectorAll('.semester-list');
 
-    <!-- Select Semester -->
-    <label for="semester_number">Select Semester:</label>
-    <select name="semester_number" id="semester_number" required>
-        <option value="1">Semester 1</option>
-        <option value="2">Semester 2</option>
-        <option value="3">Semester 3</option>
-    </select>
+        // Enable drag-and-drop for course list and semesters
+        new Sortable(courseList, { group: 'shared', animation: 150 });
+        semesterLists.forEach(list => {
+            new Sortable(list, { group: 'shared', animation: 150 });
+        });
 
-    <!-- Select Academic Year -->
-    <label for="academic_year">Select Academic Year:</label>
-    <select name="academic_year" id="academic_year" required>
-        <option value="Year 1">Year 1</option>
-        <option value="Year 2">Year 2</option>
-        <option value="Year 3">Year 3</option>
-        <option value="Year 4">Year 4</option>
-    </select>
+        // Save button functionality
+        document.getElementById('save-schedule').addEventListener('click', function () {
+            const scheduleData = {};
 
-    <!-- Select Courses -->
-    <label for="courses">Select Courses:</label>
-    <select name="courses[]" id="courses" multiple required>
-        @foreach($courses as $course)
-            <option value="{{ $course->course_code }}">{{ $course->name }} ({{ $course->credit_hour }} credits)</option>
-        @endforeach
-    </select>
+            semesterLists.forEach(list => {
+                const semesterId = list.id;
+                scheduleData[semesterId] = Array.from(list.children).map(item => item.dataset.courseCode);
+            });
 
-    <!-- Submit Button -->
-    <button type="submit">Add Courses</button>
-</form>
-
-<hr>
-
-<!-- Display Existing Courses for the Student in the Selected Semester -->
-<h2>Current Courses in Your Schedule</h2>
-@foreach($courseSchedules as $academicYear => $semesters)
-    <h3>{{ $academicYear }} Courses</h3>
-    @foreach($semesters->groupBy('semester_number') as $semesterNumber => $scheduleGroup)
-        <h4>Semester {{ $semesterNumber }}</h4>
-        <ul>
-            @foreach($scheduleGroup as $schedule)
-                <li>
-                    {{ $schedule->course->name }} ({{ $schedule->course->credit_hour }} credits)
-                    @if (auth()->user()->matric_no == $schedule->matric_no)
-                        <span> - In Progress</span>
-                    @endif
-                </li>
-            @endforeach
-        </ul>
-    @endforeach
-@endforeach
-
+            // Send data to server via AJAX
+            fetch('{{ route('course-schedule.saveSchedule') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify(scheduleData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error saving schedule:', error);
+            });
+        });
+    });
+</script>
 @endsection

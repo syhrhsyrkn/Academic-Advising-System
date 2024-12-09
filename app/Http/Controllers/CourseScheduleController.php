@@ -10,56 +10,33 @@ use Illuminate\Support\Facades\DB;
 
 class CourseScheduleController extends Controller
 {
-    /**
-     * Display the course schedule index page.
-     */
+
     public function index()
     {
         $matricNo = auth()->user()->matric_no;
 
-        // Fetch the course schedules and group them by academic year and semester number
-        $courseSchedules = CourseSchedule::with('course')
-            ->where('matric_no', $matricNo)
-            ->orderBy('academic_year')
-            ->orderBy('semester_number')
+        // Group schedules by year and semester
+        $schedules = CourseSchedule::where('matric_no', $matricNo)
+            ->with(['course'])
             ->get()
-            ->groupBy('academic_year');
+            ->groupBy(function ($schedule) {
+                return 'Year ' . ceil($schedule->semester_number / 2); 
+            })
+            ->map(function ($yearGroup) {
+                return $yearGroup->groupBy('semester_number');
+            });
 
-        // Calculate the year of study based on enrolled semesters
-        $yearOfStudy = $this->getYearOfStudy($matricNo);
+        // Group courses by classification for the sidebar
+        $coursesByClassification = Course::all()->groupBy('classification');
 
-        // Fetch all available courses for the student
-        $courses = Course::all();
-
-        return view('course-schedule.index', compact('courseSchedules', 'yearOfStudy', 'courses'));
+        return view('course-schedule.index', compact('schedules', 'coursesByClassification'));
     }
 
     /**
-     * Determine the year of study based on enrolled semesters.
-     */
-    public function getYearOfStudy($matricNo)
-    {
-        // Count the number of semesters the student is enrolled in
-        $semesterCount = CourseSchedule::where('matric_no', $matricNo)->count();
-
-        // Determine the year of study based on the semester count
-        if ($semesterCount <= 2) {
-            return 'Year 1';
-        } elseif ($semesterCount <= 4) {
-            return 'Year 2';
-        } elseif ($semesterCount <= 6) {
-            return 'Year 3';
-        } else {
-            return 'Year 4';
-        }
-    }
-
-    /**
-     * Store the selected courses for the student in the course schedule.
+     * Store the selected courses for a semester.
      */
     public function store(Request $request)
     {
-        // Validate incoming request
         $request->validate([
             'semester_number' => 'required|in:1,2,3',
             'academic_year' => 'required|in:Year 1,Year 2,Year 3,Year 4',
@@ -67,40 +44,32 @@ class CourseScheduleController extends Controller
             'courses.*' => 'exists:courses,course_code',
         ]);
 
-        // Get matric number of the authenticated user
         $matricNo = auth()->user()->matric_no;
 
-        // Calculate total credits for the selected courses
         $totalCredits = Course::whereIn('course_code', $request->courses)->sum('credit_hour');
 
-        // Check if the total credits are within the acceptable range
         if ($totalCredits < 12 || $totalCredits > 20) {
             return back()->withErrors(['message' => 'Total credit hours must be between 12 and 20.']);
         }
 
-        // Start a database transaction to ensure atomicity
         DB::beginTransaction();
 
         try {
-            // Loop through the selected courses to add them to the schedule
             foreach ($request->courses as $courseCode) {
                 $course = Course::with('prerequisites')->where('course_code', $courseCode)->firstOrFail();
 
-                // Check prerequisites for the selected course
                 if (!$this->checkPrerequisites($matricNo, $course)) {
-                    return back()->withErrors([ 
+                    return back()->withErrors([
                         'message' => "You must complete the prerequisites for {$course->name} before enrolling."
                     ]);
                 }
 
-                // Check if the student is already enrolled in the course for the selected semester
                 if ($this->isCourseAlreadyScheduled($matricNo, $request->semester_number, $courseCode)) {
-                    return back()->withErrors([ 
+                    return back()->withErrors([
                         'message' => "You are already enrolled in {$course->name} for this semester."
                     ]);
                 }
 
-                // Add the course to the course schedule with semester_number and academic_year
                 CourseSchedule::create([
                     'matric_no' => $matricNo,
                     'semester_number' => $request->semester_number,
@@ -109,21 +78,47 @@ class CourseScheduleController extends Controller
                 ]);
             }
 
-            // Commit the transaction
             DB::commit();
-
-            // Redirect back with success message
             return redirect()->route('course-schedule.index')->with('success', 'Courses added successfully.');
-
         } catch (\Exception $e) {
-            // Rollback the transaction in case of any error
             DB::rollBack();
             return back()->withErrors(['message' => 'An error occurred while processing your request. Please try again.']);
         }
     }
 
     /**
-     * Helper method to check if prerequisites for a course are completed.
+     * Save the schedule via drag-and-drop functionality.
+     */
+    public function saveSchedule(Request $request)
+    {
+        $scheduleData = $request->all();
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($scheduleData as $semesterId => $courseCodes) {
+                foreach ($courseCodes as $courseCode) {
+                    CourseSchedule::updateOrCreate(
+                        [
+                            'matric_no' => auth()->user()->matric_no,
+                            'semester_number' => $semesterId,
+                            'course_code' => $courseCode,
+                        ],
+                        [] // Add additional fields if necessary
+                    );
+                }
+            }
+
+            DB::commit();
+            return response()->json(['message' => 'Schedule saved successfully.']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'An error occurred while saving the schedule.'], 500);
+        }
+    }
+
+    /**
+     * Check if prerequisites for a course are completed.
      */
     private function checkPrerequisites($matricNo, $course)
     {
@@ -142,7 +137,7 @@ class CourseScheduleController extends Controller
     }
 
     /**
-     * Helper method to check if the student is already enrolled in the course for the selected semester.
+     * Check if the course is already scheduled.
      */
     private function isCourseAlreadyScheduled($matricNo, $semesterNumber, $courseCode)
     {

@@ -35,6 +35,7 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    //profile
     public function profile()
     {
         return $this->hasOne(Profile::class);

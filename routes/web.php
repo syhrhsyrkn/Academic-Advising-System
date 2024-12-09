@@ -76,9 +76,10 @@ Route::middleware([
     });
 
     //course schedule
-    Route::middleware(['auth', 'role:student'])->group(function () {
+    Route::middleware(['auth'])->group(function () {
         Route::get('/course-schedule', [CourseScheduleController::class, 'index'])->name('course-schedule.index');
-        Route::post('/course-schedule', [CourseScheduleController::class, 'store'])->name('course-schedule.store');
+        Route::post('/course-schedule/store', [CourseScheduleController::class, 'store'])->name('course-schedule.store');
+        Route::post('/course-schedule/save-schedule', [CourseScheduleController::class, 'saveSchedule'])->name('course-schedule.saveSchedule');
     });
 
     //taskbar

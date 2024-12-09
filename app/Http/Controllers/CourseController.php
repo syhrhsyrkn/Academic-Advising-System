@@ -43,19 +43,20 @@ class CourseController extends Controller
     {
         $sortBy = $request->get('sort_by', 'name');
         $order = $request->get('order', 'asc');
-
+    
         $search = $request->get('search');
-
+    
         $courses = Course::query()
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%')
                       ->orWhere('course_code', 'like', '%' . $search . '%');
             })
             ->orderBy($sortBy, $order)
-            ->paginate(10);
-
+            ->paginate(10);  
+    
         return view('course.index-course', compact('courses', 'search', 'sortBy', 'order'));
     }
+    
 
     public function show(Course $course)
     {
