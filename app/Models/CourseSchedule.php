@@ -13,7 +13,6 @@ class CourseSchedule extends Model
         'matric_no', 
         'course_code', 
         'academic_year',
-        'course_code',
     ];
 
     public function student()

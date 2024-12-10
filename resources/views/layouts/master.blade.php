@@ -205,7 +205,7 @@
                         <li class="menu-title">
                             <span>Main Menu</span>
                         </li>
-                        @role('admin')
+                        <!-- @role('admin')
                         <li>
                             <a href="kict-dashboard"><i class="feather-grid"></i> <span> Admin Dashboard</span> </a>
                         </li>
@@ -219,7 +219,7 @@
                         <li>
                             <a href="dashboard"><i class="feather-grid"></i> <span> Student Dashboard</span> </a>
                         </li>
-                        @endrole
+                        @endrole -->
                         <li class="submenu">
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span> Students</span> <span
                             class="menu-arrow"></span></a>
@@ -259,7 +259,7 @@
                                 @endrole
                             </ul>
                         </li>
-                        @role('advisor|student')
+                        @role('student')
                         <li class="submenu">
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span> Course Schedule</span> <span
                                     class="menu-arrow"></span></a>

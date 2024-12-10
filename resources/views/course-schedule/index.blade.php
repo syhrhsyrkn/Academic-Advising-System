@@ -42,6 +42,20 @@
     <!-- Save Button -->
     <div class="buttons">
         <button id="save-schedule" class="btn btn-primary">Save Schedule</button>
+
+        <h3>Request an Appointment</h3>
+        <form action="{{ route('appointments.store') }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label for="advising_reason">Advising Reason</label>
+                <textarea name="advising_reason" id="advising_reason" class="form-control" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="appointment_date">Preferred Appointment Date</label>
+                <input type="datetime-local" name="appointment_date" id="appointment_date" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
 </div>
 @endsection

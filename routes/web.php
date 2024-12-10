@@ -12,6 +12,10 @@ use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\CourseScheduleController;
 
+use App\Http\Controllers\AdvisorController;
+
+use App\Http\Controllers\AppointmentController;
+
 Route::get('/', function () {
     return view('auth/login');
 });
@@ -24,18 +28,18 @@ Route::middleware([
 
     //sidebar
     //dashboard
-    Route::get('/kict-dashboard', function () {
-        $courses = Course::all();
-        return view('admin.kict-dashboard', compact('courses'));
-    })->name('kict-dashboard');
+    // Route::get('/kict-dashboard', function () {
+    //     $courses = Course::all();
+    //     return view('admin/kict-dashboard', compact('courses'));
+    // })->name('kict-dashboard');
 
-    Route::get('/teacher-dashboard', function () {
-        return view('advisor/teacher-dashboard');
-    })->name('teacher-dashboard');
+    // Route::get('/teacher-dashboard', function () {
+    //     return view('advisor/teacher-dashboard');
+    // })->name('teacher-dashboard');
 
-    Route::get('/dashboard', function () {
-        return view('student/student-dashboard');
-    })->name('dashboard');
+    // Route::get('/dashboard', function () {
+    //     return view('student/student-dashboard');
+    // })->name('dashboard');
 
     //students
     Route::get('/students', function () {
@@ -80,6 +84,21 @@ Route::middleware([
         Route::get('/course-schedule', [CourseScheduleController::class, 'index'])->name('course-schedule.index');
         Route::post('/course-schedule/store', [CourseScheduleController::class, 'store'])->name('course-schedule.store');
         Route::post('/course-schedule/save-schedule', [CourseScheduleController::class, 'saveSchedule'])->name('course-schedule.saveSchedule');
+    });
+
+    // Appointment routes
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index')->middleware('role:advisor');
+        Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('role:student');
+        Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('role:student');
+    });
+    
+    //Advisor (view students)
+    Route::middleware(['auth', 'role:advisor'])->group(function () {
+        Route::get('/advisor/students', [AdvisorController::class, 'studentList'])->name('advisor.students');
+        Route::get('/advisor/students/{id}', [AdvisorController::class, 'viewStudentProfile'])->name('advisor.student.profile');
+        Route::get('/advisor/students/{id}/schedule', [AdvisorController::class, 'viewStudentSchedule'])->name('advisor.student.schedule');
+        Route::get('/advisor/students/{id}/results', [AdvisorController::class, 'viewStudentResults'])->name('advisor.student.results');
     });
 
     //taskbar
