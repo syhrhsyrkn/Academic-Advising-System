@@ -13,7 +13,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CourseScheduleController;
 
 use App\Http\Controllers\AdvisorController;
-
 use App\Http\Controllers\AppointmentController;
 
 Route::get('/', function () {
@@ -28,18 +27,18 @@ Route::middleware([
 
     //sidebar
     //dashboard
-    // Route::get('/kict-dashboard', function () {
-    //     $courses = Course::all();
-    //     return view('admin/kict-dashboard', compact('courses'));
-    // })->name('kict-dashboard');
+    Route::get('/kict-dashboard', function () {
+        $courses = Course::all();
+        return view('admin/kict-dashboard', compact('courses'));
+    })->name('kict-dashboard');
 
-    // Route::get('/teacher-dashboard', function () {
-    //     return view('advisor/teacher-dashboard');
-    // })->name('teacher-dashboard');
+    Route::get('/teacher-dashboard', function () {
+        return view('advisor/teacher-dashboard');
+    })->name('teacher-dashboard');
 
-    // Route::get('/dashboard', function () {
-    //     return view('student/student-dashboard');
-    // })->name('dashboard');
+    Route::get('/student-dashboard', function () {
+        return view('student/student-dashboard');
+    })->name('student-dashboard');
 
     //students
     Route::get('/students', function () {
@@ -58,12 +57,6 @@ Route::middleware([
         return view('edit-student');
     })->name('edit-student');
 
-    //profile
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    });
 
     //course
     Route::middleware(['role:admin'])->group(function () {
@@ -86,25 +79,33 @@ Route::middleware([
         Route::post('/course-schedule/save-schedule', [CourseScheduleController::class, 'saveSchedule'])->name('course-schedule.saveSchedule');
     });
 
-    // Appointment routes
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index')->middleware('role:advisor');
-        Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('role:student');
-        Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('role:student');
-    });
+    // // Appointment routes
+    // Route::middleware(['auth'])->group(function () {
+    //     Route::get('/appointment-', [AppointmentController::class, 'index'])->name('appointments.index')->middleware('role:advisor');
+    //     Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('role:student');
+    //     Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('role:student');
+    // });
     
     //Advisor (view students)
-    Route::middleware(['auth', 'role:advisor'])->group(function () {
-        Route::get('/advisor/students', [AdvisorController::class, 'studentList'])->name('advisor.students');
-        Route::get('/advisor/students/{id}', [AdvisorController::class, 'viewStudentProfile'])->name('advisor.student.profile');
-        Route::get('/advisor/students/{id}/schedule', [AdvisorController::class, 'viewStudentSchedule'])->name('advisor.student.schedule');
-        Route::get('/advisor/students/{id}/results', [AdvisorController::class, 'viewStudentResults'])->name('advisor.student.results');
-    });
+    Route::get('/advisor/student-list', [AdvisorController::class, 'studentList'])->name('advisor.student-list');
+    Route::get('/advisor/student-profile/{student}', [AdvisorController::class, 'viewStudentProfile'])->name('advisor.view-student-profile');
+    Route::get('/advisor/student-schedule/{student}', [AdvisorController::class, 'viewStudentSchedule'])->name('advisor.view-student-schedule');
+    Route::get('/advisor/edit-appointment/{appointment}', [AdvisorController::class, 'editAppointment'])->name('advisor.edit-appointment');
+    Route::put('/advisor/update-appointment/{appointment}', [AdvisorController::class, 'updateAppointment'])->name('advisor.update-appointment');
+    Route::get('/advisor/appointment-list', [AdvisorController::class, 'viewAllAppointments'])->name('advisor.appointment-list');
+
+
 
     //taskbar
     Route::get('/profile', function () {
         return view('/profile/profile');
     })->name('profile');
+
+    //profile
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    
     
     Route::post('/logout', [LogoutController::class, 'destroy'])->name('logout');
 });

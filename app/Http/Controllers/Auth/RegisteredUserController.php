@@ -28,10 +28,8 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        // Assign the role
         $user->assignRole('student');
 
-        // Dispatch Registered event
         event(new Registered($user));
 
         return $user;

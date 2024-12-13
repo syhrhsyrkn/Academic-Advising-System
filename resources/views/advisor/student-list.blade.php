@@ -2,27 +2,61 @@
 
 @section('content')
 <div class="container">
-    <h1>Students</h1>
-    <table class="table">
+    <h1>List of Students</h1>
+    
+    <!-- Filter by Academic Year -->
+    <form method="GET" action="{{ route('advisor.student-list') }}">
+        <label for="academic_year">Filter by Academic Year:</label>
+        <select name="academic_year" id="academic_year" onchange="this.form.submit()">
+            <option value="">All</option>
+            @foreach($academicYears as $year)
+                <option value="{{ $year->id }}" {{ request('academic_year') == $year->id ? 'selected' : '' }}>
+                    {{ $year->name }}
+                </option>
+            @endforeach
+        </select>
+    </form>
+
+    <!-- Student Table -->
+    <table border="1" cellpadding="10" cellspacing="0">
         <thead>
             <tr>
+                <th>#</th>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Matric No</th>
+                <th>Contact No</th>
+                <th>Status</th>
+                <th>Advising Reason</th>
+                <th>Appointment Date</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($students as $student)
-            <tr>
-                <td>{{ $student->name }}</td>
-                <td>{{ $student->email }}</td>
-                <td>
-                    <a href="{{ route('advisor.student.profile', $student->id) }}" class="btn btn-info">View Profile</a>
-                    <a href="{{ route('advisor.student.schedule', $student->id) }}" class="btn btn-primary">View Schedule</a>
-                    <a href="{{ route('advisor.student.results', $student->id) }}" class="btn btn-success">View Results</a>
-                </td>
-            </tr>
-            @endforeach
+            @forelse($students as $student)
+                @php
+                    $latestAppointment = $student->appointments->first();
+                @endphp
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $student->name }}</td>
+                    <td>{{ $student->email }}</td>
+                    <td>{{ $student->student->matric_no ?? 'N/A' }}</td>
+                    <td>{{ $student->student->contact_no ?? 'N/A' }}</td>
+                    <td>{{ $latestAppointment->status ?? 'No Appointment' }}</td>
+                    <td>{{ $latestAppointment->advising_reason ?? 'N/A' }}</td>
+                    <td>{{ $latestAppointment->appointment_date ?? 'N/A' }}</td>
+                    <td>
+                        <a href="{{ route('advisor.view-student-profile', $student->id) }}">View Profile</a> |
+                        <a href="{{ route('advisor.view-student-schedule', $student->id) }}">Course Schedule</a> |
+                        <a href="{{ route('advisor.edit-appointment', $latestAppointment->id ?? '') }}" {{ !$latestAppointment ? 'class=disabled' : '' }}> Update Appointment</a>                    
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="9">No students found.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 </div>

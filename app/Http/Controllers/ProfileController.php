@@ -3,65 +3,93 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Student;
+use App\Models\Staff;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
-    public function show()
-    {
-        // Fetch the authenticated user and their profile
-        $user = Auth::user();
-        $profile = $user->profile; // Assuming 'profile' is a relationship on the User model
-
-        return view('profile.profile', compact('profile'));
-    }
 
     public function edit()
     {
-        // Fetch the authenticated user and their profile for editing
-        $profile = Auth::user()->profile;
+        $user = Auth::user();
+
+        if ($user->hasRole('student')) {
+            $profile = Student::where('user_id', $user->id)->first();
+        } else {
+            $profile = Staff::where('user_id', $user->id)->first();
+        }
 
         return view('profile.edit', compact('profile'));
     }
 
     public function update(Request $request)
     {
-        // Get the authenticated user
-        $user = auth()->user();
+        $user = Auth::user();
 
-        // Validate the request input
-        $validated = $request->validate([
+        $rules = [
             'full_name' => 'required|string|max:255',
-            'contact_number' => 'required|string|max:15',
+            'contact_no' => 'required|string|max:20',
             'kulliyyah' => 'required|string|max:255',
-            'department' => 'required|string|max:255',
-        ]);
+            'department' => 'required|in:Department of Information Systems,Department of Computer Science', // Validation rule for dropdown
+        ];
 
-        // Add student-specific fields if the user is a student
         if ($user->hasRole('student')) {
-            $validated['matric_no'] = $request->input('matric_no');
-            $validated['specialisation'] = $request->input('specialisation');
-            $validated['year'] = $request->input('year');
-            $validated['semester'] = $request->input('semester');
-        }
-
-        // Add staff-specific fields if the user is an advisor or admin
-        if ($user->hasRole('advisor') || $user->hasRole('admin')) {
-            $validated['staff_id'] = $request->input('staff_id');
-        }
-
-        // Retrieve the user's profile and update or create it
-        $profile = $user->profile;
-        
-        if ($profile) {
-            // Update the existing profile
-            $profile->update($validated);
+            $rules['matric_no'] = 'required|string|max:50';
+            $rules['specialisation'] = 'nullable|string|max:255';
         } else {
-            // Create a new profile if it doesn't exist
-            $user->profile()->create($validated);
+            $rules['staff_id'] = 'required|string|max:50';
         }
 
-        // Redirect to the profile page with a success message
-        return redirect()->route('profile.show')->with('success', 'Profile updated successfully!');
+        $data = $request->validate($rules);
+
+        if ($user->hasRole('student')) {
+            $student = Student::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'full_name' => $data['full_name'],
+                    'contact_no' => $data['contact_no'],
+                    'matric_no' => $data['matric_no'],
+                    'kulliyyah' => $data['kulliyyah'],
+                    'department' => $data['department'],
+                    'specialisation' => $data['specialisation'],
+                ]
+            );
+        } else {
+            $staff = Staff::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'full_name' => $data['full_name'],
+                    'contact_no' => $data['contact_no'],
+                    'staff_id' => $data['staff_id'],
+                    'kulliyyah' => $data['kulliyyah'],
+                    'department' => $data['department'],
+                ]
+            );
+        }
+
+        return redirect()->route('profile.show')->with('success', 'Profile updated successfully.');
     }
+
+    public function show()
+    {
+        $user = Auth::user()->load('roles');
+        $profile = null;
+
+        if ($user->hasRole('student')) {
+            // Fetch data from the 'students' table
+            $profile = Student::where('user_id', $user->id)->first();
+        } elseif ($user->hasRole(['admin', 'advisor'])) {
+            // Fetch data from the 'staff' table
+            $profile = Staff::where('user_id', $user->id)->first();
+        }
+
+        if (!$profile) {
+            return redirect()->back()->with('error', 'Profile not found.');
+        }
+
+        return view('profile.show', compact('profile'));
+    }
+
 }

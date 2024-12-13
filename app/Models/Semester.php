@@ -13,6 +13,6 @@ class Semester extends Model
 
     public function courseSchedules()
     {
-        return $this->hasMany(CourseSchedule::class);
+        return $this->hasMany(CourseSchedule::class, 'semester_id');
     }
 }

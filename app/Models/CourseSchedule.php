@@ -2,26 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CourseSchedule extends Model
 {
-    use HasFactory;
+    protected $table = 'student_course_schedule';
 
     protected $fillable = [
-        'matric_no', 
-        'course_code', 
-        'academic_year',
+        'student_id',   
+        'course_code',  
+        'semester_id',  
     ];
 
     public function student()
     {
-        return $this->belongsTo(User::class, 'matric_no', 'matric_no');
+        return $this->belongsTo(Student::class, 'student_id');
     }
 
     public function course()
     {
-        return $this->belongsTo(Course::class, 'course_code', 'course_code');
+        return $this->belongsTo(Course::class, 'course_code');  
+    }
+
+    public function semester()
+    {
+        return $this->belongsTo(Semester::class, 'semester_id');
     }
 }

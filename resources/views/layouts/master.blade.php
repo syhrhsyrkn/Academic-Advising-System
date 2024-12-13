@@ -205,7 +205,7 @@
                         <li class="menu-title">
                             <span>Main Menu</span>
                         </li>
-                        <!-- @role('admin')
+                        @role('admin')
                         <li>
                             <a href="kict-dashboard"><i class="feather-grid"></i> <span> Admin Dashboard</span> </a>
                         </li>
@@ -217,17 +217,15 @@
                         @endrole
                         @role('student')
                         <li>
-                            <a href="dashboard"><i class="feather-grid"></i> <span> Student Dashboard</span> </a>
+                            <a href="student-dashboard"><i class="feather-grid"></i> <span> Student Dashboard</span> </a>
                         </li>
-                        @endrole -->
+                        @endrole
                         <li class="submenu">
-                            <a href="#"><i class="fas fa-graduation-cap"></i> <span> Students</span> <span
+                            <a href="#"><i class="fas fa-graduation-cap"></i> <span> Advising </span> <span
                             class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="students">Student List</a></li>
-                                <li><a href="student-details">Student View</a></li>
-                                <li><a href="add-student">Student Add</a></li>
-                                <li><a href="edit-student">Student Edit</a></li>
+                                <li><a href="advisor/student-list">Student List</a></li>
+                                <li><a href="{{ route('advisor.appointment-list') }}">View All Appointments</a></li>
                             </ul>
                         </li>
                         <!-- <li class="submenu">
@@ -268,7 +266,7 @@
                             </ul>
                         </li>
                         @endrole
-                        @role('advisor|student')
+                        @role('student')
                         <li class="submenu">
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span>Academic Result</span> <span
                                     class="menu-arrow"></span></a>

@@ -10,7 +10,6 @@
                 <div class="col">
                     <h3 class="page-title">Profile</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active">Profile</li>
                     </ul>
                 </div>
@@ -82,7 +81,7 @@
                                         </div>
                                         <div class="row">
                                             <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Contact Number</p>
-                                            <p class="col-sm-9">{{ $profile->contact_number ?? 'N/A' }}</p>
+                                            <p class="col-sm-9">{{ $profile->contact_no ?? 'N/A' }}</p>
                                         </div>
                                         <div class="row">
                                             <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Kulliyyah</p>

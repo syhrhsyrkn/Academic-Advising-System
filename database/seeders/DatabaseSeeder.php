@@ -13,10 +13,10 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
-            CourseSeeder::class,
-            ProfileSeeder::class,
-            PrerequisiteSeeder::class,
-            CourseScheduleSeeder::class,
+            StudentSeeder::class,
+            StaffSeeder::class,
+            // CourseSeeder::class,
+            // PrerequisiteSeeder::class,
         ]);
     }
 }

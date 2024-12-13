@@ -10,14 +10,14 @@ class Appointment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'matric_no',
+        'user_id',
         'advising_reason',
         'status',
         'appointment_date',
     ];
 
-    public function profile()
+    public function user()
     {
-        return $this->belongsTo(Profile::class, 'matric_no', 'matric_no');
+        return $this->belongsTo(User::class);
     }
 }

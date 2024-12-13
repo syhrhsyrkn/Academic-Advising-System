@@ -14,57 +14,78 @@
                         @csrf
                         @method('PUT')
 
-                        <div class="form-group">
-                            <label>Full Name</label>
-                            <input type="text" name="full_name" class="form-control" value="{{ old('full_name', $profile->full_name ?? '') }}" required>
+                        <!-- Display Validation Errors -->
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <!-- Full Name -->
+                        <div class="form-group mb-3">
+                            <label for="full_name">Full Name</label>
+                            <input type="text" name="full_name" id="full_name" class="form-control" 
+                                value="{{ old('full_name', $profile->full_name ?? '') }}" required>
                         </div>
 
-                        @role('student')
-                            <div class="form-group">
-                                <label>Matric No</label>
-                                <input type="text" name="matric_no" class="form-control" value="{{ old('matric_no', $profile->matric_no ?? '') }}">
+                        <!-- Role-specific Fields -->
+                        @if(auth()->user()->hasRole('student'))
+                            <!-- Matric No -->
+                            <div class="form-group mb-3">
+                                <label for="matric_no">Matric No</label>
+                                <input type="text" name="matric_no" id="matric_no" class="form-control" 
+                                    value="{{ old('matric_no', $profile->matric_no ?? '') }}" required>
                             </div>
-                        @endrole
 
-                        @role('admin|advisor')
-                            <div class="form-group">
-                                <label>Staff ID</label>
-                                <input type="text" name="staff_id" class="form-control" value="{{ old('staff_id', $profile->staff_id ?? '') }}">
+                            <!-- Specialisation -->
+                            <div class="form-group mb-3">
+                                <label for="specialisation">Specialisation</label>
+                                <input type="text" name="specialisation" id="specialisation" class="form-control" 
+                                    value="{{ old('specialisation', $profile->specialisation ?? '') }}">
                             </div>
-                        @endrole
 
-                        <div class="form-group">
-                            <label>Contact Number</label>
-                            <input type="text" name="contact_number" class="form-control" value="{{ old('contact_number', $profile->contact_number ?? '') }}" required>
+                        @elseif(auth()->user()->hasRole(['admin', 'advisor']))
+                            <!-- Staff ID -->
+                            <div class="form-group mb-3">
+                                <label for="staff_id">Staff ID</label>
+                                <input type="text" name="staff_id" id="staff_id" class="form-control" 
+                                    value="{{ old('staff_id', $profile->staff_id ?? '') }}" required>
+                            </div>
+                        @endif
+
+                        <!-- Contact Number -->
+                        <div class="form-group mb-3">
+                            <label for="contact_no">Contact Number</label>
+                            <input type="text" name="contact_no" id="contact_no" class="form-control" 
+                                value="{{ old('contact_no', $profile->contact_no ?? '') }}" required>
                         </div>
 
-                        @role('student')
-                            <div class="form-group">
-                                <label>Specialisation</label>
-                                <input type="text" name="specialisation" class="form-control" value="{{ old('specialisation', $profile->specialisation ?? '') }}">
-                            </div>
-                            <div class="form-group">
-                                <label>Year</label>
-                                <input type="number" name="year" class="form-control" value="{{ old('year', $profile->year ?? '') }}">
-                            </div>
-                            <div class="form-group">
-                                <label>Semester</label>
-                                <input type="number" name="semester" class="form-control" value="{{ old('semester', $profile->semester ?? '') }}">
-                            </div>
-                        @endrole
-
-                        <div class="form-group">
-                            <label>Kulliyyah</label>
-                            <input type="text" name="kulliyyah" class="form-control" value="{{ old('kulliyyah', $profile->kulliyyah ?? '') }}" required>
+                        <!-- Kulliyyah -->
+                        <div class="form-group mb-3">
+                            <label for="kulliyyah">Kulliyyah</label>
+                            <input type="text" name="kulliyyah" id="kulliyyah" class="form-control" 
+                                value="{{ old('kulliyyah', $profile->kulliyyah ?? '') }}" required>
                         </div>
 
+                        <!-- Department -->
                         <div class="form-group">
-                            <label>Department</label>
-                            <input type="text" name="department" class="form-control" value="{{ old('department', $profile->department ?? '') }}" required>
+                            <label for="department">Department</label>
+                            <select name="department" id="department" class="form-control" required>
+                                <option value="Department of Information Systems" {{ old('department', Auth::user()->department) == 'Department of Information Systems' ? 'selected' : '' }}>Department of Information Systems</option>
+                                <option value="Department of Computer Science" {{ old('department', Auth::user()->department) == 'Department of Computer Science' ? 'selected' : '' }}>Department of Computer Science</option>
+                            </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <!-- Submit Button -->
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
                     </form>
+
                 </div>
             </div>
         </div>
