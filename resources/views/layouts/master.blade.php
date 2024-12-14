@@ -220,14 +220,16 @@
                             <a href="student-dashboard"><i class="feather-grid"></i> <span> Student Dashboard</span> </a>
                         </li>
                         @endrole
+                        @role('advisor')
                         <li class="submenu">
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span> Advising </span> <span
                             class="menu-arrow"></span></a>
                             <ul>
                                 <li><a href="advisor/student-list">Student List</a></li>
-                                <li><a href="{{ route('advisor.appointment-list') }}">View All Appointments</a></li>
+                                <li><a href=advisor/appointment-list>Appointment List</a></li>
                             </ul>
                         </li>
+                        @endrole
                         <!-- <li class="submenu">
                             <a href="#"><i class="fas fa-chalkboard-teacher"></i> <span>Teachers</span> <span
                                     class="menu-arrow"></span></a>
@@ -262,7 +264,7 @@
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span> Course Schedule</span> <span
                                     class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="course-schedule">Course Schedule View</a></li>
+                                <li><a href="{{ route('student_course_schedule.index', $studentId) }}">Course Schedule View</a></li>
                             </ul>
                         </li>
                         @endrole

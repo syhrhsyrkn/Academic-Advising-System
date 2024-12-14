@@ -5,12 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\LogoutController;
 
-use App\Models\Course;
-use App\Http\Controllers\CourseController;
-
 use App\Http\Controllers\ProfileController;
 
-use App\Http\Controllers\CourseScheduleController;
+use App\Http\Controllers\StudentCourseScheduleController;
+
+use App\Models\Course;
+use App\Http\Controllers\CourseController;
 
 use App\Http\Controllers\AdvisorController;
 use App\Http\Controllers\AppointmentController;
@@ -40,24 +40,6 @@ Route::middleware([
         return view('student/student-dashboard');
     })->name('student-dashboard');
 
-    //students
-    Route::get('/students', function () {
-        return view('students');
-    })->name('students');
-
-    Route::get('/student-details', function () {
-        return view('student-details');
-    })->name('student-details');
-
-    Route::get('/add-student', function () {
-        return view('add-student');
-    })->name('add-student');
-
-    Route::get('/edit-student', function () {
-        return view('edit-student');
-    })->name('edit-student');
-
-
     //course
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/course/add-course', [CourseController::class, 'create'])->name('course.create');
@@ -73,33 +55,34 @@ Route::middleware([
     });
 
     //course schedule
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/course-schedule', [CourseScheduleController::class, 'index'])->name('course-schedule.index');
-        Route::post('/course-schedule/store', [CourseScheduleController::class, 'store'])->name('course-schedule.store');
-        Route::post('/course-schedule/save-schedule', [CourseScheduleController::class, 'saveSchedule'])->name('course-schedule.saveSchedule');
+    Route::prefix('student-course-schedule')->group(function () {
+        Route::get('/{studentId}', [StudentCourseScheduleController::class, 'index'])->name('student_course_schedule.index');
+        Route::post('/{studentId}', [StudentCourseScheduleController::class, 'store'])->name('student_course_schedule.store');
+        Route::delete('/{studentId}/{courseCode}/{semesterId}', [StudentCourseScheduleController::class, 'destroy'])->name('student_course_schedule.destroy');
     });
+    
 
-    // // Appointment routes
     // Route::middleware(['auth'])->group(function () {
     //     Route::get('/appointment-', [AppointmentController::class, 'index'])->name('appointments.index')->middleware('role:advisor');
     //     Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('role:student');
     //     Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('role:student');
     // });
     
-    //Advisor (view students)
+    //Advising
+    //student list 
     Route::get('/advisor/student-list', [AdvisorController::class, 'studentList'])->name('advisor.student-list');
     Route::get('/advisor/student-profile/{student}', [AdvisorController::class, 'viewStudentProfile'])->name('advisor.view-student-profile');
     Route::get('/advisor/student-schedule/{student}', [AdvisorController::class, 'viewStudentSchedule'])->name('advisor.view-student-schedule');
+    
+    //appointment
     Route::get('/advisor/edit-appointment/{appointment}', [AdvisorController::class, 'editAppointment'])->name('advisor.edit-appointment');
     Route::put('/advisor/update-appointment/{appointment}', [AdvisorController::class, 'updateAppointment'])->name('advisor.update-appointment');
     Route::get('/advisor/appointment-list', [AdvisorController::class, 'viewAllAppointments'])->name('advisor.appointment-list');
 
-
-
     //taskbar
-    Route::get('/profile', function () {
-        return view('/profile/profile');
-    })->name('profile');
+    // Route::get('/profile', function () {
+    //     return view('/profile/profile');
+    // })->name('profile');
 
     //profile
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');

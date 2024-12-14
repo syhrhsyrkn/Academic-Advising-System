@@ -15,8 +15,10 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             StudentSeeder::class,
             StaffSeeder::class,
-            // CourseSeeder::class,
-            // PrerequisiteSeeder::class,
+            CourseSeeder::class,
+            PrerequisiteSeeder::class,
+            AcademicYearSeeder::class,
+            SemesterSeeder::class,
         ]);
     }
 }
