@@ -217,7 +217,7 @@
                         @endrole
                         @role('student')
                         <li>
-                            <a href="student-dashboard"><i class="feather-grid"></i> <span> Student Dashboard</span> </a>
+                            <a href="{{ route('student-dashboard') }}"><i class="feather-grid"></i> <span> Student Dashboard</span> </a>
                         </li>
                         @endrole
                         @role('advisor')
@@ -264,7 +264,7 @@
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span> Course Schedule</span> <span
                                     class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="{{ route('student_course_schedule.index', $studentId) }}">Course Schedule View</a></li>
+                                <li><a href="{{ route('student_course_schedule.index', ['studentId' => auth()->user()->student->student_id]) }}">Course Schedule View</a></li>
                             </ul>
                         </li>
                         @endrole

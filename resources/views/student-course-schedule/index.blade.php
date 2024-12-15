@@ -9,8 +9,11 @@
         <div class="form-group">
             <label for="semester_id">Select Semester:</label>
             <select name="semester_id" id="semester_id" class="form-control" required>
+                <option value="" disabled selected>Select Semester ...</option>
                 @foreach($semesters as $semester)
-                    <option value="{{ $semester->id }}">{{ $semester->name }} (Year {{ $semester->year_id }})</option>
+                    <option value="{{ $semester->id }}">
+                        {{ $semester->semester_name }} ({{ $semester->academicYear->year_name }})
+                    </option>
                 @endforeach
             </select>
         </div>
@@ -52,8 +55,13 @@
             <tbody>
                 @foreach($schedules as $schedule)
                     <tr>
-                        <td>{{ $schedule->semester->name }}</td>
-                        <td>{{ $schedule->course->course_code }} - {{ $schedule->course->name }}</td>
+                        <td>
+                            @if($schedule->semester && $schedule->semester->academicYear)
+                                {{ $schedule->semester->semester_name }} ({{ $schedule->semester->academicYear->year_name }})
+                            @else
+                                No Semester Data
+                            @endif
+                        </td>                        <td>{{ $schedule->course->course_code }} - {{ $schedule->course->name }}</td>
                         <td>
                             <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST">
                                 @csrf

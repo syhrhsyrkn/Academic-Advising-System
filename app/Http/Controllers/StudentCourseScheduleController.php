@@ -12,16 +12,16 @@ class StudentCourseScheduleController extends Controller
 {
     public function index($studentId)
     {
-        $student = Student::findOrFail($studentId);  
-    
+        $student = Student::findOrFail($studentId);
         $schedules = StudentCourseSchedule::where('student_id', $studentId)
-            ->with(['course', 'semester'])
-            ->get();
-        
-        $semesters = Semester::all();  
-        $courses = Course::all();  
-    
-        return view('course_schedule.index', compact('schedules', 'semesters', 'courses', 'studentId'));
+        ->with(['course', 'semester', 'semester.academicYear']) // Eager load semester and its related academic year
+        ->get();
+
+
+        $semesters = Semester::all();
+        $courses = Course::all();
+
+        return view('student-course-schedule.index', compact('schedules', 'semesters', 'courses', 'studentId'));
     }
 
     public function store(Request $request, $studentId)

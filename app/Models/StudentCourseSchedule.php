@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class StudentCourseSchedule extends Model
 {
+    public $timestamps = false;
     protected $table = 'student_course_schedule';
 
     protected $fillable = [
-        'student_id',   
-        'course_code',  
-        'semester_id',  
+        'student_id',
+        'course_code',
+        'semester_id',
     ];
 
     public function student()
@@ -21,7 +22,7 @@ class StudentCourseSchedule extends Model
 
     public function course()
     {
-        return $this->belongsTo(Course::class, 'course_code');  
+        return $this->belongsTo(Course::class, 'course_code');
     }
 
     public function semester()

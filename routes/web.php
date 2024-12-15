@@ -48,32 +48,32 @@ Route::middleware([
         Route::put('/course/{course_code}', [CourseController::class, 'update'])->name('course.update');
         Route::post('/course/delete/{course_code}', [CourseController::class, 'destroy'])->name('course.destroy');
     });
-    
+
     Route::middleware(['role:admin|advisor|student'])->group(function () {
         Route::get('/course', [CourseController::class, 'index'])->name('course.index');
-        Route::get('/course/{course}', [CourseController::class, 'show'])->name('course.show'); 
+        Route::get('/course/{course}', [CourseController::class, 'show'])->name('course.show');
     });
 
     //course schedule
     Route::prefix('student-course-schedule')->group(function () {
-        Route::get('/{studentId}', [StudentCourseScheduleController::class, 'index'])->name('student_course_schedule.index');
+    Route::get('/{studentId}', [StudentCourseScheduleController::class, 'index'])->name('student_course_schedule.index');
         Route::post('/{studentId}', [StudentCourseScheduleController::class, 'store'])->name('student_course_schedule.store');
         Route::delete('/{studentId}/{courseCode}/{semesterId}', [StudentCourseScheduleController::class, 'destroy'])->name('student_course_schedule.destroy');
     });
-    
+
 
     // Route::middleware(['auth'])->group(function () {
     //     Route::get('/appointment-', [AppointmentController::class, 'index'])->name('appointments.index')->middleware('role:advisor');
     //     Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('role:student');
     //     Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('role:student');
     // });
-    
+
     //Advising
-    //student list 
+    //student list
     Route::get('/advisor/student-list', [AdvisorController::class, 'studentList'])->name('advisor.student-list');
     Route::get('/advisor/student-profile/{student}', [AdvisorController::class, 'viewStudentProfile'])->name('advisor.view-student-profile');
     Route::get('/advisor/student-schedule/{student}', [AdvisorController::class, 'viewStudentSchedule'])->name('advisor.view-student-schedule');
-    
+
     //appointment
     Route::get('/advisor/edit-appointment/{appointment}', [AdvisorController::class, 'editAppointment'])->name('advisor.edit-appointment');
     Route::put('/advisor/update-appointment/{appointment}', [AdvisorController::class, 'updateAppointment'])->name('advisor.update-appointment');
@@ -88,7 +88,7 @@ Route::middleware([
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    
-    
+
+
     Route::post('/logout', [LogoutController::class, 'destroy'])->name('logout');
 });
