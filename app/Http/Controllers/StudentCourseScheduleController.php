@@ -12,15 +12,14 @@ use Illuminate\Support\Facades\DB;
 class StudentCourseScheduleController extends Controller
 {
     public function index($studentId)
-    {
+    {   
         // Fetch the student by ID
         $student = Student::findOrFail($studentId);
 
         // Fetch all semesters
-        $semesters = Semester::all(); // Retrieve all available semesters
-        $courses = Course::all(); // Retrieve all available courses
+        $semesters = Semester::all();
+        $courses = Course::all();
 
-        $currentAcademicYearId = $student->academic_year_id;
         // Fetch the student's course schedule for each semester based on academic year
         $semesterSchedules = [];
         foreach ($semesters as $semester) {
@@ -30,11 +29,17 @@ class StudentCourseScheduleController extends Controller
                 ->get();
         }
 
+        // Get courses already added to the schedule
+        $existingCourses = StudentCourseSchedule::where('student_id', $studentId)
+            ->pluck('course_code')
+            ->toArray();
+
         // Pass the schedules, semesters, and courses to the view
         return view('student-course-schedule.index', compact(
-            'semesterSchedules', 'semesters', 'courses', 'studentId'
+            'semesterSchedules', 'semesters', 'courses', 'studentId', 'existingCourses'
         ));
     }
+
 
     public function store(Request $request, $studentId)
     {
@@ -121,9 +126,6 @@ class StudentCourseScheduleController extends Controller
             ]);
         }
     }
-
-
-
 
     public function destroy($studentId, $courseCode, $semesterId)
     {

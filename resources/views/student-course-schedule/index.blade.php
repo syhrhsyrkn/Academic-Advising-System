@@ -4,6 +4,7 @@
 <div class="container">
     <h1>Course Schedule</h1>
 
+    <!-- Add Course Form -->
     <form action="{{ route('student_course_schedule.store', $studentId) }}" method="POST">
         @csrf
         <div class="form-group">
@@ -22,7 +23,11 @@
             <label for="course_code">Select Course:</label>
             <select name="course_code" id="course_code" class="form-control" required>
                 @foreach($courses as $course)
-                <option value="{{ $course->course_code }}">{{ $course->course_code }} - {{ $course->name }} ({{ $course->credit_hour }} chr)</option>
+                    @if(!in_array($course->course_code, $existingCourses)) <!-- Only show courses not in schedule -->
+                        <option value="{{ $course->course_code }}">
+                            {{ $course->course_code }} - {{ $course->name }} ({{ $course->credit_hour }} chr )
+                        </option>
+                    @endif
                 @endforeach
             </select>
         </div>
@@ -30,6 +35,7 @@
         <button type="submit" class="btn btn-primary">Add to Schedule</button>
     </form>
 
+    <!-- Validation Errors -->
     @if ($errors->any())
         <div class="alert alert-danger mt-3">
             <ul>
@@ -39,265 +45,102 @@
             </ul>
         </div>
     @endif
-
-    <h2>Current Schedule</h2>
-
-    <!-- Course Schedule Table -->
+    
+    <!-- Table for Year 1 & Year 2 -->
+    <h2 class="mt-5">Year 1 & Year 2</h2>
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th colspan="2" class="text-center"><strong>Year 1</strong></th>
-                <th colspan="2" class="text-center"><strong>Year 2</strong></th>
-                <th colspan="2" class="text-center"><strong>Year 3</strong></th>
-                <th colspan="2" class="text-center"><strong>Year 4</strong></th>
-            </tr>
-            <tr>
-                <th class="text-center"><strong>Semester 1</strong></th>
-                <th class="text-center"><strong>Semester 2</strong></th>
-                <th class="text-center"><strong>Semester 1</strong></th>
-                <th class="text-center"><strong>Semester 2</strong></th>
-                <th class="text-center"><strong>Semester 1</strong></th>
-                <th class="text-center"><strong>Semester 2</strong></th>
-                <th class="text-center"><strong>Semester 1</strong></th>
-                <th class="text-center"><strong>Semester 2</strong></th>
+                <th class="text-center"><strong>Year 1 <br> Semester 1</strong></th>
+                <th class="text-center"><strong>Year 1 <br> Semester 2</strong></th>
+                <th class="text-center"><strong>Year 1 <br> Semester 3</strong></th>
+                <th class="text-center"><strong>Year 2 <br> Semester 1</strong></th>
+                <th class="text-center"><strong>Year 2 <br> Semester 2</strong></th>
+                <th class="text-center"><strong>Year 2 <br> Semester 3</strong></th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <!-- Year 1 Semester 1 Courses -->
-                <td>
-                    <table class="table table-sm">
-                        @php $year1Semester1Total = 0; @endphp
-                        @foreach ($semesterSchedules[1] as $schedule)
-                            @if($schedule->semester_id == 1)
+                @for ($sem = 1; $sem <= 6; $sem++)
+                    <td>
+                        <table class="table table-sm">
+                            @php $totalCredit = 0; @endphp
+                            @foreach ($semesterSchedules[$sem] as $schedule)
                                 <tr>
-                                    <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
+                                    <td>{{ $schedule->course_code }}</td>
+                                    <td>{{ $schedule->course->name }}</td>
                                     <td>{{ $schedule->course->credit_hour }}</td>
                                     <td>
                                         <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i> <!-- Trash icon -->
+                                                <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
                                     </td>
                                 </tr>
-                                @php $year1Semester1Total += $schedule->course->credit_hour; @endphp
-                            @endif
-                        @endforeach
-                        <tr class="table-info font-weight-bold">
-                            <td>Total</td>
-                            <td>{{ $year1Semester1Total }}</td>
-                        </tr>
-                    </table>
-                </td>
+                                @php $totalCredit += $schedule->course->credit_hour; @endphp
+                            @endforeach
+                            <tr class="table-info font-weight-bold">
+                                <td>Total</td>
+                                <td>{{ $totalCredit }} chr</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                @endfor
+            </tr>
+        </tbody>
+    </table>
 
-                <!-- Year 1 Semester 2 Courses -->
-                <td>
-                    <table class="table table-sm">
-                        @php $year1Semester2Total = 0; @endphp
-                        @foreach ($semesterSchedules[2] as $schedule)
-
-                            @if($schedule->semester_id == 2)
+    <!-- Table for Year 3 & Year 4 -->
+    <h2 class="mt-5">Year 3 & Year 4</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th class="text-center"><strong>Year 3 <br> Semester 1</strong></th>
+                <th class="text-center"><strong>Year 3 <br> Semester 2</strong></th>
+                <th class="text-center"><strong>Year 3 <br> Semester 3</strong></th>
+                <th class="text-center"><strong>Year 4 <br> Semester 1</strong></th>
+                <th class="text-center"><strong>Year 4 <br> Semester 2</strong></th>
+                <th class="text-center"><strong>Year 4 <br> Semester 3</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                @for ($sem = 7; $sem <= 12; $sem++)
+                    <td>
+                        <table class="table table-sm">
+                            @php $totalCredit = 0; @endphp
+                            @foreach ($semesterSchedules[$sem] as $schedule)
                                 <tr>
-                                    <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
-                                    <td>{{ $schedule->course->credit_hour }}</td>
+                                    <td>{{ $schedule->course_code }}</td>
+                                    <td>{{ $schedule->course->name }}</td>
+                                    <td>{{ $schedule->course->credit_hour }} </td>
                                     <td>
                                         <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i> <!-- Trash icon -->
+                                                <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
                                     </td>
                                 </tr>
-                                @php $year1Semester2Total += $schedule->course->credit_hour; @endphp
-                            @endif
-                        @endforeach
-                        <tr class="table-info font-weight-bold">
-                            <td>Total</td>
-                            <td>{{ $year1Semester2Total }}</td>
-                        </tr>
-                    </table>
-                </td>
-
-                <!-- Year 2 Semester 1 Courses -->
-                <td>
-                    <table class="table table-sm">
-                        @php $year2Semester1Total = 0; @endphp
-                        @foreach ($semesterSchedules[4] as $schedule)
-                            @if($schedule->semester_id == 4)
-                                <tr>
-                                    <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
-                                    <td>{{ $schedule->course->credit_hour }}</td>
-                                    <td>
-                                        <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i> <!-- Trash icon -->
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @php $year2Semester1Total += $schedule->course->credit_hour; @endphp
-                            @endif
-                        @endforeach
-                        <tr class="table-info font-weight-bold">
-                            <td>Total</td>
-                            <td>{{ $year2Semester1Total }}</td>
-                        </tr>
-                    </table>
-                </td>
-
-                <!-- Year 2 Semester 2 Courses -->
-                <td>
-                    <table class="table table-sm">
-                        @php $year2Semester2Total = 0; @endphp
-                        @foreach ($semesterSchedules[5] as $schedule)
-                            @if($schedule->semester_id == 5)
-                                <tr>
-                                    <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
-                                    <td>{{ $schedule->course->credit_hour }}</td>
-                                    <td>
-                                        <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i> <!-- Trash icon -->
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @php $year2Semester2Total += $schedule->course->credit_hour; @endphp
-                            @endif
-                        @endforeach
-                        <tr class="table-info font-weight-bold">
-                            <td>Total</td>
-                            <td>{{ $year2Semester2Total }}</td>
-                        </tr>
-                    </table>
-                </td>
-
-                <!-- Year 3 Semester 1 Courses -->
-                <td>
-                    <table class="table table-sm">
-                        @php $year3Semester1Total = 0; @endphp
-                        @foreach ($semesterSchedules[7] as $schedule)
-                            @if($schedule->semester_id == 7)
-                                <tr>
-                                    <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
-                                    <td>{{ $schedule->course->credit_hour }}</td>
-                                    <td>
-                                        <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i> <!-- Trash icon -->
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @php $year3Semester1Total += $schedule->course->credit_hour; @endphp
-                            @endif
-                        @endforeach
-                        <tr class="table-info font-weight-bold">
-                            <td>Total</td>
-                            <td>{{ $year3Semester1Total }}</td>
-                        </tr>
-                    </table>
-                </td>
-
-                <!-- Year 3 Semester 2 Courses -->
-                <td>
-                    <table class="table table-sm">
-                        @php $year3Semester2Total = 0; @endphp
-                        @foreach ($semesterSchedules[8] as $schedule)
-                            @if($schedule->semester_id == 8)
-                                <tr>
-                                    <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
-                                    <td>{{ $schedule->course->credit_hour }}</td>
-                                    <td>
-                                        <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i> <!-- Trash icon -->
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @php $year3Semester2Total += $schedule->course->credit_hour; @endphp
-                            @endif
-                        @endforeach
-                        <tr class="table-info font-weight-bold">
-                            <td>Total</td>
-                            <td>{{ $year3Semester2Total }}</td>
-                        </tr>
-                    </table>
-                </td>
-
-                <!-- Year 4 Semester 1 Courses -->
-                <td>
-                    <table class="table table-sm">
-                        @php $year4Semester1Total = 0; @endphp
-                        @foreach ($semesterSchedules[10] as $schedule)
-                            @if($schedule->semester_id == 10)
-                                <tr>
-                                    <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
-                                    <td>{{ $schedule->course->credit_hour }}</td>
-                                    <td>
-                                        <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i> <!-- Trash icon -->
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @php $year4Semester1Total += $schedule->course->credit_hour; @endphp
-                            @endif
-                        @endforeach
-                        <tr class="table-info font-weight-bold">
-                            <td>Total</td>
-                            <td>{{ $year4Semester1Total }}</td>
-                        </tr>
-                    </table>
-                </td>
-
-                <!-- Year 4 Semester 2 Courses -->
-                <td>
-                    <table class="table table-sm">
-                        @php $year4Semester2Total = 0; @endphp
-                        @foreach ($semesterSchedules[11] as $schedule)
-                            @if($schedule->semester_id == 11)
-                                <tr>
-                                    <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
-                                    <td>{{ $schedule->course->credit_hour }}</td>
-                                    <td>
-                                        <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i> <!-- Trash icon -->
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @php $year4Semester2Total += $schedule->course->credit_hour; @endphp
-                            @endif
-                        @endforeach
-                        <tr class="table-info font-weight-bold">
-                            <td>Total</td>
-                            <td>{{ $year4Semester2Total }}</td>
-                        </tr>
-                    </table>
-                </td>
+                                @php $totalCredit += $schedule->course->credit_hour; @endphp
+                            @endforeach
+                            <tr class="table-info font-weight-bold">
+                                <td>Total</td>
+                                <td>{{ $totalCredit }} chr</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                @endfor
             </tr>
         </tbody>
     </table>
 </div>
+
 @endsection

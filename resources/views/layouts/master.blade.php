@@ -117,16 +117,21 @@
                             <a href="{{ route('student-dashboard') }}"><i class="feather-grid"></i> <span> Student Dashboard</span> </a>
                         </li>
                         @endrole
-                        @role('advisor')
+                        @if(auth()->user()->hasRole('advisor') || auth()->user()->hasRole('student'))
                         <li class="submenu">
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span> Advising </span> <span
                             class="menu-arrow"></span></a>
                             <ul>
+                                @role('advisor')
                                 <li><a href="advisor/student-list">Student List</a></li>
-                                <li><a href=advisor/appointment-list>Appointment List</a></li>
+                                <li><a href="{{ route('appointments.index') }}">Appointment List</a></li>                                @endrole
+                                @role('student')
+                                <li><a href="{{ route('appointments.create') }}" class="btn btn-primary">Book an Appointment</a></li>
+                                <li><a href="{{ route('appointments.myAppointments') }}">View My Appointments</a></li>
+                                @endrole
                             </ul>
                         </li>
-                        @endrole
+                        @endif
                         <li class="submenu">
                             <a href="#"><i class="fas fa-book-reader"></i> <span> Course</span> <span
                                     class="menu-arrow"></span></a>
@@ -142,7 +147,7 @@
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span> Course Schedule</span> <span
                                     class="menu-arrow"></span></a>
                             <ul>
-                                {{-- <li><a href="{{ route('student_course_schedule.index', ['studentId' => auth()->user()->student->student_id]) }}">Course Schedule View</a></li> --}}
+                                <li><a href="{{ route('student_course_schedule.index', ['studentId' => auth()->user()->student->student_id]) }}">Course Schedule View</a></li>
                             </ul>
                         </li>
                         @endrole

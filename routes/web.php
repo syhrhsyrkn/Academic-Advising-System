@@ -61,13 +61,6 @@ Route::middleware([
         Route::delete('/student/{studentId}/course/{courseCode}/semester/{semesterId}', [StudentCourseScheduleController::class, 'destroy'])->name('student_course_schedule.destroy');
     });
 
-
-    // Route::middleware(['auth'])->group(function () {
-    //     Route::get('/appointment-', [AppointmentController::class, 'index'])->name('appointments.index')->middleware('role:advisor');
-    //     Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('role:student');
-    //     Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('role:student');
-    // });
-
     //Advising
     //student list
     Route::get('/advisor/student-list', [AdvisorController::class, 'studentList'])->name('advisor.student-list');
@@ -75,9 +68,14 @@ Route::middleware([
     Route::get('/advisor/student-schedule/{student}', [AdvisorController::class, 'viewStudentSchedule'])->name('advisor.view-student-schedule');
 
     //appointment
-    Route::get('/advisor/edit-appointment/{appointment}', [AdvisorController::class, 'editAppointment'])->name('advisor.edit-appointment');
-    Route::put('/advisor/update-appointment/{appointment}', [AdvisorController::class, 'updateAppointment'])->name('advisor.update-appointment');
-    Route::get('/advisor/appointment-list', [AdvisorController::class, 'viewAllAppointments'])->name('advisor.appointment-list');
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index')->middleware('role:advisor');
+        Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('role:student');
+        Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('role:student');
+        Route::get('/appointments/mine', [AppointmentController::class, 'myAppointments'])->name('appointments.myAppointments')->middleware('role:student');
+        Route::get('/appointments/{appointment}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit')->middleware('role:advisor');
+        Route::put('/appointments/{appointment}', [AppointmentController::class, 'update'])->name('appointments.update')->middleware('role:advisor');
+    });
 
     //taskbar
     //profile

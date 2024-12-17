@@ -18,7 +18,7 @@ class CourseController extends Controller
         $request->validate([
             'course_code' => 'required|string|max:50|unique:courses',
             'name' => 'required|string|max:255',
-            'credit_hour' => 'required|integer|min:1|max:20',
+            'credit_hour' => 'required|numeric|min:0',
             'classification' => 'required|in:URC,CCC,DCC,Electives,FYP,IAP',
             'prerequisites' => 'array|exists:courses,course_code',
             'description' => 'required|string|max:1000',
@@ -84,7 +84,7 @@ class CourseController extends Controller
         $request->validate([
             'course_code' => 'required|string|max:10',
             'name' => 'required|string|max:255',
-            'credit_hour' => 'required|integer|min:1|max:20',
+            'credit_hour' => 'required|numeric|min:0',
             'classification' => 'required|in:URC,CCC,DCC,Electives,FYP,IAP',
             'prerequisites' => 'array|exists:courses,course_code',
             'description' => 'required|string|max:1000',

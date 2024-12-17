@@ -50,13 +50,16 @@
                         <!-- Credit Hour (CHR) -->
                         <div class="form-group">
                             <label for="credit_hour">Credit Hour</label>
-                            <input type="number" name="credit_hour" id="credit_hour" class="form-control @error('credit_hour') is-invalid @enderror" value="{{ old('credit_hour') }}" min="1" max="20">
+                            <input type="number" name="credit_hour" id="credit_hour" 
+                                class="form-control @error('credit_hour') is-invalid @enderror" 
+                                value="{{ old('credit_hour') }}" step="0.1" min="0">
                             @error('credit_hour')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
+
 
                         <!-- Course Classification -->
                         <div class="form-group">
