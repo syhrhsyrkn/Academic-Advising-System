@@ -36,7 +36,6 @@ class Student extends Model
         return $this->hasMany(CourseSchedule::class, 'student_id'); 
     }
 
-
     public function appointments()
     {
         return $this->hasMany(Appointment::class);

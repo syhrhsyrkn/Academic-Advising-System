@@ -56,9 +56,9 @@ Route::middleware([
 
     //course schedule
     Route::prefix('student-course-schedule')->group(function () {
-    Route::get('/{studentId}', [StudentCourseScheduleController::class, 'index'])->name('student_course_schedule.index');
+        Route::get('/{studentId}', [StudentCourseScheduleController::class, 'index'])->name('student_course_schedule.index');
         Route::post('/{studentId}', [StudentCourseScheduleController::class, 'store'])->name('student_course_schedule.store');
-        Route::delete('/{studentId}/{courseCode}/{semesterId}', [StudentCourseScheduleController::class, 'destroy'])->name('student_course_schedule.destroy');
+        Route::delete('/student/{studentId}/course/{courseCode}/semester/{semesterId}', [StudentCourseScheduleController::class, 'destroy'])->name('student_course_schedule.destroy');
     });
 
 
@@ -80,15 +80,11 @@ Route::middleware([
     Route::get('/advisor/appointment-list', [AdvisorController::class, 'viewAllAppointments'])->name('advisor.appointment-list');
 
     //taskbar
-    // Route::get('/profile', function () {
-    //     return view('/profile/profile');
-    // })->name('profile');
-
     //profile
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-
-
+    
+    //logout
     Route::post('/logout', [LogoutController::class, 'destroy'])->name('logout');
 });
