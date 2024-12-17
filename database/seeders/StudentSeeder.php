@@ -37,6 +37,5 @@ class StudentSeeder extends Seeder
                 'specialisation' => null,
             ]);
         }
-    }    
+    }
 }
-

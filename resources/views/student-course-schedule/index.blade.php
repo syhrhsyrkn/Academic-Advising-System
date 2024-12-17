@@ -12,7 +12,7 @@
                 <option value="" disabled selected>Select Semester ...</option>
                 @foreach($semesters as $semester)
                     <option value="{{ $semester->id }}">
-                        {{ $semester->semester_name }} ({{ $semester->academicYear->year_name }})
+                        {{ $semester->academicYear->year_name }} ( {{ $semester->semester_name }} )
                     </option>
                 @endforeach
             </select>
@@ -22,7 +22,7 @@
             <label for="course_code">Select Course:</label>
             <select name="course_code" id="course_code" class="form-control" required>
                 @foreach($courses as $course)
-                <option value="{{ $course->course_code }}">{{ $course->course_code }} - {{ $course->name }} ({{ $course->credit_hour }} chr)</option>                
+                <option value="{{ $course->course_code }}">{{ $course->course_code }} - {{ $course->name }} ({{ $course->credit_hour }} chr)</option>
                 @endforeach
             </select>
         </div>
@@ -97,7 +97,8 @@
                 <td>
                     <table class="table table-sm">
                         @php $year1Semester2Total = 0; @endphp
-                        @foreach ($semesterSchedules[1] as $schedule)
+                        @foreach ($semesterSchedules[2] as $schedule)
+
                             @if($schedule->semester_id == 2)
                                 <tr>
                                     <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
@@ -126,8 +127,8 @@
                 <td>
                     <table class="table table-sm">
                         @php $year2Semester1Total = 0; @endphp
-                        @foreach ($semesterSchedules[2] as $schedule)
-                            @if($schedule->semester_id == 1)
+                        @foreach ($semesterSchedules[4] as $schedule)
+                            @if($schedule->semester_id == 4)
                                 <tr>
                                     <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
                                     <td>{{ $schedule->course->credit_hour }}</td>
@@ -155,8 +156,8 @@
                 <td>
                     <table class="table table-sm">
                         @php $year2Semester2Total = 0; @endphp
-                        @foreach ($semesterSchedules[2] as $schedule)
-                            @if($schedule->semester_id == 2)
+                        @foreach ($semesterSchedules[5] as $schedule)
+                            @if($schedule->semester_id == 5)
                                 <tr>
                                     <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
                                     <td>{{ $schedule->course->credit_hour }}</td>
@@ -184,8 +185,8 @@
                 <td>
                     <table class="table table-sm">
                         @php $year3Semester1Total = 0; @endphp
-                        @foreach ($semesterSchedules[3] as $schedule)
-                            @if($schedule->semester_id == 1)
+                        @foreach ($semesterSchedules[7] as $schedule)
+                            @if($schedule->semester_id == 7)
                                 <tr>
                                     <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
                                     <td>{{ $schedule->course->credit_hour }}</td>
@@ -213,8 +214,8 @@
                 <td>
                     <table class="table table-sm">
                         @php $year3Semester2Total = 0; @endphp
-                        @foreach ($semesterSchedules[3] as $schedule)
-                            @if($schedule->semester_id == 2)
+                        @foreach ($semesterSchedules[8] as $schedule)
+                            @if($schedule->semester_id == 8)
                                 <tr>
                                     <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
                                     <td>{{ $schedule->course->credit_hour }}</td>
@@ -242,8 +243,8 @@
                 <td>
                     <table class="table table-sm">
                         @php $year4Semester1Total = 0; @endphp
-                        @foreach ($semesterSchedules[4] as $schedule)
-                            @if($schedule->semester_id == 1)
+                        @foreach ($semesterSchedules[10] as $schedule)
+                            @if($schedule->semester_id == 10)
                                 <tr>
                                     <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
                                     <td>{{ $schedule->course->credit_hour }}</td>
@@ -271,8 +272,8 @@
                 <td>
                     <table class="table table-sm">
                         @php $year4Semester2Total = 0; @endphp
-                        @foreach ($semesterSchedules[4] as $schedule)
-                            @if($schedule->semester_id == 2)
+                        @foreach ($semesterSchedules[11] as $schedule)
+                            @if($schedule->semester_id == 11)
                                 <tr>
                                     <td>{{ $schedule->course_code }} - {{ $schedule->course->name }}</td>
                                     <td>{{ $schedule->course->credit_hour }}</td>
