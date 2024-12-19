@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,20 +10,25 @@ class AcademicResult extends Model
     use HasFactory;
 
     protected $fillable = [
-        'matric_no',
+        'student_id',
         'course_code',
         'grade',
         'gpa',
-        'cgpa',
+        'semester_id',
     ];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
 
     public function course()
     {
         return $this->belongsTo(Course::class, 'course_code', 'course_code');
     }
 
-    public function student()
+    public function semester()
     {
-        return $this->belongsTo(Profile::class, 'matric_no', 'matric_no');
+        return $this->belongsTo(Semester::class, 'semester_id');
     }
 }

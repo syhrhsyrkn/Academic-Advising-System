@@ -9,6 +9,8 @@ use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\StudentCourseScheduleController;
 
+use App\Http\Controllers\AcademicResultController;
+
 use App\Models\Course;
 use App\Http\Controllers\CourseController;
 
@@ -61,21 +63,28 @@ Route::middleware([
         Route::delete('/student/{studentId}/course/{courseCode}/semester/{semesterId}', [StudentCourseScheduleController::class, 'destroy'])->name('student_course_schedule.destroy');
     });
 
+    //academic result 
+    Route::get('/student/{studentId}/academic-results', [AcademicResultController::class, 'index'])->name('academic-result.index');
+
     //Advising
     //student list
     Route::get('/advisor/student-list', [AdvisorController::class, 'studentList'])->name('advisor.student-list');
-    Route::get('/advisor/student-profile/{student}', [AdvisorController::class, 'viewStudentProfile'])->name('advisor.view-student-profile');
-    Route::get('/advisor/student-schedule/{student}', [AdvisorController::class, 'viewStudentSchedule'])->name('advisor.view-student-schedule');
+    Route::get('/advisor/student-profile/{student}', [AdvisorController::class, 'viewStudentProfile'])->name('advisor.view-student-profile')->middleware('role:advisor');
+    Route::get('/advisor/student-schedule/{student}', [AdvisorController::class, 'viewStudentSchedule'])->name('advisor.student-schedule')->middleware('role:advisor');
+    Route::get('/appointments/latest/{student}', [AppointmentController::class, 'latestAppointmentByStudent'])->name('appointments.latest')->middleware('role:advisor'); 
 
     //appointment
     Route::middleware(['auth'])->group(function () {
+        // Advisor Routes
         Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index')->middleware('role:advisor');
+        Route::get('/appointments/{appointment}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit')->middleware('role:advisor');
+        Route::put('/appointments/{appointment}', [AppointmentController::class, 'update'])->name('appointments.update')->middleware('role:advisor');
+        // Student Routes
         Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('role:student');
         Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('role:student');
         Route::get('/appointments/mine', [AppointmentController::class, 'myAppointments'])->name('appointments.myAppointments')->middleware('role:student');
-        Route::get('/appointments/{appointment}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit')->middleware('role:advisor');
-        Route::put('/appointments/{appointment}', [AppointmentController::class, 'update'])->name('appointments.update')->middleware('role:advisor');
     });
+    
 
     //taskbar
     //profile

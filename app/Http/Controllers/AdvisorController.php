@@ -1,22 +1,23 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\AcademicYear;
 use App\Models\Appointment;
+use App\Models\Student;
+use App\Models\StudentCourseSchedule;
 use Illuminate\Http\Request;
 
 class AdvisorController extends Controller
 {
     public function studentList(Request $request)
     {
-        // Fetch academic years for filtering
         $academicYears = AcademicYear::all();
 
-        // Fetch students with related data from student and appointment tables
         $students = User::role('student')
             ->with(['student', 'appointments' => function ($query) {
-                $query->latest(); // Ensure appointments are sorted by latest
+                $query->latest();
             }])
             ->whereHas('student', function ($query) use ($request) {
                 if ($request->has('academic_year')) {
@@ -37,62 +38,41 @@ class AdvisorController extends Controller
         $studentDetails = $student->student;
         $academicResults = $studentDetails ? $studentDetails->academicResults : []; 
     
-        return view('advisor.student-profile', ['student' => $student,'studentDetails' => $studentDetails,'academicResults' => $academicResults,]);
-    }
-    
-
-    public function viewStudentSchedule(User $student)
-    {
-        if (!$student->hasRole('student')) {
-            abort(403, 'Unauthorized action.');
-        }
-    
-        $student = Student::with('courseSchedules.course', 'courseSchedules.semester')->find($studentId);
-    
-        return view('advisor.student-schedule', ['student' => $student,'courseSchedule' => $courseSchedule,]);
-    }
-    
-
-    public function editAppointment(Appointment $appointment)
-    {
-        return view('advisor.edit-appointment', compact('appointment'));
-    }
-
-    public function updateAppointment(Request $request, Appointment $appointment)
-    {
-        $request->validate([
-            'status' => 'required|string|in:Scheduled,Completed,Canceled',
-            'advising_reason' => 'nullable|string|max:255',
-            'appointment_date' => 'required|date',
+        return view('advisor.student-profile', [
+            'student' => $student,
+            'studentDetails' => $studentDetails,
+            'academicResults' => $academicResults,
         ]);
-
-        $appointment->update([
-            'status' => $request->status,
-            'advising_reason' => $request->advising_reason,
-            'appointment_date' => $request->appointment_date,
-        ]);
-
-        return redirect()->route('advisor.student-list')->with('success', 'Appointment updated successfully!');
     }
 
-    public function viewAllAppointments(Request $request)
-    {
-        $status = $request->input('status');
-        $date = $request->input('date');
-    
-        $query = Appointment::with(['user', 'user.student']);
-    
-        if ($status) {
-            $query->where('status', $status);
-        }
-    
-        if ($date) {
-            $query->whereDate('appointment_date', $date);
-        }
-    
-        $appointments = $query->paginate(10);
-    
-        return view('advisor.appointment-list', ['appointments' => $appointments,'filters' => ['status' => $status,'date' => $date,],]);
-    }
-    
+   // In AdvisorController
+   public function viewStudentSchedule(User $student)
+   {
+       if (!$student->hasRole('student')) {
+           abort(403, 'Unauthorized action.');
+       }
+   
+       // Load courses, semesters, and courseSchedules for the student
+       $student->load('student.courseSchedules.course', 'student.courseSchedules.semester');
+   
+       // Organize the schedule by semester
+       $semesterSchedules = $this->organizeSchedule($student);
+   
+       return view('advisor.student-schedule', compact('student', 'semesterSchedules'));
+   }
+   
+   private function organizeSchedule($student)
+   {
+       $semesterSchedules = [];
+   
+       // Loop through the student's schedules and organize by semester_id
+       foreach ($student->student->courseSchedules as $schedule) {
+           // Ensure that we only add to an existing semester
+           $semesterSchedules[$schedule->semester_id][] = $schedule;
+       }
+   
+       return $semesterSchedules;
+   }
+   
+
 }

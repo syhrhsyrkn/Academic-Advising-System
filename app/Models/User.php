@@ -44,9 +44,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Staff::class);
     }
-
+        // Define the inverse relationship
     public function appointments()
     {
-        return $this->hasMany(Appointment::class);
+        return $this->hasMany(Appointment::class); // Adjust Appointment model path if needed
     }
 }

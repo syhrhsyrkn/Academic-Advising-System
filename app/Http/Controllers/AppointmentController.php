@@ -14,17 +14,24 @@ class AppointmentController extends Controller
         $this->middleware('role:advisor')->only('index');
     }
 
-
-    public function index()
+    public function index(Request $request)
     {
+        $sortOrder = $request->get('sort', 'asc'); 
+    
         if (auth()->user()->hasRole('advisor')) {
-            $appointments = Appointment::with('user.student')->get();
+            $appointments = Appointment::with('user.student')
+                ->orderBy('appointment_date', $sortOrder)
+                ->get();
         } elseif (auth()->user()->hasRole('student')) {
-            $appointments = Appointment::with('user.student')->where('user_id', auth()->id())->get();
+            $appointments = Appointment::with('user.student')
+                ->where('user_id', auth()->id())
+                ->orderBy('appointment_date', $sortOrder)
+                ->get();
         }
     
-        return view('appointments.index', compact('appointments'));
+        return view('appointments.index', compact('appointments', 'sortOrder'));
     }
+    
 
     public function create()
     {
@@ -51,7 +58,7 @@ class AppointmentController extends Controller
 
         return redirect()->route('appointments.myAppointments')->with('success', 'Appointment request submitted.');
     }
-
+ 
     public function show($id)
     {
         $appointment = Appointment::findOrFail($id); // Find appointment by ID
@@ -88,6 +95,7 @@ class AppointmentController extends Controller
         return redirect()->route('appointments.index')->with('success', 'Appointment updated successfully.');
     }
 
+    //student's personal appointments history
     public function myAppointments()
     {
         $appointments = Appointment::with('user.student')
@@ -95,5 +103,15 @@ class AppointmentController extends Controller
             ->get();
         
         return view('appointments.myAppointments', compact('appointments'));
+    }
+
+    public function latestAppointmentByStudent($studentId)
+    {
+        // Fetch the latest appointment for the given student
+        $appointment = Appointment::where('user_id', $studentId)
+            ->orderBy('appointment_date', 'desc')
+            ->first();
+    
+        return view('appointments.latest', compact('appointment'));
     }
 }

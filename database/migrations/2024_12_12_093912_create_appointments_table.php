@@ -14,7 +14,7 @@ class CreateAppointmentsTable extends Migration
             $table->string('advising_reason');
             $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled']) 
                   ->default('pending');  
-            $table->dateTime('appointment_date'); 
+            $table->dateTime('appointment_date');            
             $table->timestamps(); 
         });
     }

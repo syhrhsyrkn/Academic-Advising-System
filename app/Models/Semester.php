@@ -21,6 +21,11 @@ class Semester extends Model
         return $this->belongsTo(AcademicYear::class);
     }
     
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
+
     public function courseSchedules()
     {
         return $this->hasMany(CourseSchedule::class, 'semester_id');

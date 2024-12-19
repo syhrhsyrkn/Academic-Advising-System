@@ -17,6 +17,7 @@
 
     <!-- Bootstrap CSS -->
 <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 <!-- Bootstrap Bundle with Popper (necessary for dropdowns) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -156,8 +157,7 @@
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span>Academic Result</span> <span
                                     class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="s.result-view.html">Academic Result View</a></li>
-                                <li><a href="s.result-edit.html">Academic Result Edit</a></li>
+                                <li><a href="{{ route('academic-result.index') }}">View Academic Results</a></li>
                             </ul>
                         </li>
                         @endrole

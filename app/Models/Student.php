@@ -33,12 +33,19 @@ class Student extends Model
 
     public function courseSchedules()
     {
-        return $this->hasMany(CourseSchedule::class, 'student_id'); 
+        return $this->hasMany(StudentCourseSchedule::class, 'student_id');
     }
-
+    // In the Student model
     public function appointments()
     {
-        return $this->hasMany(Appointment::class);
+        return $this->hasMany(Appointment::class, 'student_id', 'student_id'); // Ensure 'student_id' is the correct column
+    }
+
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'student_course_schedule', 'student_id', 'course_code')
+                    ->withPivot('semester_id'); 
     }
     
 }

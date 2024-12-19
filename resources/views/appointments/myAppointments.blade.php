@@ -1,4 +1,3 @@
-{{-- resources/views/appointments/myAppointments.blade.php --}}
 @extends('layouts.master')
 
 @section('content')
@@ -15,7 +14,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>#</th>
                 <th>Advising Reason</th>
                 <th>Status</th>
                 <th>Appointment Date</th>
@@ -24,7 +22,6 @@
         <tbody>
         @forelse ($appointments as $appointment)
         <tr>
-            <td>{{ $appointment->student->matric_no ?? 'N/A' }}</td>
             <td>{{ $appointment->advising_reason }}</td>
             <td>{{ $appointment->status }}</td>
             <td>{{ $appointment->appointment_date }}</td>

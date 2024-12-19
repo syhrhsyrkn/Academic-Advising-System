@@ -18,7 +18,7 @@
     </form>
 
     <!-- Student Table -->
-    <table border="1" cellpadding="10" cellspacing="0">
+    <table cellpadding="10" cellspacing="0">
         <thead>
             <tr>
                 <th>#</th>
@@ -47,9 +47,9 @@
                     <td>{{ $latestAppointment->advising_reason ?? 'N/A' }}</td>
                     <td>{{ $latestAppointment->appointment_date ?? 'N/A' }}</td>
                     <td>
-                        <a href="{{ route('advisor.view-student-profile', $student->id) }}">View Profile</a> |
-                        <a href="{{ route('advisor.view-student-schedule', $student->id) }}">Course Schedule</a> |
-                        <a href="{{ route('advisor.edit-appointment', $latestAppointment->id ?? '') }}" {{ !$latestAppointment ? 'class=disabled' : '' }}> Update Appointment</a>                    
+                        <a href="{{ route('advisor.view-student-profile', $student->id) }}" class="me-4">Profile</a>
+                        <a href="{{ route('advisor.student-schedule', $student->id) }}" class="me-4">Schedule</a>
+                        <a href="{{ route('appointments.latest', $student->id) }}" class="me-4">Appointment</a>
                     </td>
                 </tr>
             @empty

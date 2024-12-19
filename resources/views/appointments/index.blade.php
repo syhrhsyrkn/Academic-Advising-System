@@ -12,7 +12,9 @@
                 <th>Contact No</th>
                 <th>Email</th>
                 <th>Advising Reason</th>
-                <th>Appointment Date</th>
+                <th>Appointment Date 
+                    <a href="{{ route('appointments.index', ['sort' => 'asc']) }}">▲</a>
+                    <a href="{{ route('appointments.index', ['sort' => 'desc']) }}">▼</a></th>
                 <th>Status</th>
                 @role('advisor')
                 <th>Actions</th>
@@ -21,14 +23,14 @@
         </thead>
         <tbody>
             @foreach ($appointments as $appointment)
-            <tr>
+            <tr class="{{ $appointment->status === 'Pending' ? 'table-warning' : '' }}">
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $appointment->user->student->matric_no ?? 'N/A' }}</td>
                 <td>{{ $appointment->user->name ?? 'N/A' }}</td>
                 <td>{{ $appointment->user->student->contact_no ?? 'N/A' }}</td>
                 <td>{{ $appointment->user->email ?? 'N/A' }}</td>
                 <td>{{ $appointment->advising_reason }}</td>
-                <td>{{ $appointment->appointment_date }}</td>
+                <td>{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('d-m-Y H:i') }}</td>
                 <td>{{ $appointment->status }}</td>
                 @role('advisor')
                 <td>
