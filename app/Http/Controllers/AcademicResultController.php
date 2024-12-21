@@ -6,40 +6,61 @@ use App\Models\AcademicResult;
 use App\Models\Course;
 use App\Models\Semester;
 use App\Models\Student;
+use App\Models\StudentCourseSchedule;
 use Illuminate\Http\Request;
 
 class AcademicResultController extends Controller
 {
     public function index($studentId)
     {
-        // Fetch academic results for the student
-        $academicResults = AcademicResult::where('student_id', $studentId)->get();
+        // Fetch the student's course schedule and eager load the related course data
+        $studentSchedule = StudentCourseSchedule::with('course', 'semester') // Eager load the 'course' and 'semester' relationships
+            ->where('student_id', $studentId) // Ensure you're fetching for the correct student
+            ->get();
 
-        // Return the view with the results
-        return view('academic-result.index', compact('academicResults'));
+        // Group courses by semester
+        $semesterSchedules = $studentSchedule->groupBy(function ($schedule) {
+            return $schedule->semester_id; // Group by semester_id
+        });
+
+        // Check if the student is editing or just viewing
+        $isEditing = request()->query('edit') === 'true';
+
+        // Return the view with the student's schedule and semesterSchedules
+        return view('academic-result.index', compact('studentSchedule', 'semesterSchedules', 'studentId', 'isEditing'));
     }
 
-    // Store the academic results in the database
-    public function store(Request $request)
+    public function store(Request $request, $studentId)
     {
-        // Validate the input data
         $request->validate([
-            'course_code' => 'required',
-            'grade' => 'required|in:A,B,C,D,Pass,Fail',
-            'gpa' => 'required|numeric|between:0,4',
-            'semester_id' => 'required|exists:semesters,id',
+            'grades' => 'required|array',
+            'scores' => 'required|array',
+            'grades.*' => 'required|string|in:A,B,C,D,Pass,Fail', // Grade validation
+            'scores.*' => 'required|numeric|between:0,4', // Score validation
         ]);
 
-        // Create and save the academic result
-        AcademicResult::create([
-            'student_id' => auth()->user()->id,  // Assuming the student is logged in
-            'course_code' => $request->course_code,
-            'grade' => $request->grade,
-            'gpa' => $request->gpa,
-            'semester_id' => $request->semester_id,
-        ]);
+        // Loop through each course and store the grade and score
+        foreach ($request->grades as $index => $grade) {
+            $score = $request->scores[$index];
+            $courseCode = $request->course_code[$index];
+            $semesterId = $request->semester_id[$index];
 
-        // Redirect back with success message
-        return redirect()->route('academic-result.index')->with('success', 'Academic result added successfully!');
+            // Create or update the academic result
+            AcademicResult::updateOrCreate(
+                [
+                    'student_id' => $studentId,
+                    'course_code' => $courseCode,
+                    'semester_id' => $semesterId,
+                ],
+                [
+                    'grade' => $grade,
+                    'score' => $score,
+                ]
+            );
+        }
+
+        // Redirect back to the academic results page with a success message
+        return redirect()->route('academic-result.index', $studentId)
+            ->with('success', 'Academic results have been updated successfully!');
     }
 }

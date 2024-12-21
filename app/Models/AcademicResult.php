@@ -13,7 +13,7 @@ class AcademicResult extends Model
         'student_id',
         'course_code',
         'grade',
-        'gpa',
+        'score',
         'semester_id',
     ];
 

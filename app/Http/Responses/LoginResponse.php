@@ -17,6 +17,6 @@ class LoginResponse implements LoginResponseContract
         else if($user->hasRole('advisor')){
             return redirect('/teacher-dashboard');
         }
-        return redirect('/student-dashboard'); // Default redirect
+        return redirect('/student-dashboard'); 
     }
 }

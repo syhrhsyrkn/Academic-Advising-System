@@ -45,7 +45,6 @@ class AdvisorController extends Controller
         ]);
     }
 
-   // In AdvisorController
    public function viewStudentSchedule(User $student)
    {
        if (!$student->hasRole('student')) {

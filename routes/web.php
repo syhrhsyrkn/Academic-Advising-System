@@ -65,7 +65,9 @@ Route::middleware([
 
     //academic result 
     Route::get('/student/{studentId}/academic-results', [AcademicResultController::class, 'index'])->name('academic-result.index');
-
+    // Route::post('/student/{studentId}/academic-results/store', [AcademicResultController::class, 'store'])->name('academic_result.store');
+    Route::post('/academic-results/{studentId}/store', [AcademicResultController::class, 'store'])->name('academic-result.store');
+    
     //Advising
     //student list
     Route::get('/advisor/student-list', [AdvisorController::class, 'studentList'])->name('advisor.student-list');

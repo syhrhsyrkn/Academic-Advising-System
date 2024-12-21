@@ -26,9 +26,6 @@
                 <th>Email</th>
                 <th>Matric No</th>
                 <th>Contact No</th>
-                <th>Status</th>
-                <th>Advising Reason</th>
-                <th>Appointment Date</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -43,9 +40,6 @@
                     <td>{{ $student->email }}</td>
                     <td>{{ $student->student->matric_no ?? 'N/A' }}</td>
                     <td>{{ $student->student->contact_no ?? 'N/A' }}</td>
-                    <td>{{ $latestAppointment->status ?? 'No Appointment' }}</td>
-                    <td>{{ $latestAppointment->advising_reason ?? 'N/A' }}</td>
-                    <td>{{ $latestAppointment->appointment_date ?? 'N/A' }}</td>
                     <td>
                         <a href="{{ route('advisor.view-student-profile', $student->id) }}" class="me-4">Profile</a>
                         <a href="{{ route('advisor.student-schedule', $student->id) }}" class="me-4">Schedule</a>
