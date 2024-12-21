@@ -128,7 +128,7 @@
                                 <li><a href="{{ route('appointments.index') }}">Appointment List</a></li>                                @endrole
                                 @role('student')
                                 <li><a href="{{ route('appointments.create') }}" class="btn btn-primary">Book an Appointment</a></li>
-                                <li><a href="{{ route('appointments.myAppointments') }}">View My Appointments</a></li>
+                                <li><a href="{{ route('appointments.myAppointments') }}">Appointment History</a></li>
                                 @endrole
                             </ul>
                         </li>
@@ -157,7 +157,7 @@
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span>Academic Result</span> <span
                                     class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="{{ route('academic-result.index', ['studentId' => auth()->user()->student->student_id]) }}">View Academic Results</a></li>
+                                <li><a href="{{ route('academic-result.index', ['studentId' => auth()->user()->student->student_id]) }}">Academic Result View</a></li>
                             </ul>
                         </li>
                         @endrole

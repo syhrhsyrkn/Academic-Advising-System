@@ -12,7 +12,8 @@ class CreateAppointmentsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('advising_reason');
-            $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled']) 
+            $table->text('details'); 
+            $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])
                   ->default('pending');  
             $table->dateTime('appointment_date');            
             $table->timestamps(); 

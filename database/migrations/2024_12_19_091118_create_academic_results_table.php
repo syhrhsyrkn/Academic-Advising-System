@@ -17,7 +17,7 @@ class CreateAcademicResultsTable extends Migration
             $table->unsignedBigInteger('semester_id');
             $table->foreign('semester_id')->references('id')->on('semesters')->onDelete('cascade');
             $table->string('grade')->nullable();
-            $table->decimal('score', 3, 2)->nullable();
+            $table->decimal('point', 3, 2)->nullable();
             $table->primary(['student_id', 'course_code', 'semester_id']);
         });
     }

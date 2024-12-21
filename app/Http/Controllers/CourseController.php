@@ -112,8 +112,8 @@ class CourseController extends Controller
     public function destroy($course_code)
     {
         $course = Course::where('course_code', $course_code)->firstOrFail();
-        $course->prerequisites()->detach();  // Detach prerequisites
-        $course->delete();  // Delete the course
+        $course->prerequisites()->detach(); 
+        $course->delete(); 
 
         return redirect()->route('course.index')->with('success', 'Course deleted successfully.');
     }

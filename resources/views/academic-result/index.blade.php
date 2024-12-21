@@ -17,52 +17,69 @@
     <form action="{{ route('academic-result.store', $studentId) }}" method="POST">
         @csrf
 
-        <h2 class="mt-5">Year 1 & Year 2</h2>
+        <!-- Table for Year 1 -->
+        <h2 class="mt-5">Year 1</h2>
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th class="text-center"><strong>Year 1 <br> Semester 1</strong></th>
                     <th class="text-center"><strong>Year 1 <br> Semester 2</strong></th>
                     <th class="text-center"><strong>Year 1 <br> Semester 3</strong></th>
-                    <th class="text-center"><strong>Year 2 <br> Semester 1</strong></th>
-                    <th class="text-center"><strong>Year 2 <br> Semester 2</strong></th>
-                    <th class="text-center"><strong>Year 2 <br> Semester 3</strong></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    @for ($sem = 1; $sem <= 6; $sem++)
+                    @for ($sem = 1; $sem <= 3; $sem++)
                         <td>
                             <table class="table table-sm">
-                                @php $totalCredit = 0; @endphp
+                                @php $totalCredit = 0; $totalGradePoint = 0; @endphp
                                 @foreach ($semesterSchedules[$sem] ?? [] as $schedule)
-                                    <tr>
-                                        <td>{{ $schedule->course_code }}</td>
-                                        <td>{{ $schedule->course->name }}</td>
-                                        <td>{{ $schedule->course->credit_hour }}</td>
+                                <tr>
+                                    <td>{{ $schedule->course_code }}</td>
+                                    <td>{{ $schedule->course->name }}</td>
+                                    <td>{{ $schedule->course->credit_hour }}</td>
 
-                                        <td>
-                                            <input type="text" name="grades[{{ $schedule->course_code }}]" 
-                                                   class="form-control" 
-                                                   value="{{ old('grades.' . $schedule->course_code, $schedule->grade ?? '') }}"
-                                                   placeholder="Enter grade" required
-                                                   @if(!isset($isEditing)) disabled @endif>
-                                        </td>
+                                    <td>
+                                    <select name="grades[{{ $schedule->course_code }}]" class="form-control" required
+                                            @if(!isset($isEditing) || !$isEditing) disabled @endif>
+                                        <option value="" disabled selected>Select Grade</option>
+                                        <option value="A" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'A' ? 'selected' : '' }}>A</option>
+                                        <option value="A-" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'A-' ? 'selected' : '' }}>A-</option>
+                                        <option value="B+" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'B+' ? 'selected' : '' }}>B+</option>
+                                        <option value="B" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'B' ? 'selected' : '' }}>B</option>
+                                        <option value="B-" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'B-' ? 'selected' : '' }}>B-</option>
+                                        <option value="C+" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'C+' ? 'selected' : '' }}>C+</option>
+                                        <option value="C" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'C' ? 'selected' : '' }}>C</option>
+                                        <option value="D" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'D' ? 'selected' : '' }}>D</option>
+                                        <option value="D-" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'D-' ? 'selected' : '' }}>D-</option>
+                                        <option value="E" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'E' ? 'selected' : '' }}>E</option>
+                                        <option value="F" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'F' ? 'selected' : '' }}>F</option>
+                                    </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="points[{{ $schedule->course_code }}]" 
+                                            class="form-control" 
+                                            value="{{ old('points.' . $schedule->course_code, App\Models\AcademicResult::getGradePoint($schedule->grade) ?? '') }}"
+                                            min="0" max="4" step="0.01" placeholder="Grade Point" readonly>
+                                    </td>
+                                </tr>
 
-                                        <td>
-                                            <input type="number" name="scores[{{ $schedule->course_code }}]" 
-                                                   class="form-control" 
-                                                   value="{{ old('scores.' . $schedule->course_code, $schedule->score ?? '') }}"
-                                                   min="0" max="4" step="0.1" placeholder="Enter score" required
-                                                   @if(!isset($isEditing)) disabled @endif>
-                                        </td>
-                                    </tr>
-                                    @php $totalCredit += $schedule->course->credit_hour; @endphp
+                                    @php 
+                                        $totalCredit += $schedule->course->credit_hour;
+                                        $gradePoint = App\Models\AcademicResult::getGradePoint($schedule->grade);
+                                        $totalGradePoint += $gradePoint * $schedule->course->credit_hour;
+                                    @endphp
                                 @endforeach
                                 <tr class="table-info font-weight-bold">
                                     <td>Total</td>
                                     <td>{{ $totalCredit }} chr</td>
-                                    <td></td>
+                                    <td>{{ $totalGradePoint }} grade points</td>
+                                    <td>GPA: 
+                                        @php
+                                            $gpa = $totalCredit > 0 ? round($totalGradePoint / $totalCredit, 2) : 0;
+                                        @endphp
+                                        {{ $gpa }}
+                                    </td>
                                 </tr>
                             </table>
                         </td>
@@ -71,14 +88,150 @@
             </tbody>
         </table>
 
-        <!-- Table for Year 3 & Year 4 -->
-        <h2 class="mt-5">Year 3 & Year 4</h2>
+        <!-- Table for Year 2 -->
+        <h2 class="mt-5">Year 2</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center"><strong>Year 2 <br> Semester 1</strong></th>
+                    <th class="text-center"><strong>Year 2 <br> Semester 2</strong></th>
+                    <th class="text-center"><strong>Year 2 <br> Semester 3</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @for ($sem = 4; $sem <= 6; $sem++)
+                        <td>
+                            <table class="table table-sm">
+                                @php $totalCredit = 0; $totalGradePoint = 0; @endphp
+                                @foreach ($semesterSchedules[$sem] ?? [] as $schedule)
+                                <tr>
+                                    <td>{{ $schedule->course_code }}</td>
+                                    <td>{{ $schedule->course->name }}</td>
+                                    <td>{{ $schedule->course->credit_hour }}</td>
+                                    <td>
+                                    <select name="grades[{{ $schedule->course_code }}]" class="form-control" required
+                                            @if(!isset($isEditing) || !$isEditing) disabled @endif>
+                                        <option value="" disabled selected>Select Grade</option>
+                                        <option value="A" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'A' ? 'selected' : '' }}>A</option>
+                                        <option value="A-" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'A-' ? 'selected' : '' }}>A-</option>
+                                        <option value="B+" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'B+' ? 'selected' : '' }}>B+</option>
+                                        <option value="B" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'B' ? 'selected' : '' }}>B</option>
+                                        <option value="B-" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'B-' ? 'selected' : '' }}>B-</option>
+                                        <option value="C+" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'C+' ? 'selected' : '' }}>C+</option>
+                                        <option value="C" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'C' ? 'selected' : '' }}>C</option>
+                                        <option value="D" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'D' ? 'selected' : '' }}>D</option>
+                                        <option value="D-" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'D-' ? 'selected' : '' }}>D-</option>
+                                        <option value="E" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'E' ? 'selected' : '' }}>E</option>
+                                        <option value="F" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'F' ? 'selected' : '' }}>F</option>
+                                    </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="points[{{ $schedule->course_code }}]" 
+                                            class="form-control" 
+                                            value="{{ old('points.' . $schedule->course_code, App\Models\AcademicResult::getGradePoint($schedule->grade) ?? '') }}"
+                                            min="0" max="4" step="0.01" placeholder="Grade Point" readonly>
+                                    </td>
+                                </tr>
+                                    @php 
+                                        $totalCredit += $schedule->course->credit_hour;
+                                        $gradePoint = App\Models\AcademicResult::getGradePoint($schedule->grade);
+                                        $totalGradePoint += $gradePoint * $schedule->course->credit_hour;
+                                    @endphp
+                                @endforeach
+                                <tr class="table-info font-weight-bold">
+                                    <td>Total</td>
+                                    <td>{{ $totalCredit }} chr</td>
+                                    <td>{{ $totalGradePoint }} grade points</td>
+                                    <td>GPA: 
+                                        @php
+                                            $gpa = $totalCredit > 0 ? round($totalGradePoint / $totalCredit, 2) : 0;
+                                        @endphp
+                                        {{ $gpa }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    @endfor
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Table for Year 3 -->
+        <h2 class="mt-5">Year 3</h2>
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th class="text-center"><strong>Year 3 <br> Semester 1</strong></th>
                     <th class="text-center"><strong>Year 3 <br> Semester 2</strong></th>
                     <th class="text-center"><strong>Year 3 <br> Semester 3</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @for ($sem = 7; $sem <= 9; $sem++)
+                        <td>
+                            <table class="table table-sm">
+                                @php $totalCredit = 0; $totalGradePoint = 0; @endphp
+                                @foreach ($semesterSchedules[$sem] ?? [] as $schedule)
+                                <tr>
+                                    <td>{{ $schedule->course_code }}</td>
+                                    <td>{{ $schedule->course->name }}</td>
+                                    <td>{{ $schedule->course->credit_hour }}</td>
+                                    <td>
+                                    <select name="grades[{{ $schedule->course_code }}]" class="form-control" required
+                                            @if(!isset($isEditing) || !$isEditing) disabled @endif>
+                                        <option value="" disabled selected>Select Grade</option>
+                                        <option value="A" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'A' ? 'selected' : '' }}>A</option>
+                                        <option value="A-" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'A-' ? 'selected' : '' }}>A-</option>
+                                        <option value="B+" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'B+' ? 'selected' : '' }}>B+</option>
+                                        <option value="B" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'B' ? 'selected' : '' }}>B</option>
+                                        <option value="B-" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'B-' ? 'selected' : '' }}>B-</option>
+                                        <option value="C+" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'C+' ? 'selected' : '' }}>C+</option>
+                                        <option value="C" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'C' ? 'selected' : '' }}>C</option>
+                                        <option value="D" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'D' ? 'selected' : '' }}>D</option>
+                                        <option value="D-" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'D-' ? 'selected' : '' }}>D-</option>
+                                        <option value="E" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'E' ? 'selected' : '' }}>E</option>
+                                        <option value="F" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'F' ? 'selected' : '' }}>F</option>
+                                    </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="points[{{ $schedule->course_code }}]" 
+                                            class="form-control" 
+                                            value="{{ old('points.' . $schedule->course_code, App\Models\AcademicResult::getGradePoint($schedule->grade) ?? '') }}"
+                                            min="0" max="4" step="0.01" placeholder="Grade Point" readonly>
+                                    </td>
+                                </tr>
+
+                                    @php 
+                                        $totalCredit += $schedule->course->credit_hour;
+                                        $gradePoint = App\Models\AcademicResult::getGradePoint($schedule->grade);
+                                        $totalGradePoint += $gradePoint * $schedule->course->credit_hour;
+                                    @endphp
+                                @endforeach
+                                <tr class="table-info font-weight-bold">
+                                    <td>Total</td>
+                                    <td>{{ $totalCredit }} chr</td>
+                                    <td>{{ $totalGradePoint }} grade points</td>
+                                    <td>GPA: 
+                                        @php
+                                            $gpa = $totalCredit > 0 ? round($totalGradePoint / $totalCredit, 2) : 0;
+                                        @endphp
+                                        {{ $gpa }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    @endfor
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Table for Year 4 -->
+        <h2 class="mt-5">Year 4</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
                     <th class="text-center"><strong>Year 4 <br> Semester 1</strong></th>
                     <th class="text-center"><strong>Year 4 <br> Semester 2</strong></th>
                     <th class="text-center"><strong>Year 4 <br> Semester 3</strong></th>
@@ -86,38 +239,55 @@
             </thead>
             <tbody>
                 <tr>
-                    @for ($sem = 7; $sem <= 12; $sem++)
+                    @for ($sem = 10; $sem <= 12; $sem++)
                         <td>
                             <table class="table table-sm">
-                                @php $totalCredit = 0; @endphp
+                                @php $totalCredit = 0; $totalGradePoint = 0; @endphp
                                 @foreach ($semesterSchedules[$sem] ?? [] as $schedule)
-                                    <tr>
-                                        <td>{{ $schedule->course_code }}</td>
-                                        <td>{{ $schedule->course->name }}</td>
-                                        <td>{{ $schedule->course->credit_hour }} </td>
-
-                                        <td>
-                                            <input type="text" name="grades[{{ $schedule->course_code }}]" 
-                                                   class="form-control" 
-                                                   value="{{ old('grades.' . $schedule->course_code, $schedule->grade ?? '') }}"
-                                                   placeholder="Enter grade" required
-                                                   @if(!isset($isEditing)) disabled @endif>
-                                        </td>
-
-                                        <td>
-                                            <input type="number" name="scores[{{ $schedule->course_code }}]" 
-                                                   class="form-control" 
-                                                   value="{{ old('scores.' . $schedule->course_code, $schedule->score ?? '') }}"
-                                                   min="0" max="4" step="0.1" placeholder="Enter score" required
-                                                   @if(!isset($isEditing)) disabled @endif>
-                                        </td>
-                                    </tr>
-                                    @php $totalCredit += $schedule->course->credit_hour; @endphp
+                                <tr>
+                                    <td>{{ $schedule->course_code }}</td>
+                                    <td>{{ $schedule->course->name }}</td>
+                                    <td>{{ $schedule->course->credit_hour }}</td>
+                                    <td>
+                                    <select name="grades[{{ $schedule->course_code }}]" class="form-control" required
+                                            @if(!isset($isEditing) || !$isEditing) disabled @endif>
+                                        <option value="" disabled selected>Select Grade</option>
+                                        <option value="A" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'A' ? 'selected' : '' }}>A</option>
+                                        <option value="A-" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'A-' ? 'selected' : '' }}>A-</option>
+                                        <option value="B+" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'B+' ? 'selected' : '' }}>B+</option>
+                                        <option value="B" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'B' ? 'selected' : '' }}>B</option>
+                                        <option value="B-" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'B-' ? 'selected' : '' }}>B-</option>
+                                        <option value="C+" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'C+' ? 'selected' : '' }}>C+</option>
+                                        <option value="C" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'C' ? 'selected' : '' }}>C</option>
+                                        <option value="D" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'D' ? 'selected' : '' }}>D</option>
+                                        <option value="D-" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'D-' ? 'selected' : '' }}>D-</option>
+                                        <option value="E" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'E' ? 'selected' : '' }}>E</option>
+                                        <option value="F" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == 'F' ? 'selected' : '' }}>F</option>
+                                    </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="points[{{ $schedule->course_code }}]" 
+                                            class="form-control" 
+                                            value="{{ old('points.' . $schedule->course_code, App\Models\AcademicResult::getGradePoint($schedule->grade) ?? '') }}"
+                                            min="0" max="4" step="0.01" placeholder="Grade Point" readonly>
+                                    </td>
+                                </tr>
+                                    @php 
+                                        $totalCredit += $schedule->course->credit_hour;
+                                        $gradePoint = App\Models\AcademicResult::getGradePoint($schedule->grade);
+                                        $totalGradePoint += $gradePoint * $schedule->course->credit_hour;
+                                    @endphp
                                 @endforeach
                                 <tr class="table-info font-weight-bold">
                                     <td>Total</td>
                                     <td>{{ $totalCredit }} chr</td>
-                                    <td></td>
+                                    <td>{{ $totalGradePoint }} grade points</td>
+                                    <td>GPA: 
+                                        @php
+                                            $gpa = $totalCredit > 0 ? round($totalGradePoint / $totalCredit, 2) : 0;
+                                        @endphp
+                                        {{ $gpa }}
+                                    </td>
                                 </tr>
                             </table>
                         </td>

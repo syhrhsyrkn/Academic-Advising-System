@@ -5,16 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Appointment extends Model
+class SemesterGpa extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'advising_reason',
-        'details', 
-        'status',
-        'appointment_date',
+        'student_id',
+        'semester_id',
+        'gpa',
     ];
 
     public function student()
@@ -22,8 +20,8 @@ class Appointment extends Model
         return $this->belongsTo(Student::class);
     }
 
-    public function user()
+    public function semester()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Semester::class);
     }
 }

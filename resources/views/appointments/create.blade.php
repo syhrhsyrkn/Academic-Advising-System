@@ -7,8 +7,24 @@
         @csrf
         <div class="form-group">
             <label for="advising_reason">Advising Reason</label>
-            <input type="text" class="form-control" id="advising_reason" name="advising_reason" required>
+            <select class="form-control" id="advising_reason" name="advising_reason" required>
+                <option value="">Select a reason</option>
+                <option value="Study plan consultation">Study plan consultation</option>
+                <option value="Issues with course registration">Issues with course registration</option>
+                <option value="Issues with transfer of credits">Issues with transfer of credits</option>
+                <option value="Appeal for exceed workload">Appeal for exceed workload</option>
+                <option value="Appeal for change of program">Appeal for change of program</option>
+                <option value="Consultation on leave of absence">Consultation on leave of absence</option>
+                <option value="Others">Others</option>
+            </select>
             @error('advising_reason') 
+                <div class="text-danger">{{ $message }}</div> 
+            @enderror
+        </div>
+        <div class="form-group">
+            <label for="details">Details</label>
+            <textarea class="form-control" id="details" name="details" rows="4" required></textarea>
+            @error('details') 
                 <div class="text-danger">{{ $message }}</div> 
             @enderror
         </div>

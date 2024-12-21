@@ -29,4 +29,9 @@ class StudentCourseSchedule extends Model
     {
         return $this->belongsTo(Semester::class, 'semester_id');
     }
+
+    public function academicResults()
+    {
+        return $this->hasOne(AcademicResult::class, 'course_code', 'course_code');
+    }
 }

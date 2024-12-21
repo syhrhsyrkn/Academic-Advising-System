@@ -44,7 +44,7 @@
                         <!-- Credit Hour -->
                         <div class="form-group">
                             <label for="credit_hour">Credit Hour</label>
-                            <input type="number" name="credit_hour" class="form-control @error('credit_hour') is-invalid @enderror" value="{{ old('credit_hour', $course->credit_hour) }}" min="1" max="20" required>
+                            <input type="decimal" name="credit_hour" class="form-control @error('credit_hour') is-invalid @enderror" value="{{ old('credit_hour', $course->credit_hour) }}" max="20" required>
                             @error('credit_hour')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

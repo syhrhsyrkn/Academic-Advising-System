@@ -4,7 +4,6 @@
 <div class="container">
     <h2>Your Appointments</h2>
     
-    {{-- Display success message --}}
     @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -15,6 +14,7 @@
         <thead>
             <tr>
                 <th>Advising Reason</th>
+                <th>Details</th> 
                 <th>Status</th>
                 <th>Appointment Date</th>
             </tr>
@@ -23,6 +23,7 @@
         @forelse ($appointments as $appointment)
         <tr>
             <td>{{ $appointment->advising_reason }}</td>
+            <td>{{ $appointment->details }}</td> 
             <td>{{ $appointment->status }}</td>
             <td>{{ $appointment->appointment_date }}</td>
         </tr>

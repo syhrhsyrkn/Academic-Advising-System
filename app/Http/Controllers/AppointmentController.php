@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
@@ -16,8 +15,8 @@ class AppointmentController extends Controller
 
     public function index(Request $request)
     {
-        $sortOrder = $request->get('sort', 'asc'); 
-    
+        $sortOrder = $request->get('sort', 'asc');
+
         if (auth()->user()->hasRole('advisor')) {
             $appointments = Appointment::with('user.student')
                 ->orderBy('appointment_date', $sortOrder)
@@ -28,10 +27,9 @@ class AppointmentController extends Controller
                 ->orderBy('appointment_date', $sortOrder)
                 ->get();
         }
-    
+
         return view('appointments.index', compact('appointments', 'sortOrder'));
     }
-    
 
     public function create()
     {
@@ -42,23 +40,25 @@ class AppointmentController extends Controller
     {
         $request->validate([
             'advising_reason' => 'required|string|max:255',
+            'details' => 'required|string',
             'appointment_date' => 'required|date|after:today',
         ]);
 
         $appointment = new Appointment();
 
-        $appointment->user_id = auth()->id(); 
+        $appointment->user_id = auth()->id();
         $appointment->advising_reason = $request->advising_reason;
+        $appointment->details = $request->details;
         $appointment->status = 'Pending';
         $appointment->appointment_date = $request->appointment_date;
-        
+
         $appointment->save();
 
         session()->flash('success', 'Your appointment request has been submitted successfully!');
 
         return redirect()->route('appointments.myAppointments')->with('success', 'Appointment request submitted.');
     }
- 
+
     public function show($id)
     {
         $appointment = Appointment::findOrFail($id); // Find appointment by ID
@@ -80,6 +80,7 @@ class AppointmentController extends Controller
     {
         $request->validate([
             'advising_reason' => 'required|string|max:255',
+            'details' => 'required|string',
             'appointment_date' => 'required|date|after:today',
             'status' => 'required|in:pending,confirmed,completed,cancelled',
         ]);
@@ -87,6 +88,7 @@ class AppointmentController extends Controller
         $appointment = Appointment::findOrFail($id);
 
         $appointment->advising_reason = $request->advising_reason;
+        $appointment->details = $request->details;
         $appointment->appointment_date = $request->appointment_date;
         $appointment->status = $request->status;
 
@@ -95,23 +97,21 @@ class AppointmentController extends Controller
         return redirect()->route('appointments.index')->with('success', 'Appointment updated successfully.');
     }
 
-    //student's personal appointments history
     public function myAppointments()
     {
         $appointments = Appointment::with('user.student')
-            ->where('user_id', auth()->id()) 
+            ->where('user_id', auth()->id())
             ->get();
-        
+
         return view('appointments.myAppointments', compact('appointments'));
     }
 
     public function latestAppointmentByStudent($studentId)
     {
-        // Fetch the latest appointment for the given student
         $appointment = Appointment::where('user_id', $studentId)
             ->orderBy('appointment_date', 'desc')
             ->first();
-    
+
         return view('appointments.latest', compact('appointment'));
     }
 }
