@@ -51,7 +51,6 @@ class AdvisorController extends Controller
            abort(403, 'Unauthorized action.');
        }
    
-       // Load courses, semesters, and courseSchedules for the student
        $student->load('student.courseSchedules.course', 'student.courseSchedules.semester');
    
        // Organize the schedule by semester
@@ -73,5 +72,21 @@ class AdvisorController extends Controller
        return $semesterSchedules;
    }
    
+   public function viewStudentAcademicResult(Student $student)
+   {
+       $semesterSchedules = $this->getSemesterSchedules($student);
+   
+       return view('advisor.student-academic-result', compact('student', 'semesterSchedules'));
+   }   
+
+    private function getSemesterSchedules(Student $student)
+    {
+        return $student->courseSchedules()
+            ->with(['course', 'academicResults']) 
+            ->where('student_id', $student->id) 
+            ->get()
+            ->groupBy('semester_id');
+    }
+    
 
 }

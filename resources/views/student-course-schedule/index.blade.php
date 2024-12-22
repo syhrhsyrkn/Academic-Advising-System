@@ -46,25 +46,28 @@
         </div>
     @endif
     
-    <!-- Table for Year 1 & Year 2 -->
-    <h2 class="mt-5">Year 1 & Year 2</h2>
+    <!-- Table for Year 1 -->
+    <h2 class="mt-5">Year 1</h2>
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th class="text-center"><strong>Year 1 <br> Semester 1</strong></th>
-                <th class="text-center"><strong>Year 1 <br> Semester 2</strong></th>
-                <th class="text-center"><strong>Year 1 <br> Semester 3</strong></th>
-                <th class="text-center"><strong>Year 2 <br> Semester 1</strong></th>
-                <th class="text-center"><strong>Year 2 <br> Semester 2</strong></th>
-                <th class="text-center"><strong>Year 2 <br> Semester 3</strong></th>
+                <th class="text-center"><strong>Semester 1</strong></th>
+                <th class="text-center"><strong>Semester 2</strong></th>
+                <th class="text-center"><strong>Semester 3</strong></th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                @for ($sem = 1; $sem <= 6; $sem++)
+                @for ($sem = 1; $sem <= 3; $sem++)
                     <td>
                         <table class="table table-sm">
                             @php $totalCredit = 0; @endphp
+                            <tr class="table-info font-weight-bold">
+                                    <td>Code</td>
+                                    <td>Name</td>
+                                    <td>Chr</td>
+                                    <td>Act</td>
+                                </tr>
                             @foreach ($semesterSchedules[$sem] as $schedule)
                                 <tr>
                                     <td>{{ $schedule->course_code }}</td>
@@ -84,7 +87,8 @@
                             @endforeach
                             <tr class="table-info font-weight-bold">
                                 <td>Total</td>
-                                <td>{{ $totalCredit }} chr</td>
+                                <td></td>
+                                <td>{{ $totalCredit }} </td>
                                 <td></td>
                             </tr>
                         </table>
@@ -94,30 +98,33 @@
         </tbody>
     </table>
 
-    <!-- Table for Year 3 & Year 4 -->
-    <h2 class="mt-5">Year 3 & Year 4</h2>
+    <!-- Table for Year 2 -->
+    <h2 class="mt-5">Year 2</h2>
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th class="text-center"><strong>Year 3 <br> Semester 1</strong></th>
-                <th class="text-center"><strong>Year 3 <br> Semester 2</strong></th>
-                <th class="text-center"><strong>Year 3 <br> Semester 3</strong></th>
-                <th class="text-center"><strong>Year 4 <br> Semester 1</strong></th>
-                <th class="text-center"><strong>Year 4 <br> Semester 2</strong></th>
-                <th class="text-center"><strong>Year 4 <br> Semester 3</strong></th>
+                <th class="text-center"><strong>Semester 1</strong></th>
+                <th class="text-center"><strong>Semester 2</strong></th>
+                <th class="text-center"><strong>Semester 3</strong></th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                @for ($sem = 7; $sem <= 12; $sem++)
+                @for ($sem = 4; $sem <= 6; $sem++)
                     <td>
                         <table class="table table-sm">
                             @php $totalCredit = 0; @endphp
+                            <tr class="table-info font-weight-bold">
+                                    <td>Code</td>
+                                    <td>Name</td>
+                                    <td>Chr</td>
+                                    <td>Act</td>
+                                </tr>
                             @foreach ($semesterSchedules[$sem] as $schedule)
                                 <tr>
                                     <td>{{ $schedule->course_code }}</td>
                                     <td>{{ $schedule->course->name }}</td>
-                                    <td>{{ $schedule->course->credit_hour }} </td>
+                                    <td>{{ $schedule->course->credit_hour }}</td>
                                     <td>
                                         <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
                                             @csrf
@@ -132,7 +139,112 @@
                             @endforeach
                             <tr class="table-info font-weight-bold">
                                 <td>Total</td>
-                                <td>{{ $totalCredit }} chr</td>
+                                <td></td>
+                                <td>{{ $totalCredit }} </td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                @endfor
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Table for Year 3 -->
+    <h2 class="mt-5">Year 3</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th class="text-center"><strong>Semester 1</strong></th>
+                <th class="text-center"><strong>Semester 2</strong></th>
+                <th class="text-center"><strong>Semester 3</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                @for ($sem = 7; $sem <= 9; $sem++)
+                    <td>
+                        <table class="table table-sm">
+                            @php $totalCredit = 0; @endphp
+                            <tr class="table-info font-weight-bold">
+                                    <td>Code</td>
+                                    <td>Name</td>
+                                    <td>Chr</td>
+                                    <td>Act</td>
+                                </tr>
+                            @foreach ($semesterSchedules[$sem] as $schedule)
+                                <tr>
+                                    <td>{{ $schedule->course_code }}</td>
+                                    <td>{{ $schedule->course->name }}</td>
+                                    <td>{{ $schedule->course->credit_hour }}</td>
+                                    <td>
+                                        <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @php $totalCredit += $schedule->course->credit_hour; @endphp
+                            @endforeach
+                            <tr class="table-info font-weight-bold">
+                                <td>Total</td>
+                                <td></td>
+                                <td>{{ $totalCredit }} </td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                @endfor
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Table for Year 4 -->
+    <h2 class="mt-5">Year 4</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th class="text-center"><strong>Semester 1</strong></th>
+                <th class="text-center"><strong>Semester 2</strong></th>
+                <th class="text-center"><strong>Semester 3</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                @for ($sem = 10; $sem <= 12; $sem++)
+                    <td>
+                        <table class="table table-sm">
+                            @php $totalCredit = 0; @endphp
+                            <tr class="table-info font-weight-bold">
+                                    <td>Code</td>
+                                    <td>Name</td>
+                                    <td>Chr</td>
+                                    <td>Act</td>
+                                </tr>
+                            @foreach ($semesterSchedules[$sem] as $schedule)
+                                <tr>
+                                    <td>{{ $schedule->course_code }}</td>
+                                    <td>{{ $schedule->course->name }}</td>
+                                    <td>{{ $schedule->course->credit_hour }}</td>
+                                    <td>
+                                        <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @php $totalCredit += $schedule->course->credit_hour; @endphp
+                            @endforeach
+                            <tr class="table-info font-weight-bold">
+                                <td>Total</td>
+                                <td></td>
+                                <td>{{ $totalCredit }} </td>
                                 <td></td>
                             </tr>
                         </table>
@@ -142,5 +254,4 @@
         </tbody>
     </table>
 </div>
-
 @endsection

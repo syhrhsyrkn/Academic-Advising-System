@@ -9,6 +9,8 @@ class AcademicResult extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'student_id',
         'course_code',
@@ -16,7 +18,7 @@ class AcademicResult extends Model
         'point',
         'semester_id',
     ];
-
+    
     protected $casts = [
         'point' => 'decimal:2',
     ];

@@ -14,7 +14,6 @@ return new class extends Migration
             $table->unsignedDecimal('credit_hour', 2, 1); 
             $table->enum('classification', ['URC', 'CCC', 'DCC', 'Electives', 'FYP', 'IAP']);
             $table->text('description')->nullable();
-            $table->timestamps();
         });
     }
 

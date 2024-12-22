@@ -125,7 +125,8 @@
                             <ul>
                                 @role('advisor')
                                 <li><a href="advisor/student-list">Student List</a></li>
-                                <li><a href="{{ route('appointments.index') }}">Appointment List</a></li>                                @endrole
+                                <li><a href="{{ route('appointments.index') }}">Appointment List</a></li>                                
+                                @endrole
                                 @role('student')
                                 <li><a href="{{ route('appointments.create') }}" class="btn btn-primary">Book an Appointment</a></li>
                                 <li><a href="{{ route('appointments.myAppointments') }}">Appointment History</a></li>

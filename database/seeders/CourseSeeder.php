@@ -164,6 +164,13 @@ class CourseSeeder extends Seeder
                 'description' => null,
             ],
             [
+                'course_code' => 'BIIT 2304',
+                'name' => 'Technopreneurship',
+                'credit_hour' => 3,
+                'classification' => 'DCC',
+                'description' => null,
+            ],
+            [
                 'course_code' => 'BIIT 2305',
                 'name' => 'Web Application Development',
                 'credit_hour' => 3,
@@ -173,6 +180,13 @@ class CourseSeeder extends Seeder
             [
                 'course_code' => 'BICS 1304',
                 'name' => 'Object-Oriented Programming',
+                'credit_hour' => 3,
+                'classification' => 'DCC',
+                'description' => null,
+            ],
+            [
+                'course_code' => 'BICS 1305',
+                'name' => 'Discrete Structures',
                 'credit_hour' => 3,
                 'classification' => 'DCC',
                 'description' => null,

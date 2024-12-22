@@ -9,6 +9,8 @@ class SemesterGpa extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'student_id',
         'semester_id',

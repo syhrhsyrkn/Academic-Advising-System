@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             PrerequisiteSeeder::class,
             AcademicYearSeeder::class,
             SemesterSeeder::class,
+            CourseScheduleSeeder::class,
+            AcademicResult::class,
         ]);
     }
 }
