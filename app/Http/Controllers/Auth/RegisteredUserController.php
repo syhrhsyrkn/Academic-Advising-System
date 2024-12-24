@@ -44,6 +44,6 @@ class RegisteredUserController extends Controller
     {
         $this->create($request->all());
 
-        return redirect()->route('login')->with('status', 'Registration successful! Please login.');
+        return redirect()->route('profile/edit')->with('status', 'Registration successful! Please login.');
     }
 }

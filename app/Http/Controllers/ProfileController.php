@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Student;
 use App\Models\Staff;
 use App\Models\User;
 
 class ProfileController extends Controller
 {
-
     public function edit()
     {
         $user = Auth::user();
@@ -76,20 +76,30 @@ class ProfileController extends Controller
     {
         $user = Auth::user()->load('roles');
         $profile = null;
-
+        $semesterInfo = null;
+    
         if ($user->hasRole('student')) {
-            // Fetch data from the 'students' table
+            // Fetch student data from the 'students' table
             $profile = Student::where('user_id', $user->id)->first();
+            
+            // Retrieve the latest academic year and semester based on the student's course schedule
+            $semesterInfo = DB::table('student_course_schedule')
+                ->join('semesters', 'student_course_schedule.semester_id', '=', 'semesters.id')
+                ->join('academic_years', 'semesters.academic_year_id', '=', 'academic_years.id')
+                ->where('student_course_schedule.student_id', $profile->student_id) // Using student_id from the 'students' table
+                ->select('semesters.semester_name', 'academic_years.year_name')
+                ->orderByDesc('academic_years.id') // Order by academic year descending
+                ->orderByDesc('semesters.id') // Order by semester descending
+                ->first();
         } elseif ($user->hasRole(['admin', 'advisor'])) {
-            // Fetch data from the 'staff' table
+            // Fetch staff data from the 'staff' table
             $profile = Staff::where('user_id', $user->id)->first();
         }
-
+    
         if (!$profile) {
             return redirect()->back()->with('error', 'Profile not found.');
         }
-
-        return view('profile.show', compact('profile'));
+    
+        return view('profile.show', compact('profile', 'semesterInfo'));
     }
-
 }

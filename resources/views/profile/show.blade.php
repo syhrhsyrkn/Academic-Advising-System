@@ -103,11 +103,11 @@
                                             </div>
                                             <div class="row">
                                                 <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Year</p>
-                                                <p class="col-sm-9">{{ $profile->year ?? 'N/A' }}</p>
+                                                <p class="col-sm-9">{{ $semesterInfo->year_name ?? 'N/A' }}</p>
                                             </div>
                                             <div class="row">
                                                 <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Semester</p>
-                                                <p class="col-sm-9">{{ $profile->semester ?? 'N/A' }}</p>
+                                                <p class="col-sm-9">{{ $semesterInfo->semester_name ?? 'N/A' }}</p>
                                             </div>
                                         @endif
 

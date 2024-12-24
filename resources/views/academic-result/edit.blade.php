@@ -3,10 +3,10 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mt-3">
-        <h1>Academic Results</h1>
+        <h1>Edit Academic Results</h1>
 
-        <!-- Edit Button -->
-        <a href="{{ route('academic-result.edit', $studentId) }}" class="btn btn-primary">Edit</a>
+        <!-- Back Button -->
+        <a href="{{ route('academic-result.index', $studentId) }}" class="btn btn-secondary">Back to Results</a>
     </div>
 
     @if ($errors->any())
@@ -19,8 +19,9 @@
         </div>
     @endif
 
-    <form action="{{ route('academic-result.store', $studentId) }}" method="POST">
+    <form action="{{ route('academic-result.update', $studentId) }}" method="POST">
         @csrf
+        @method('PUT')
 
         <!-- Table for Year 1 -->
         <h2 class="mt-5">Year 1</h2>
@@ -57,12 +58,15 @@
                                     <td>{{ $schedule->course->name }}</td>
                                     <td>{{ $schedule->course->credit_hour }}</td>
                                     <td>
-                                        <select name="grades[{{ $schedule->course_code }}]" class="form-control grade-dropdown" required>
-                                            <option value="" disabled selected>Select Grade</option>
-                                            @foreach (['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'D', 'D-', 'E', 'F'] as $grade)
-                                                <option value="{{ $grade }}" {{ old('grades.' . $schedule->course_code, $schedule->academicResults->grade ?? '') == $grade ? 'selected' : '' }}>{{ $grade }}</option>
-                                            @endforeach
-                                        </select>
+                                    <select name="grades[{{ (string) $schedule->course_code }}]" class="form-control grade-dropdown" required>
+                                        <option value="" disabled selected>Select Grade</option>
+                                        @foreach (['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'D', 'D-', 'E', 'F'] as $grade)
+                                            <option value="{{ $grade }}" 
+                                                    {{ old('grades.' . $schedule->course_code, $schedule->academicResults?->grade ?? '') == $grade ? 'selected' : '' }}>
+                                                {{ $grade }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                     </td>
                                     <td>
                                         <input type="number" 
@@ -92,36 +96,19 @@
                                     <td>{{ $totalGradePoint }}</td>
                                 </tr>
                             </table>
-                            <table>
-                                <tr>
-                                    <td>GPA:</td>
-                                    <td class="gpa-cell">
-                                        {{ $gpas[$sem] ?? 'N/A' }} &nbsp; &nbsp; &nbsp;
-                                    </td>
-                                    <td>CGPA:</td>
-                                    <td>
-                                        {{ $cgpa }}
-                                    </td>
-                                </tr>
-                            </table>
                         </td>
                     @endfor
                 </tr>
             </tbody>
         </table>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success">Save Changes</button>
+        </div>
     </form>
 </div>
 
-
 <script>
-    function toggleEdit() {
-        @if(isset($isEditing))
-            window.location.reload(); 
-        @else
-            window.location.search = '?edit=true';
-        @endif
-    }
-
     document.addEventListener('DOMContentLoaded', function () {
         const gradeToPoint = {
             'A': 4.00,
@@ -143,42 +130,8 @@
                 const selectedGrade = this.value;
                 const pointField = this.closest('tr').querySelector('.grade-point');
                 pointField.value = gradeToPoint[selectedGrade] || '';
-                updateGPA(); // Recalculate GPA after a grade change
             });
         });
-
-        // Function to calculate and update GPA
-        function updateGPA() {
-            document.querySelectorAll('table.table-sm').forEach((table) => {
-                let totalCredit = 0;
-                let totalGradePoint = 0;
-
-                // Iterate through each row of the table
-                table.querySelectorAll('tr').forEach((row) => {
-                    const creditCell = row.querySelector('td:nth-child(3)');
-                    const pointField = row.querySelector('.grade-point');
-
-                    // Make sure the row contains valid credit and point values
-                    if (creditCell && pointField) {
-                        const creditHour = parseFloat(creditCell.textContent.trim()) || 0;
-                        const gradePoint = parseFloat(pointField.value) || 0;
-
-                        totalCredit += creditHour;
-                        totalGradePoint += creditHour * gradePoint;
-                    }
-                });
-
-                // Find the GPA row and update the GPA value
-                const gpaRow = table.querySelector('tr.table-info');
-                const gpaCell = gpaRow ? gpaRow.querySelector('td:last-child') : null;
-                const gpa = totalCredit > 0 ? (totalGradePoint / totalCredit).toFixed(2) : '0.00';
-
-                if (gpaCell) {
-                    gpaCell.textContent = `GPA: ${gpa}`;
-                }
-            });
-        }
     });
 </script>
-
 @endsection

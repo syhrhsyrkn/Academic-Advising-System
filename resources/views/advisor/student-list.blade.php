@@ -26,7 +26,9 @@
                 <th>Email</th>
                 <th>Matric No</th>
                 <th>Contact No</th>
-                <th>Actions</th>
+                <th>Year</th>
+                <th>Semester</th>
+                <th class="text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -40,6 +42,8 @@
                     <td>{{ $student->email }}</td>
                     <td>{{ $student->student->matric_no ?? 'N/A' }}</td>
                     <td>{{ $student->student->contact_no ?? 'N/A' }}</td>
+                    <td>{{ $profile->academic_year ?? 'N/A' }}</td>
+                    <td>{{ $profile->semester ?? 'N/A' }}</td>
                     <td>
                         <a href="{{ route('advisor.view-student-profile', $student->id) }}" class="me-4">Profile</a>
                         <a href="{{ route('advisor.student-schedule', $student->id) }}" class="me-4">Schedule</a>

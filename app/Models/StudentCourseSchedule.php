@@ -22,16 +22,17 @@ class StudentCourseSchedule extends Model
 
     public function course()
     {
-        return $this->belongsTo(Course::class, 'course_code');
+        return $this->belongsTo(Course::class, 'course_code', 'course_code');
     }
 
     public function semester()
     {
         return $this->belongsTo(Semester::class, 'semester_id');
     }
-
     public function academicResults()
     {
         return $this->hasOne(AcademicResult::class, 'course_code', 'course_code');
     }
+    
+
 }

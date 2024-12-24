@@ -2,58 +2,61 @@
 
 @section('content')
 <div class="container">
-    <h1>Course Schedule</h1>
+    <div>
+        <h1>Course Schedule</h1>
 
-    <!-- Add Course Form -->
-    <form action="{{ route('student_course_schedule.store', $studentId) }}" method="POST">
-        @csrf
-        <div class="form-group">
-            <label for="semester_id">Select Semester:</label>
-            <select name="semester_id" id="semester_id" class="form-control" required>
-                <option value="" disabled selected>Select Semester ...</option>
-                @foreach($semesters as $semester)
-                    <option value="{{ $semester->id }}">
-                        {{ $semester->academicYear->year_name }} ( {{ $semester->semester_name }} )
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="course_code">Select Course:</label>
-            <select name="course_code" id="course_code" class="form-control" required>
-                @foreach($courses as $course)
-                    @if(!in_array($course->course_code, $existingCourses)) <!-- Only show courses not in schedule -->
-                        <option value="{{ $course->course_code }}">
-                            {{ $course->course_code }} - {{ $course->name }} ({{ $course->credit_hour }} chr )
+        <!-- Add Course Form -->
+        <form action="{{ route('student_course_schedule.store', $studentId) }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label for="semester_id">Select Semester:</label>
+                <select name="semester_id" id="semester_id" class="form-control" required>
+                    <option value="" disabled selected>Select Semester ...</option>
+                    @foreach($semesters as $semester)
+                        <option value="{{ $semester->id }}">
+                            {{ $semester->academicYear->year_name }} ( {{ $semester->semester_name }} )
                         </option>
-                    @endif
-                @endforeach
-            </select>
-        </div>
+                    @endforeach
+                </select>
+            </div>
 
-        <button type="submit" class="btn btn-primary">Add to Schedule</button>
-    </form>
+            <div class="form-group">
+                <label for="course_code">Select Course:</label>
+                <select name="course_code" id="course_code" class="form-control" required>
+                    @foreach($courses as $course)
+                        @if(!in_array($course->course_code, $existingCourses)) <!-- Only show courses not in schedule -->
+                            <option value="{{ $course->course_code }}">
+                                {{ $course->course_code }} - {{ $course->name }} ({{ $course->credit_hour }} chr )
+                            </option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
 
-    <!-- Validation Errors -->
-    @if ($errors->any())
-        <div class="alert alert-danger mt-3">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+            <button type="submit" class="btn btn-primary">Add to Schedule</button>
+        </form>
+
+        <!-- Validation Errors -->
+        @if ($errors->any())
+            <div class="alert alert-danger mt-3">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </div>
+    
     
     <!-- Table for Year 1 -->
     <h2 class="mt-5">Year 1</h2>
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th class="text-center"><strong>Semester 1</strong></th>
-                <th class="text-center"><strong>Semester 2</strong></th>
-                <th class="text-center"><strong>Semester 3</strong></th>
+                <th class="text-center">Semester 1</th>
+                <th class="text-center">Semester 2</th>
+                <th class="text-center">Semester 3</th>
             </tr>
         </thead>
         <tbody>
@@ -66,14 +69,14 @@
                                     <td>Code</td>
                                     <td>Name</td>
                                     <td>Chr</td>
-                                    <td>Act</td>
+                                    <td>Action</td>
                                 </tr>
                             @foreach ($semesterSchedules[$sem] as $schedule)
                                 <tr>
-                                    <td>{{ $schedule->course_code }}</td>
+                                    <td class="text-center">{{ $schedule->course_code }}</td>
                                     <td>{{ $schedule->course->name }}</td>
                                     <td>{{ $schedule->course->credit_hour }}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
@@ -103,9 +106,9 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th class="text-center"><strong>Semester 1</strong></th>
-                <th class="text-center"><strong>Semester 2</strong></th>
-                <th class="text-center"><strong>Semester 3</strong></th>
+                <th class="text-center">Semester 1</th>
+                <th class="text-center">Semester 2</th>
+                <th class="text-center">Semester 3</th>
             </tr>
         </thead>
         <tbody>
@@ -118,14 +121,14 @@
                                     <td>Code</td>
                                     <td>Name</td>
                                     <td>Chr</td>
-                                    <td>Act</td>
+                                    <td>Action</td>
                                 </tr>
                             @foreach ($semesterSchedules[$sem] as $schedule)
                                 <tr>
-                                    <td>{{ $schedule->course_code }}</td>
+                                    <td class="text-center">{{ $schedule->course_code }}</td>
                                     <td>{{ $schedule->course->name }}</td>
                                     <td>{{ $schedule->course->credit_hour }}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
@@ -155,9 +158,9 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th class="text-center"><strong>Semester 1</strong></th>
-                <th class="text-center"><strong>Semester 2</strong></th>
-                <th class="text-center"><strong>Semester 3</strong></th>
+                <th class="text-center">Semester 1</th>
+                <th class="text-center">Semester 2</th>
+                <th class="text-center">Semester 3</th>
             </tr>
         </thead>
         <tbody>
@@ -170,14 +173,14 @@
                                     <td>Code</td>
                                     <td>Name</td>
                                     <td>Chr</td>
-                                    <td>Act</td>
+                                    <td>Action</td>
                                 </tr>
                             @foreach ($semesterSchedules[$sem] as $schedule)
                                 <tr>
-                                    <td>{{ $schedule->course_code }}</td>
+                                    <td class="text-center">{{ $schedule->course_code }}</td>
                                     <td>{{ $schedule->course->name }}</td>
                                     <td>{{ $schedule->course->credit_hour }}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
@@ -207,9 +210,9 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th class="text-center"><strong>Semester 1</strong></th>
-                <th class="text-center"><strong>Semester 2</strong></th>
-                <th class="text-center"><strong>Semester 3</strong></th>
+                <th class="text-center">Semester 1</th>
+                <th class="text-center">Semester 2</th>
+                <th class="text-center">Semester 3</th>
             </tr>
         </thead>
         <tbody>
@@ -222,14 +225,14 @@
                                     <td>Code</td>
                                     <td>Name</td>
                                     <td>Chr</td>
-                                    <td>Act</td>
+                                    <td>Action</td>
                                 </tr>
                             @foreach ($semesterSchedules[$sem] as $schedule)
                                 <tr>
-                                    <td>{{ $schedule->course_code }}</td>
+                                    <td class="text-center">{{ $schedule->course_code }}</td>
                                     <td>{{ $schedule->course->name }}</td>
                                     <td>{{ $schedule->course->credit_hour }}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <form action="{{ route('student_course_schedule.destroy', [$studentId, $schedule->course_code, $schedule->semester_id]) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')

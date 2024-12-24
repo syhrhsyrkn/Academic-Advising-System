@@ -11,6 +11,11 @@ class AcademicResult extends Model
 
     public $timestamps = false;
 
+    public $incrementing = false;
+
+    protected $primaryKey = ['student_id', 'course_code', 'semester_id']; // Composite key
+
+
     protected $fillable = [
         'student_id',
         'course_code',
@@ -30,7 +35,7 @@ class AcademicResult extends Model
     
     public function course()
     {
-        return $this->belongsTo(Course::class, 'course_code', 'course_code');
+        return $this->belongsTo(Course::class, 'course_code');
     }
     
     public function semester()
@@ -54,9 +59,8 @@ class AcademicResult extends Model
             'F' => 0.00,
         ];
 
-        return $gradePoints[$grade] ?? 0.00;
+        return $gradePoints[$grade] ?? 0; // Default to 0 if the grade is invalid
     }
-
     public static function setGradeAndPoint($grade)
     {
         $point = self::getGradePoint($grade);

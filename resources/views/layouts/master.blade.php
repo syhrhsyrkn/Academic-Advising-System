@@ -14,13 +14,8 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
-<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
-<!-- Bootstrap Bundle with Popper (necessary for dropdowns) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </head>
 
@@ -31,10 +26,10 @@
         <div class="header">
 
             <div class="header-left">
-                <a href="/dashboard" class="logo">
+                <a href="#" class="logo">
                     <img src="{{asset('assets/img/logo.png')}}" alt="Logo">
                 </a>
-                <a href="/dashboard" class="logo logo-small">
+                <a href="#" class="logo logo-small">
                     <img src="{{asset('assets/img/logo-small.png')}}" alt="Logo" width="30" height="30">
                 </a>
             </div>
@@ -44,12 +39,12 @@
                 </a>
             </div>
 
-            <div class="top-nav-search">
+            <!-- <div class="top-nav-search">
                 <form>
                     <input type="text" class="form-control" placeholder="Search here">
                     <button class="btn" type="submit"><i class="fas fa-search"></i></button>
                 </form>
-            </div>
+            </div> -->
             <a class="mobile_btn" id="mobile_btn">
                 <i class="fas fa-bars"></i>
             </a>
@@ -172,7 +167,7 @@
         @yield('content')
 
         <footer>
-            <p>Copyright © 2024 by MyKICT.</p>
+            <p  class="text-center">Copyright © 2024 by MyKICT</p>
         </footer>
     </div>
 
@@ -189,5 +184,12 @@
     <script src="assets/js/circle-progress.min.js"></script> --}}
 
 </body>
+
+<style>
+    .container {
+    padding-top: 80px; /* Add spacing for header */
+}
+</style>
+
 
 </html>

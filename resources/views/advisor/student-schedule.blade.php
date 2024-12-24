@@ -24,7 +24,6 @@
                                     <td>Code</td>
                                     <td>Name</td>
                                     <td>Chr</td>
-                                    <td>Act</td>
                                 </tr>
                             @foreach ($semesterSchedules[$sem] ?? [] as $schedule)
                                 <tr>
@@ -38,7 +37,6 @@
                                 <td>Total</td>
                                 <td></td>
                                 <td>{{ $totalCredit }} </td>
-                                <td></td>
                             </tr>
                         </table>
                     </td>
@@ -67,7 +65,6 @@
                                     <td>Code</td>
                                     <td>Name</td>
                                     <td>Chr</td>
-                                    <td>Act</td>
                                 </tr>
                             @foreach ($semesterSchedules[$sem] ?? [] as $schedule)
                                 <tr>
@@ -81,7 +78,6 @@
                                 <td>Total</td>
                                 <td></td>
                                 <td>{{ $totalCredit }} </td>
-                                <td></td>
                             </tr>
                         </table>
                     </td>
@@ -110,7 +106,6 @@
                                     <td>Code</td>
                                     <td>Name</td>
                                     <td>Chr</td>
-                                    <td>Act</td>
                                 </tr>
                             @foreach ($semesterSchedules[$sem] ?? [] as $schedule)
                                 <tr>
@@ -124,7 +119,6 @@
                                 <td>Total</td>
                                 <td></td>
                                 <td>{{ $totalCredit }} </td>
-                                <td></td>
                             </tr>
                         </table>
                     </td>
@@ -153,7 +147,6 @@
                                     <td>Code</td>
                                     <td>Name</td>
                                     <td>Chr</td>
-                                    <td>Act</td>
                                 </tr>
                             @foreach ($semesterSchedules[$sem] ?? [] as $schedule)
                                 <tr>
@@ -167,7 +160,6 @@
                                 <td>Total</td>
                                 <td></td>
                                 <td>{{ $totalCredit }} </td>
-                                <td></td>
                             </tr>
                         </table>
                     </td>

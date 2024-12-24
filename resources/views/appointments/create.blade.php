@@ -8,7 +8,7 @@
         <div class="form-group">
             <label for="advising_reason">Advising Reason</label>
             <select class="form-control" id="advising_reason" name="advising_reason" required>
-                <option value="">Select a reason</option>
+                <option disabled value="">Select a reason</option>
                 <option value="Study plan consultation">Study plan consultation</option>
                 <option value="Issues with course registration">Issues with course registration</option>
                 <option value="Issues with transfer of credits">Issues with transfer of credits</option>
