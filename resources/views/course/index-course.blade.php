@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="container mt-5">
+<div class="container-course">
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
@@ -114,4 +114,10 @@
         </div>
     </div>
 </div>
+
+<style>
+    .container-course {
+    padding-top: 80px; /* Add spacing for header */
+}
+</style>
 @endsection
