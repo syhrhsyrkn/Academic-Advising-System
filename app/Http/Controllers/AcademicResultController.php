@@ -181,7 +181,7 @@ class AcademicResultController extends Controller
             $cgpa = round($totalGradePoints / $totalCreditHours, 2);
         }
     
-        return view('academic_results.edit', compact('semesterSchedules', 'cgpa', 'studentId'));
+        return view('academicresult.edit', compact('semesterSchedules', 'cgpa', 'studentId'));
     }
     
     
