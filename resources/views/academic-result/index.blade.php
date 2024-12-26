@@ -111,4 +111,73 @@
         </table>
     </form>
 </div>
+
+<script>
+    function toggleEdit() {
+        @if(isset($isEditing))
+            window.location.reload(); 
+        @else
+            window.location.search = '?edit=true';
+        @endif
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const gradeToPoint = {
+            'A': 4.00,
+            'A-': 3.67,
+            'B+': 3.33,
+            'B': 3.00,
+            'B-': 2.67,
+            'C+': 2.33,
+            'C': 2.00,
+            'D': 1.67,
+            'D-': 1.33,
+            'E': 1.00,
+            'F': 0.00,
+        };
+
+        // Update grade points when a grade is selected
+        document.querySelectorAll('.grade-dropdown').forEach(dropdown => {
+            dropdown.addEventListener('change', function () {
+                const selectedGrade = this.value;
+                const pointField = this.closest('tr').querySelector('.grade-point');
+                pointField.value = gradeToPoint[selectedGrade] || '';
+                updateGPA(); // Recalculate GPA after a grade change
+            });
+        });
+
+        // Function to calculate and update GPA
+        function updateGPA() {
+            document.querySelectorAll('table.table-sm').forEach((table) => {
+                let totalCredit = 0;
+                let totalGradePoint = 0;
+
+                // Iterate through each row of the table
+                table.querySelectorAll('tr').forEach((row) => {
+                    const creditCell = row.querySelector('td:nth-child(3)');
+                    const pointField = row.querySelector('.grade-point');
+
+                    // Make sure the row contains valid credit and point values
+                    if (creditCell && pointField) {
+                        const creditHour = parseFloat(creditCell.textContent.trim()) || 0;
+                        const gradePoint = parseFloat(pointField.value) || 0;
+
+                        totalCredit += creditHour;
+                        totalGradePoint += creditHour * gradePoint;
+                    }
+                });
+
+                // Find the GPA row and update the GPA value
+                const gpaRow = table.querySelector('tr.table-info');
+                const gpaCell = gpaRow ? gpaRow.querySelector('td:last-child') : null;
+                const gpa = totalCredit > 0 ? (totalGradePoint / totalCredit).toFixed(2) : '0.00';
+
+                if (gpaCell) {
+                    gpaCell.textContent = `GPA: ${gpa}`;
+                }
+            });
+        }
+    });
+</script>
+
 @endsection
