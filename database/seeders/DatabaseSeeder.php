@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             AcademicYearSeeder::class,
             SemesterSeeder::class,
             CourseScheduleSeeder::class,
-            AcademicResult::class,
+            AcademicResultSeeder::class,
         ]);
     }
 }
