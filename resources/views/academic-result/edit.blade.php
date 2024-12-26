@@ -37,10 +37,6 @@
                     @for ($sem = 1; $sem <= 3; $sem++)
                         <td>
                             <table class="table table-sm">
-                                @php 
-                                    $totalCredit = 0; 
-                                    $totalGradePoint = 0; 
-                                @endphp
                                 <tr class="table-info font-weight-bold">
                                     <td>Code</td>
                                     <td>Name</td>
@@ -49,63 +45,39 @@
                                     <td>Point</td>
                                 </tr>
                                 @foreach ($semesterSchedules[$sem] ?? [] as $schedule)
-                                <tr>                                  
-                                    <td>{{ $schedule->course_code }}</td>
-                                    <td>{{ $schedule->course->name }}</td>
-                                    <td>{{ $schedule->course->credit_hour }}</td>
-                                    <td>
-                                    <select name="grades[{{ (string) $schedule->course_code }}]" class="form-control grade-dropdown" required>
-                                        <option value="" disabled selected>Select Grade</option>
-                                        @foreach (['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'D', 'D-', 'E', 'F'] as $grade)
-                                            <option value="{{ $grade }}" {{ old('grades.' . (string) $schedule->course_code, $schedule->academicResults->grade ?? '') == $grade ? 'selected' : '' }}>
-                                                {{ $grade }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    </td>
-                                    <td>
-                                    <input type="number" 
-                                    name="points[{{ (string) $schedule->course_code }}]" 
-                                    class="form-control grade-point" 
-                                    value="{{ old('points.' . (string) $schedule->course_code, $schedule->academicResults->point ?? '') }}" 
-                                    min="0" max="4" step="0.01" 
-                                    placeholder="Grade Point" 
-                                    readonly>
-                                    </td>
-                                </tr>
-                                @php 
-                                    $totalCredit += $schedule->course->credit_hour;
-                                    $grade = $schedule->academicResults->grade ?? null;
-                                    $gradePoint = $grade ? App\Models\AcademicResult::getGradePoint($grade) : 0;
-                                    $totalGradePoint += $gradePoint * $schedule->course->credit_hour;
-                                @endphp
+                                    <tr>
+                                        <td>{{ $schedule->course_code }}</td>
+                                        <td>{{ $schedule->course->name }}</td>
+                                        <td>{{ $schedule->course->credit_hour }}</td>
+                                        <td>
+                                            <select name="grades[{{ $schedule->course_code }}]" class="form-control grade-dropdown" required>
+                                                <option value="" disabled selected>Select Grade</option>
+                                                <option value="A">A</option>
+                                                <option value="A-">A-</option>
+                                                <option value="B+">B+</option>
+                                                <option value="B">B</option>
+                                                <option value="B-">B-</option>
+                                                <option value="C+">C+</option>
+                                                <option value="C">C</option>
+                                                <option value="D">D</option>
+                                                <option value="E">E</option>
+                                                <option value="F">F</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="points[{{ $schedule->course_code }}]" class="form-control grade-point" readonly>
+                                        </td>
+                                    </tr>
                                 @endforeach
-
-                                <tr class="table-info font-weight-bold">
-                                    <td>Total:</td>
-                                    <td></td>
-                                    <td>{{ $totalCredit }}</td>
-                                    <td></td>
-                                    <td class="total-grade-point">{{ $totalGradePoint }}</td>
-                                </tr>
-                            </table>
-                            <table>
-                                <tr>
-                                    <td>GPA:</td>
-                                    <td class="gpa-cell">
-                                        <span class="gpa-value">{{ $gpas[$sem] ?? 'N/A' }}</span>
-                                    </td>
-                                    <td>CGPA:</td>
-                                    <td>
-                                        <span id="cgpa">{{ $cgpa }}</span>
-                                    </td>
-                                </tr>
                             </table>
                         </td>
                     @endfor
                 </tr>
             </tbody>
         </table>
+
+        <input type="hidden" name="semester_id" value="{{ $semesterId }}">
+
         <div class="mt-4">
             <button type="submit" class="btn btn-success">Save Changes</button>
         </div>
@@ -141,7 +113,7 @@
         function updateGPA() {
             let cumulativeCredit = 0;
             let cumulativeGradePoint = 0;
-            
+
             document.querySelectorAll('table.table-sm').forEach((table) => {
                 let totalCredit = 0;
                 let totalGradePoint = 0;
