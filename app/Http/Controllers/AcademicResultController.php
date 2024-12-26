@@ -152,7 +152,6 @@ class AcademicResultController extends Controller
 
     public function edit($studentId)
     {
-        // Example computation for CGPA
         $semesterSchedules = // Retrieve semester schedules for the student
         $cgpa = 0; // Default or computed value
         $totalCreditHours = 0;
