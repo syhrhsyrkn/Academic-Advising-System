@@ -16,18 +16,20 @@ class AcademicResultController extends Controller
         ->where('student_id', $studentId)
         ->get();
 
-    // If necessary, further filter or modify academic results to ensure they belong to the right student
-    $studentSchedule->each(function ($schedule) use ($studentId) {
-        $schedule->load(['academicResults' => function ($query) use ($studentId) {
-            $query->where('student_id', $studentId);  // Ensure the academic results match the student_id
-        }]);
-    });
+    // Calculate CGPA
+    $cgpa = $this->calculateCGPA($studentId);
 
     // Group the schedules by semester_id
     $semesterSchedules = $studentSchedule->groupBy('semester_id');
 
+    // Fetch the GPA data for each semester
+    $gpas = [];
+    foreach ($semesterSchedules as $semesterId => $schedules) {
+        $gpas[$semesterId] = $this->calculateSemesterGPA($schedules);
+    }
+
     // Return the view with the filtered data
-    return view('academic-result.index', compact('semesterSchedules', 'studentId'));
+    return view('academic-result.index', compact('semesterSchedules', 'studentId', 'cgpa', 'gpas'));
 }
 
 
@@ -152,14 +154,19 @@ class AcademicResultController extends Controller
 
     public function edit($studentId)
     {
-        $semesterSchedules = // Retrieve semester schedules for the student
-        $cgpa = 0; // Default or computed value
+        // Retrieve the semester schedules for the student
+        $semesterSchedules = StudentCourseSchedule::with(['course', 'academicResults'])
+            ->where('student_id', $studentId)
+            ->get()
+            ->groupBy('semester_id');
+    
+        $cgpa = 0; // Default value for CGPA
         $totalCreditHours = 0;
         $totalGradePoints = 0;
     
         foreach ($semesterSchedules as $semSchedules) {
             foreach ($semSchedules as $schedule) {
-                $creditHour = $schedule->course->credit_hour;
+                $creditHour = $schedule->course->credit_hour ?? 0;
                 $grade = $schedule->academicResults->grade ?? null;
     
                 if ($grade) {
@@ -176,6 +183,7 @@ class AcademicResultController extends Controller
     
         return view('academic_results.edit', compact('semesterSchedules', 'cgpa', 'studentId'));
     }
+    
     
     
     
