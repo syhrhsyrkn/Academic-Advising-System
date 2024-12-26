@@ -49,24 +49,30 @@
                                         <td>{{ $schedule->course_code }}</td>
                                         <td>{{ $schedule->course->name }}</td>
                                         <td>{{ $schedule->course->credit_hour }}</td>
-                                        <td>
-                                            <select name="grades[{{ $schedule->course_code }}]" class="form-control grade-dropdown" required>
-                                                <option value="" disabled selected>Select Grade</option>
-                                                <option value="A">A</option>
-                                                <option value="A-">A-</option>
-                                                <option value="B+">B+</option>
-                                                <option value="B">B</option>
-                                                <option value="B-">B-</option>
-                                                <option value="C+">C+</option>
-                                                <option value="C">C</option>
-                                                <option value="D">D</option>
-                                                <option value="E">E</option>
-                                                <option value="F">F</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="number" name="points[{{ $schedule->course_code }}]" class="form-control grade-point" readonly>
-                                        </td>
+                                        @php
+                                        // Construct the key based on course_code and semester_id
+                                        $academicResultKey = $schedule->course_code . '-' . $sem;
+                                        $academicResult = $academicResults->get($academicResultKey);
+                                    @endphp
+
+                                    <td>
+                                        <select name="grades[{{ $schedule->course_code }}]" class="form-control grade-dropdown" required>
+                                            <option value="" disabled selected>Select Grade</option>
+                                            <option value="A" {{ $academicResult && $academicResult->grade == 'A' ? 'selected' : '' }}>A</option>
+                                            <option value="A-" {{ $academicResult && $academicResult->grade == 'A-' ? 'selected' : '' }}>A-</option>
+                                            <option value="B+" {{ $academicResult && $academicResult->grade == 'B+' ? 'selected' : '' }}>B+</option>
+                                            <option value="B" {{ $academicResult && $academicResult->grade == 'B' ? 'selected' : '' }}>B</option>
+                                            <option value="B-" {{ $academicResult && $academicResult->grade == 'B-' ? 'selected' : '' }}>B-</option>
+                                            <option value="C+" {{ $academicResult && $academicResult->grade == 'C+' ? 'selected' : '' }}>C+</option>
+                                            <option value="C" {{ $academicResult && $academicResult->grade == 'C' ? 'selected' : '' }}>C</option>
+                                            <option value="D" {{ $academicResult && $academicResult->grade == 'D' ? 'selected' : '' }}>D</option>
+                                            <option value="E" {{ $academicResult && $academicResult->grade == 'E' ? 'selected' : '' }}>E</option>
+                                            <option value="F" {{ $academicResult && $academicResult->grade == 'F' ? 'selected' : '' }}>F</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="points[{{ $schedule->course_code }}]" class="form-control grade-point" value="{{ $academicResult ? $academicResult->point : '' }}" readonly>
+                                    </td>
                                     </tr>
                                 @endforeach
                             </table>

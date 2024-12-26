@@ -23,7 +23,7 @@ class AcademicResult extends Model
         'point',
         'semester_id',
     ];
-    
+
     protected $casts = [
         'point' => 'decimal:2',
     ];
@@ -32,16 +32,23 @@ class AcademicResult extends Model
     {
         return $this->belongsTo(Student::class);
     }
-    
+
     public function course()
     {
         return $this->belongsTo(Course::class, 'course_code');
     }
-    
+
     public function semester()
     {
         return $this->belongsTo(Semester::class, 'semester_id');
     }
+    public function studentCourseSchedule()
+    {
+        return $this->belongsTo(StudentCourseSchedule::class, 'course_code', 'course_code')
+                    ->where('student_course_schedule.student_id', $this->student_id)
+                    ->where('student_course_schedule.semester_id', $this->semester_id);
+    }
+
 
     public static function getGradePoint($grade)
     {

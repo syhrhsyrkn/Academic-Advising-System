@@ -33,8 +33,12 @@ class StudentCourseSchedule extends Model
     public function academicResults()
     {
         return $this->hasOne(AcademicResult::class, 'course_code', 'course_code')
-                    ->where('student_id', $this->student_id)
-                    ->where('semester_id', $this->semester_id);  // Add any necessary filters
+            ->where('academic_results.student_id', $this->student_id)
+            ->where('academic_results.semester_id', $this->semester_id);
     }
-    
+
+
+
+
+
 }

@@ -11,8 +11,8 @@ class AcademicResultController extends Controller
 {
     public function index($studentId)
     {
-        // Fetch the student's course schedule and eager load course and academic results
-        $studentSchedule = StudentCourseSchedule::with(['course', 'academicResults'])
+        // Eager load both 'course' and 'academicResults' relationships
+        $studentSchedule = StudentCourseSchedule::with('course')
             ->where('student_id', $studentId)
             ->get();
 
@@ -24,12 +24,23 @@ class AcademicResultController extends Controller
         $cumulativeCredit = 0;
         $cumulativeGradePoint = 0;
 
+        // Retrieve all academicResults for the student at once for easy access
+        $academicResults = AcademicResult::where('student_id', $studentId)
+            ->get()
+            ->keyBy(function ($item) {
+                return $item->course_code . '-' . $item->semester_id; // Combine course_code and semester_id as the key
+            });
+
         foreach ($semesterSchedules as $semesterId => $schedules) {
             $totalCredit = 0;
             $totalGradePoint = 0;
+
             foreach ($schedules as $schedule) {
-                $academicResult = $schedule->academicResults;  // This will now be a single result
-                // Get the grade point for the academic result (default to 0 if no result exists)
+                // Get academicResult based on course_code and semester_id
+                $academicResultKey = $schedule->course_code . '-' . $semesterId;
+                $academicResult = $academicResults->get($academicResultKey);
+
+                // Get gradePoint or set to 0 if not available
                 $gradePoint = $academicResult ? $academicResult->point : 0;
 
                 // Get credit hour and accumulate totals
@@ -48,9 +59,10 @@ class AcademicResultController extends Controller
 
         $cgpa = $cumulativeCredit > 0 ? round($cumulativeGradePoint / $cumulativeCredit, 2) : 0;
 
-        // Return the view with the calculated data
-        return view('academic-result.index', compact('semesterSchedules', 'studentId', 'gpas', 'cgpa'));
+        // Return the view with the calculated data, including the academicResults relationship
+        return view('academic-result.index', compact('semesterSchedules', 'studentId', 'gpas', 'cgpa', 'academicResults'));
     }
+
     // Helper function to calculate the GPA for a given semester
     private function calculateSemesterGPA($schedules)
     {
@@ -144,6 +156,12 @@ class AcademicResultController extends Controller
         $totalCreditHours = 0;
         $totalGradePoints = 0;
 
+        $academicResults = AcademicResult::where('student_id', $studentId)
+        ->get()
+        ->keyBy(function ($item) {
+            return $item->course_code . '-' . $item->semester_id; // Combine course_code and semester_id as the key
+        });
+
         // Define $semesterId (you can get it dynamically depending on your use case)
         // For example, if you want the current semester, you can set it dynamically:
         $semesterId = 1; // or retrieve from the database or user input
@@ -165,7 +183,7 @@ class AcademicResultController extends Controller
             $cgpa = round($totalGradePoints / $totalCreditHours, 2);
         }
 
-        return view('academic-result.edit', compact('semesterSchedules', 'cgpa', 'studentId', 'semesterId'));
+        return view('academic-result.edit', compact('semesterSchedules', 'cgpa', 'studentId', 'semesterId', 'academicResults'));
     }
 
 

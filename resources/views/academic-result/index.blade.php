@@ -56,8 +56,15 @@
                                     <td>{{ $schedule->course_code }}</td>
                                     <td>{{ $schedule->course->name }}</td>
                                     <td>{{ $schedule->course->credit_hour }}</td>
-                                    <td>{{ $schedule->academicResults->grade ?? '' }}</td>
-                                    <td>{{ number_format($schedule->academicResults->point ?? 0, 2) }}</td>
+                                    @php
+                                        // Construct the key based on course_code and semester_id
+                                        $academicResultKey = $schedule->course_code . '-' . $sem;
+                                        $academicResult = $academicResults->get($academicResultKey);
+                                    @endphp
+
+                                    <td>{{ $academicResult ? $academicResult->grade : 'N/A' }}</td> <!-- Display grade -->
+                                    <td>{{ $academicResult ? $academicResult->point : 'N/A' }}</td> <!-- Display point -->
+
                                 </tr>
                                 @php
                                     $totalCredit += $schedule->course->credit_hour;
