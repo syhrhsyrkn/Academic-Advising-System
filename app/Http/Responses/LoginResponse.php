@@ -8,15 +8,21 @@ class LoginResponse implements LoginResponseContract
 {
     public function toResponse($request)
     {
+
         $user = $request->user();
 
         if ($user->hasRole('admin')) {
-            return redirect('/kict-dashboard');
+            return redirect('/course');
+        } elseif ($user->hasRole('advisor')) {
+            return redirect('/advisor/student-list');
+        } elseif ($user->hasRole('student')) {
+            if ($user->student && $user->student->student_id) {
+                return redirect('/student-dashboard');
+            } else {
+                return redirect('/profile/edit'); 
+            }
         }
 
-        else if($user->hasRole('advisor')){
-            return redirect('/teacher-dashboard');
-        }
-        return redirect('/profile/edit'); 
+        return redirect('/login');
     }
 }

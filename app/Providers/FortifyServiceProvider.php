@@ -40,7 +40,11 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
 
-        $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
-
+        $this->app->singleton(
+            \Laravel\Fortify\Contracts\LoginResponse::class,
+            \App\Http\Responses\LoginResponse::class
+        );
+        
+        logger('Custom LoginResponse binding applied.');
     }
 }

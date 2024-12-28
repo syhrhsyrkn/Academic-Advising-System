@@ -65,10 +65,10 @@ Route::middleware([
 
     //academic result 
     Route::prefix('academic-result')->name('academic-result.')->group(function () {
-        Route::get('{studentId}', [AcademicResultController::class, 'index'])->name('index'); // View academic results
-        Route::post('{studentId}/store', [AcademicResultController::class, 'store'])->name('store'); // Save academic results
-        Route::get('{studentId}/edit', [AcademicResultController::class, 'edit'])->name('edit'); // Edit academic results
-        Route::put('{studentId}/update', [AcademicResultController::class, 'update'])->name('update'); // Update academic results
+        Route::get('{studentId}', [AcademicResultController::class, 'index'])->name('index'); 
+        Route::post('{studentId}/store', [AcademicResultController::class, 'store'])->name('store');
+        Route::get('{studentId}/edit', [AcademicResultController::class, 'edit'])->name('edit'); 
+        Route::put('{studentId}/update', [AcademicResultController::class, 'update'])->name('update'); 
     });
     
     //Advising
