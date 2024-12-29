@@ -28,16 +28,24 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
+        $request->merge([
+            'semester' => (int) $request->input('semester'),
+            'year' => (int) $request->input('year'),
+        ]);
+
+        
         $rules = [
             'full_name' => 'required|string|max:255',
             'contact_no' => 'required|string|max:20',
             'kulliyyah' => 'required|string|max:255',
-            'department' => 'required|in:Department of Information Systems,Department of Computer Science', // Validation rule for dropdown
+            'department' => 'required|in:Department of Information Systems,Department of Computer Science', 
         ];
 
         if ($user->hasRole('student')) {
             $rules['matric_no'] = 'required|string|max:50';
             $rules['specialisation'] = 'nullable|string|max:255';
+            $rules['semester'] = 'required|integer|min:1|max:3';
+            $rules['year'] = 'required|integer|min:1|max:4';
         } else {
             $rules['staff_id'] = 'required|string|max:50';
         }
@@ -54,6 +62,8 @@ class ProfileController extends Controller
                     'kulliyyah' => $data['kulliyyah'],
                     'department' => $data['department'],
                     'specialisation' => $data['specialisation'],
+                    'semester' => $data['semester'], 
+                    'year' => $data['year'], 
                 ]
             );
         } else {
@@ -79,20 +89,14 @@ class ProfileController extends Controller
         $semesterInfo = null;
     
         if ($user->hasRole('student')) {
-            // Fetch student data from the 'students' table
             $profile = Student::where('user_id', $user->id)->first();
             
-            // Retrieve the latest academic year and semester based on the student's course schedule
-            $semesterInfo = DB::table('student_course_schedule')
-                ->join('semesters', 'student_course_schedule.semester_id', '=', 'semesters.id')
-                ->join('academic_years', 'semesters.academic_year_id', '=', 'academic_years.id')
-                ->where('student_course_schedule.student_id', $profile->student_id) // Using student_id from the 'students' table
-                ->select('semesters.semester_name', 'academic_years.year_name')
-                ->orderByDesc('academic_years.id') // Order by academic year descending
-                ->orderByDesc('semesters.id') // Order by semester descending
-                ->first();
+            $semesterInfo = [
+                'semester' => $profile->semester ?? null,
+                'year' => $profile->year ?? null,
+            ];
+            
         } elseif ($user->hasRole(['admin', 'advisor'])) {
-            // Fetch staff data from the 'staff' table
             $profile = Staff::where('user_id', $user->id)->first();
         }
     

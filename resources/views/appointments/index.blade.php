@@ -42,4 +42,10 @@
         </tbody>
     </table>
 </div>
+
+<style>
+    .container {
+    margin-left: 100px;
+}
+</style>
 @endsection

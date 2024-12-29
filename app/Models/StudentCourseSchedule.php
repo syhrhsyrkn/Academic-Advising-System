@@ -36,9 +36,4 @@ class StudentCourseSchedule extends Model
             ->where('academic_results.student_id', $this->student_id)
             ->where('academic_results.semester_id', $this->semester_id);
     }
-
-
-
-
-
 }

@@ -216,23 +216,23 @@
                             <!-- Year -->
                             <div class="form-group mb-3">
                                 <label for="year">Year</label>
-                                <select name="year" id="year" class="form-control">
+                                <select name="year" id="year" class="form-control" required>
                                     <option disabled value="">Select Year</option>
-                                    <option value="Year 1" {{ old('year') == 'Year 1' ? 'selected' : '' }}>Year 1</option>
-                                    <option value="Year 2" {{ old('year') == 'Year 2' ? 'selected' : '' }}>Year 2</option>
-                                    <option value="Year 3" {{ old('year') == 'Year 3' ? 'selected' : '' }}>Year 3</option>
-                                    <option value="Year 4" {{ old('year') == 'Year 4' ? 'selected' : '' }}>Year 4</option>
+                                    <option value="1" {{ old('year', $profile->year ?? '') == 1 ? 'selected' : '' }}>Year 1</option>
+                                    <option value="2" {{ old('year', $profile->year ?? '') == 2 ? 'selected' : '' }}>Year 2</option>
+                                    <option value="3" {{ old('year', $profile->year ?? '') == 3 ? 'selected' : '' }}>Year 3</option>
+                                    <option value="4" {{ old('year', $profile->year ?? '') == 4 ? 'selected' : '' }}>Year 4</option>
                                 </select>
                             </div>
 
                             <!-- Semester -->
                             <div class="form-group mb-3">
                                 <label for="semester">Semester</label>
-                                <select name="semester" id="semester" class="form-control">
-                                    <option disabled value="">Select Semester</option>
-                                    <option value="Semester 1" {{ old('semester') == 'Semester 1' ? 'selected' : '' }}>Semester 1</option>
-                                    <option value="Semester 2" {{ old('semester') == 'Semester 2' ? 'selected' : '' }}>Semester 2</option>
-                                    <option value="Semester 3" {{ old('semester') == 'Semester 3' ? 'selected' : '' }}>Semester 3</option>
+                                <select name="semester" id="semester" class="form-control" required>
+                                <option disabled value="">Select Semester</option>
+                                    <option value="1" {{ old('semester', $profile->semester ?? '') == 1 ? 'selected' : '' }}>Semester 1</option>
+                                    <option value="2" {{ old('semester', $profile->semester ?? '') == 2 ? 'selected' : '' }}>Semester 2</option>
+                                    <option value="3" {{ old('semester', $profile->semester ?? '') == 3 ? 'selected' : '' }}>Semester 3</option>
                                 </select>
                             </div>
 
@@ -246,6 +246,7 @@
                                     class="form-control" 
                                     value="{{ old('specialisation', $profile->specialisation ?? '') }}">
                             </div>
+
                         @elseif (auth()->user()->hasRole(['admin', 'advisor']))
                             <!-- Staff ID -->
                             <div class="form-group mb-3">

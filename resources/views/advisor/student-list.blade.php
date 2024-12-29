@@ -4,14 +4,14 @@
 <div class="container">
     <h1>List of Students</h1>
     
-    <!-- Filter by Academic Year -->
+    <!-- Filter by Year -->
     <form method="GET" action="{{ route('advisor.student-list') }}">
-        <label for="academic_year">Filter by Academic Year:</label>
-        <select name="academic_year" id="academic_year" onchange="this.form.submit()">
+        <label for="year">Filter by Year:</label>
+        <select name="year" id="year" onchange="this.form.submit()">
             <option value="">All</option>
-            @foreach($academicYears as $year)
-                <option value="{{ $year->id }}" {{ request('academic_year') == $year->id ? 'selected' : '' }}>
-                    {{ $year->name }}
+            @foreach($years as $year)
+                <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>
+                    Year {{ $year }}
                 </option>
             @endforeach
         </select>
@@ -33,19 +33,16 @@
         </thead>
         <tbody>
             @forelse($students as $student)
-                @php
-                    $latestAppointment = $student->appointments->first();
-                @endphp
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $student->name }}</td>
                     <td>{{ $student->email }}</td>
-                    <td>{{ $student->student->matric_no ?? 'N/A' }}</td>
-                    <td>{{ $student->student->contact_no ?? 'N/A' }}</td>
-                    <td>{{ $profile->academic_year ?? 'N/A' }}</td>
-                    <td>{{ $profile->semester ?? 'N/A' }}</td>
+                    <td class="text-center">{{ $student->student->matric_no ?? 'N/A' }}</td>
+                    <td class="text-center">{{ $student->student->contact_no ?? 'N/A' }}</td>
+                    <td class="text-center">{{ $student->student->year ?? 'N/A' }}</td>
+                    <td class="text-center">{{ $student->student->semester ?? 'N/A' }}</td>
                     <td>
-                        <a href="{{ route('advisor.view-student-profile', $student->id) }}" class="me-4">Profile</a>
+                        <!-- <a href="{{ route('advisor.view-student-profile', $student->id) }}" class="me-4">Profile</a> -->
                         <a href="{{ route('advisor.student-schedule', $student->id) }}" class="me-4">Schedule</a>
                         <a href="{{ route('advisor.student-academic-result', $student->id) }}" class="me-4">Academic Result</a>                        
                         <a href="{{ route('appointments.latest', $student->id) }}" class="me-4">Appointment</a>
@@ -59,4 +56,10 @@
         </tbody>
     </table>
 </div>
+
+<style>
+    .container {
+    margin-left: 180px;
+}
+</style>
 @endsection

@@ -42,13 +42,13 @@ class AcademicResult extends Model
     {
         return $this->belongsTo(Semester::class, 'semester_id');
     }
+
     public function studentCourseSchedule()
     {
         return $this->belongsTo(StudentCourseSchedule::class, 'course_code', 'course_code')
                     ->where('student_course_schedule.student_id', $this->student_id)
                     ->where('student_course_schedule.semester_id', $this->semester_id);
     }
-
 
     public static function getGradePoint($grade)
     {
@@ -66,8 +66,9 @@ class AcademicResult extends Model
             'F' => 0.00,
         ];
 
-        return $gradePoints[$grade] ?? 0; // Default to 0 if the grade is invalid
+        return $gradePoints[$grade] ?? 0; 
     }
+    
     public static function setGradeAndPoint($grade)
     {
         $point = self::getGradePoint($grade);

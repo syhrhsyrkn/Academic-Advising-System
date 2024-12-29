@@ -13,12 +13,22 @@ class CourseScheduleSeeder extends Seeder
             //student A
             [
                 'student_id' => 1,
+                'course_code' => 'BIIT 1301',
+                'semester_id' => 1,
+            ],
+            [
+                'student_id' => 1,
                 'course_code' => 'BIIT 1302',
                 'semester_id' => 1,
             ],
             [
                 'student_id' => 1,
                 'course_code' => 'BICS 1301',
+                'semester_id' => 1,
+            ],
+            [
+                'student_id' => 1,
+                'course_code' => 'BICS 1302',
                 'semester_id' => 1,
             ],
             [
@@ -41,17 +51,42 @@ class CourseScheduleSeeder extends Seeder
                 'course_code' => 'SCSH 1201',
                 'semester_id' => 1,
             ],
-            //student B
             [
-                'student_id' => 2,
+                'student_id' => 1,
+                'course_code' => 'BIIT 1303',
+                'semester_id' => 2,
+            ],
+            [
+                'student_id' => 1,
+                'course_code' => 'BICS 1303',
+                'semester_id' => 2,
+            ],
+            [
+                'student_id' => 1,
+                'course_code' => 'BICS 1304',
+                'semester_id' => 2,
+            ],
+            [
+                'student_id' => 1,
                 'course_code' => 'BICS 1305',
-                'semester_id' => 1,
+                'semester_id' => 2,
             ],
             [
-                'student_id' => 2,
+                'student_id' => 1,
                 'course_code' => 'UNGS 2380',
-                'semester_id' => 1,
+                'semester_id' => 2,
             ],
+            [
+                'student_id' => 1,
+                'course_code' => 'TQTD 2002',
+                'semester_id' => 2,
+            ],
+            [
+                'student_id' => 1,
+                'course_code' => 'CCUB 1062',
+                'semester_id' => 2,
+            ],
+
         ]);
     }
 }

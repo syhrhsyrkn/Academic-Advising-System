@@ -17,6 +17,8 @@ class CreateStudentsTable extends Migration
             $table->string('kulliyyah')->nullable();
             $table->string('department')->nullable();
             $table->string('specialisation')->nullable();
+            $table->unsignedTinyInteger('year')->nullable();
+            $table->unsignedTinyInteger('semester')->nullable();
         });
     }
 
@@ -25,4 +27,3 @@ class CreateStudentsTable extends Migration
         Schema::dropIfExists('students');
     }
 }
-

@@ -36,6 +36,7 @@
                     {!! __('of') !!}
                     <span class="fw-semibold">{{ $paginator->total() }}</span>
                     {!! __('results') !!}
+                    &nbsp;
                 </p>
             </div>
 

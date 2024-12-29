@@ -17,10 +17,12 @@ class StudentSeeder extends Seeder
                 'user_id' => $student->id,
                 'full_name' => 'Student A',
                 'contact_no' => '0123456789',
-                'matric_no' => '2112510',
+                'matric_no' => '2411234',
                 'kulliyyah' => 'KICT',
                 'department' => 'Department of Information Systems',
                 'specialisation' => null,
+                'year' => 1,
+                'semester' => 2,
             ]);
         }
 
@@ -30,11 +32,13 @@ class StudentSeeder extends Seeder
             DB::table('students')->insert([
                 'user_id' => $student->id,
                 'full_name' => 'Student B',
-                'contact_no' => '0123456789',
-                'matric_no' => '2112511',
+                'contact_no' => '0134567892',
+                'matric_no' => '2421234',
                 'kulliyyah' => 'KICT',
                 'department' => 'Department of Computer Science',
                 'specialisation' => null,
+                'year' => 1,
+                'semester' => 1,
             ]);
         }
     }

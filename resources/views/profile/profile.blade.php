@@ -33,7 +33,7 @@
                     <div class="row align-items-center">
                         <div class="col-auto profile-image">
                             <a href="#">
-                                <img class="rounded-circle" alt="User Image" src="{{ asset('assets/img/profiles/avatar-02.jpg') }}">
+                                <img class="rounded-circle" alt="User Image" src="{{ asset('assets/img/profiles/avatar-01.jpg') }}">
                             </a>
                         </div>
                         <div class="col ms-md-n2 profile-user-info">
@@ -103,11 +103,11 @@
                                             </div>
                                             <div class="row">
                                                 <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Year</p>
-                                                <p class="col-sm-9">{{ $profile->year_name ?? 'N/A' }}</p>
+                                                <p class="col-sm-9">{{ $profile->year ?? 'N/A' }}</p>
                                             </div>
                                             <div class="row">
                                                 <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Semester</p>
-                                                <p class="col-sm-9">{{ $profile->semester_name ?? 'N/A' }}</p>
+                                                <p class="col-sm-9">{{ $profile->semester ?? 'N/A' }}</p>
                                             </div>
                                         @endif
 

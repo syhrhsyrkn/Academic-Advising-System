@@ -24,7 +24,10 @@ class Student extends Model
         'kulliyyah', 
         'department', 
         'specialisation',
+        'year', 
+        'semester',
     ];
+
 
     public function user()
     {
@@ -45,5 +48,10 @@ class Student extends Model
     {
         return $this->belongsToMany(Course::class, 'student_course_schedule', 'student_id', 'course_code')
                     ->withPivot('semester_id'); 
-    }   
+    }
+    
+    public function academicResults()
+    {
+        return $this->hasMany(AcademicResult::class, 'student_id');
+    }
 }
