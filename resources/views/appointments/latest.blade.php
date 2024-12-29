@@ -9,6 +9,7 @@
             <thead>
                 <tr>
                     <th>Advising Reason</th>
+                    <th>Details</th>
                     <th>Appointment Date</th>
                     <th>Status</th>
                 </tr>
@@ -16,6 +17,7 @@
             <tbody>
                 <tr>
                     <td>{{ $appointment->advising_reason }}</td>
+                    <td>{{ $appointment->details }}</td>
                     <td>{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('d-m-Y H:i') }}</td>
                     <td>{{ ucfirst($appointment->status) }}</td>
                 </tr>

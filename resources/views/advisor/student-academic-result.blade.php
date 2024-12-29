@@ -2,12 +2,11 @@
 
 @section('content')
 <div class="container">
-    <h1>Academic Results for {{ $student->name }}</h1>
+    <h1>Academic Results for {{ $student->name }}</h1>  
 
     @if ($semesterSchedules->isEmpty())
         <p>No academic results found for this student.</p>
     @else
-        <!-- Display each year -->
         @for ($year = 1; $year <= 4; $year++)
             <h2 class="mt-5">Year {{ $year }}</h2>
             <table class="table table-bordered">
@@ -61,10 +60,7 @@
                                             <tr>
                                                 <td>GPA:</td>
                                                 <td>
-                                                    @php
-                                                        $gpa = $totalCredit > 0 ? round($totalGradePoint / $totalCredit, 2) : 0;
-                                                    @endphp
-                                                    {{ $gpa }}
+                                                    {{ round($totalGradePoint / $totalCredit, 2) }}
                                                 </td>
                                             </tr>
                                         @else

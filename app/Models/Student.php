@@ -41,7 +41,7 @@ class Student extends Model
     
     public function appointments()
     {
-        return $this->hasMany(Appointment::class, 'student_id', 'student_id'); // Ensure 'student_id' is the correct column
+        return $this->hasMany(Appointment::class, 'student_id', 'student_id');
     }
 
     public function courses()

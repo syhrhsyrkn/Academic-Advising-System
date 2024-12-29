@@ -12,6 +12,7 @@
                 <th>Contact No</th>
                 <th>Email</th>
                 <th>Advising Reason</th>
+                <th>Details</th>
                 <th>Appointment Date 
                     <a href="{{ route('appointments.index', ['sort' => 'asc']) }}">▲</a>
                     <a href="{{ route('appointments.index', ['sort' => 'desc']) }}">▼</a></th>
@@ -30,6 +31,7 @@
                 <td>{{ $appointment->user->student->contact_no ?? 'N/A' }}</td>
                 <td>{{ $appointment->user->email ?? 'N/A' }}</td>
                 <td>{{ $appointment->advising_reason }}</td>
+                <td>{{ $appointment->details }}</td>                
                 <td>{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('d-m-Y H:i') }}</td>
                 <td>{{ $appointment->status }}</td>
                 @role('advisor')

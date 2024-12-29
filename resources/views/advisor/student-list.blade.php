@@ -44,7 +44,7 @@
                     <td>
                         <!-- <a href="{{ route('advisor.view-student-profile', $student->id) }}" class="me-4">Profile</a> -->
                         <a href="{{ route('advisor.student-schedule', $student->id) }}" class="me-4">Schedule</a>
-                        <a href="{{ route('advisor.student-academic-result', $student->id) }}" class="me-4">Academic Result</a>                        
+                        <a href="{{ route('advisor.student-academic-result',  $student->student) }}" class="me-4">Academic Results</a>
                         <a href="{{ route('appointments.latest', $student->id) }}" class="me-4">Appointment</a>
                     </td>
                 </tr>

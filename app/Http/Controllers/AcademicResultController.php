@@ -207,6 +207,8 @@ class AcademicResultController extends Controller
 
     public function update(Request $request, $studentId)
     {
+        // Debugging step to check the semester_id value (you can remove this later)
+        dd($request->input('semester_id'));
 
         // Validate the incoming request
         $validated = $request->validate([
@@ -216,8 +218,8 @@ class AcademicResultController extends Controller
         ]);
 
         // Get the semester_id from the validated request
-        $semesterId = $request->input('semester_id');
-        
+        $semesterId = $request->input('semester_id'); 
+
         // Iterate over the grades array
         foreach ($request->input('grades') as $courseCode => $grade) {
             // Get the corresponding grade point for the grade

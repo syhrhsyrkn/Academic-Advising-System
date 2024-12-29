@@ -16,13 +16,11 @@ class AdvisorController extends Controller
     {
         $years = range(1, 4);
 
-        // Fetch students with optional filtering by year
         $students = User::role('student')
             ->with(['student', 'appointments' => function ($query) {
                 $query->latest();
             }])
             ->when($request->filled('year'), function ($query) use ($request) {
-                // Apply filter only if the year is provided and not empty
                 $query->whereHas('student', function ($query) use ($request) {
                     $query->where('year', $request->year);
                 });
@@ -63,26 +61,25 @@ class AdvisorController extends Controller
    {
        $semesterSchedules = [];
    
-       // Loop through the student's schedules and organize by semester_id
        foreach ($student->student->courseSchedules as $schedule) {
-           // Ensure that we only add to an existing semester
            $semesterSchedules[$schedule->semester_id][] = $schedule;
        }
    
        return $semesterSchedules;
    }
    
-   public function viewStudentAcademicResult(User $student)
+   public function viewStudentAcademicResult($studentId)
     {
+        $student = Student::findOrFail($studentId);
+        
+        $semesterSchedules = StudentCourseSchedule::with(['course', 'academicResults'])
+        ->where('student_id', $studentId) 
+        ->get()
+        ->groupBy('semester_id');
 
-        $student->load('student.courseSchedules.course', 'student.courseSchedules.semester', 'student.courseSchedules.academicResults');
-
-        // Organize the academic results by semester
-        $semesterSchedules = $this->organizeAcademicResults($student);
-   
-        return view('advisor.student-academic-result', compact('student', 'semesterSchedules'));
+        // Pass the data to the view
+        return view('advisor.student-academic-result', compact('semesterSchedules', 'student'));
     }
-
     private function organizeAcademicResults($student)
     {
         $semesterSchedules = [];
@@ -99,7 +96,7 @@ class AdvisorController extends Controller
             }
         }
 
-        return collect($semesterSchedules); // Ensure it's a collection
+        return collect($semesterSchedules);
     }
 
     private function getSemesterSchedules(Student $student)
