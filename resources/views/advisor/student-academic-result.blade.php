@@ -2,19 +2,18 @@
 
 @section('content')
 <div class="container">
-    <h1>Academic Results for {{ $student->name }}</h1>  
-
+    <!-- Display no results message if empty -->
     @if ($semesterSchedules->isEmpty())
         <p>No academic results found for this student.</p>
     @else
         @for ($year = 1; $year <= 4; $year++)
-            <h2 class="mt-5">Year {{ $year }}</h2>
+            <h2 class="text-center"><strong>Year {{ $year }}</strong></h2>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th class="text-center"><strong>Year {{ $year }} <br> Semester 1</strong></th>
-                        <th class="text-center"><strong>Year {{ $year }} <br> Semester 2</strong></th>
-                        <th class="text-center"><strong>Year {{ $year }} <br> Semester 3</strong></th>
+                        <th class="text-center">Semester 1</th>
+                        <th class="text-center">Semester 2</th>
+                        <th class="text-center">Semester 3</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,8 +40,8 @@
                                                 <td>{{ $schedule->course_code }}</td>
                                                 <td>{{ $schedule->course->name }}</td>
                                                 <td>{{ $schedule->course->credit_hour }}</td>
-                                                <td>{{ $schedule->academicResults->grade ?? '-' }}</td>
-                                                <td>{{ $schedule->academicResults->point ?? '-' }}</td>
+                                                <td>{{ $schedule->academicResults ? $schedule->academicResults->grade : '-' }}</td>
+                                                <td>{{ $schedule->academicResults ? $schedule->academicResults->point : '-' }}</td>
                                             </tr>
                                             @php 
                                                 $totalCredit += $schedule->course->credit_hour;

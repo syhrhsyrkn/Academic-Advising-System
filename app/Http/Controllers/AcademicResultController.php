@@ -208,7 +208,7 @@ class AcademicResultController extends Controller
     public function update(Request $request, $studentId)
     {
         // Debugging step to check the semester_id value (you can remove this later)
-        dd($request->input('semester_id'));
+        // dd($request->input('semester_id'));
 
         // Validate the incoming request
         $validated = $request->validate([

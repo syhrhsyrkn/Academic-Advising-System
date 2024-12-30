@@ -32,10 +32,6 @@ class AdvisorController extends Controller
 
     public function viewStudentProfile(User $student)
     {
-        if (!$student->hasRole('student')) {
-            abort(403, 'Unauthorized action.');
-        }
-    
         $studentDetails = $student->student;
         $academicResults = $studentDetails ? $studentDetails->academicResults : []; 
     
@@ -51,7 +47,6 @@ class AdvisorController extends Controller
 
         $student->load('student.courseSchedules.course', 'student.courseSchedules.semester');
    
-       // Organize the schedule by semester
        $semesterSchedules = $this->organizeSchedule($student);
    
        return view('advisor.student-schedule', compact('student', 'semesterSchedules'));
@@ -69,17 +64,18 @@ class AdvisorController extends Controller
    }
    
    public function viewStudentAcademicResult($studentId)
-    {
-        $student = Student::findOrFail($studentId);
-        
-        $semesterSchedules = StudentCourseSchedule::with(['course', 'academicResults'])
-        ->where('student_id', $studentId) 
-        ->get()
-        ->groupBy('semester_id');
+   {
+       $student = Student::findOrFail($studentId);
+       
+       $semesterSchedules = StudentCourseSchedule::with(['course', 'academicResults'])
+           ->where('student_id', $studentId)
+           ->get()
+           ->groupBy('semester_id');
+   
+       return view('advisor.student-academic-result', compact('semesterSchedules', 'student'));
+   }
+   
 
-        // Pass the data to the view
-        return view('advisor.student-academic-result', compact('semesterSchedules', 'student'));
-    }
     private function organizeAcademicResults($student)
     {
         $semesterSchedules = [];
