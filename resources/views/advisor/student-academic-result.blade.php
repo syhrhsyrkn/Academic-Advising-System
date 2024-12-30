@@ -50,7 +50,7 @@
                                             </tr>
                                             @php
                                                 $totalCredit += $schedule->course->credit_hour;
-                                                $totalGradePoint += ($schedule->academicResults->point ?? 0) * $schedule->course->credit_hour;
+                                                $totalGradePoint += ($academicResult->point ?? 0) * $schedule->course->credit_hour;
                                             @endphp
                                         @endforeach
                                         @if ($totalCredit > 0)
