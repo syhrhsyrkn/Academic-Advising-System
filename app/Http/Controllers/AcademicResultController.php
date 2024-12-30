@@ -24,7 +24,7 @@ class AcademicResultController extends Controller
         $academicResults = AcademicResult::where('student_id', $studentId)
             ->get()
             ->keyBy(function ($item) {
-                return $item->course_code . '-' . $item->semester_id; 
+                return $item->course_code . '-' . $item->semester_id;
             });
 
         foreach ($semesterSchedules as $semesterId => $schedules) {
@@ -60,7 +60,7 @@ class AcademicResultController extends Controller
         $totalGradePoint = 0;
 
         foreach ($schedules as $schedule) {
-            $academicResult = $schedule->academicResults;  
+            $academicResult = $schedule->academicResults;
 
             if ($academicResult) {
                 $creditHour = $schedule->course->credit_hour ?? 0;
@@ -117,7 +117,7 @@ class AcademicResultController extends Controller
             }
 
             $totalCredits += $totalCreditForSemester;
-            $totalGradePoints += ($totalCreditForSemester * $semesterGpa->gpa); 
+            $totalGradePoints += ($totalCreditForSemester * $semesterGpa->gpa);
         }
 
         $cgpa = $totalCredits > 0 ? round($totalGradePoints / $totalCredits, 2) : 0;
@@ -132,39 +132,39 @@ class AcademicResultController extends Controller
             ->where('student_id', $studentId)
             ->get()
             ->groupBy('semester_id');
-    
+
         // Initialize variables for CGPA calculation
         $cgpa = 0;
         $totalCreditHours = 0;
         $totalGradePoints = 0;
-    
+
         // Get academic results for the student, indexed by course_code and semester_id
         $academicResults = AcademicResult::where('student_id', $studentId)
             ->get()
             ->keyBy(function ($item) {
                 return $item->course_code . '-' . $item->semester_id;
             });
-    
+
         // Dynamically get semester_id from request or default to 1
         $semesterId = $request->input('semester_id', 1); // Ensure semester_id is passed in the request
-    
+
         // Check if semester_id is valid and exists in the schedules
         if (!isset($semesterSchedules[$semesterId])) {
             // If the requested semester_id does not exist, default to the first semester
             $semesterId = $semesterSchedules->keys()->first();
         }
-    
+
         // Iterate over the schedules grouped by semester_id
         foreach ($semesterSchedules as $semSchedules) {
             foreach ($semSchedules as $schedule) {
                 $creditHour = $schedule->course->credit_hour ?? 0;
-    
+
                 // Check if academicResults exists and is not null
                 if ($schedule->academicResults) {
                     // Find the academic result for the current semester
                     $academicResult = $schedule->academicResults->firstWhere('semester_id', $semesterId);
                     $grade = $academicResult ? $academicResult->grade : null;
-    
+
                     if ($grade) {
                         // Assuming you have a method to get grade points
                         $gradePoint = AcademicResult::getGradePoint($grade);
@@ -174,18 +174,18 @@ class AcademicResultController extends Controller
                 }
             }
         }
-    
+
         // Calculate CGPA if total credit hours is greater than 0
         if ($totalCreditHours > 0) {
             $cgpa = round($totalGradePoints / $totalCreditHours, 2);
         }
-    
+
         // Return the edit view with the necessary data
         return view('academic-result.edit', compact('semesterSchedules', 'cgpa', 'studentId', 'semesterId', 'academicResults'));
     }
-    
 
-    
+
+
     public function getGradePoint($grade)
     {
         $gradePoints = [
@@ -209,45 +209,48 @@ class AcademicResultController extends Controller
     {
         // Debugging step to check the semester_id value (you can remove this later)
         // dd($request->input('semester_id'));
+        // dd($request->all());
 
-        // Validate the incoming request
         $validated = $request->validate([
             'grades' => 'required|array',
             'points' => 'required|array',
-            'semester_id' => 'required|integer',
+            'semester_id' => 'required|array',
         ]);
 
-        // Get the semester_id from the validated request
-        $semesterId = $request->input('semester_id'); 
 
-        // Iterate over the grades array
+
         foreach ($request->input('grades') as $courseCode => $grade) {
-            // Get the corresponding grade point for the grade
-            $point = AcademicResult::getGradePoint($grade); 
+            // Retrieve semester_id for the course
+            $semesterId = $request->input("semester_id.$courseCode");
+            $point = AcademicResult::getGradePoint($grade);
+            // dd($point, $grade, $courseCode, $semesterId);
 
-            // Check if an academic result already exists for the given student, course, and semester
+
+            // Check if an academic result exists
             $academicResult = AcademicResult::where('student_id', $studentId)
                 ->where('course_code', $courseCode)
                 ->where('semester_id', $semesterId)
                 ->first();
 
+
+
             if ($academicResult) {
-                // If the result exists, update it
-                $academicResult->update([
-                    'grade' => $grade,
-                    'point' => $point,
-                ]);
+
+                $academicResult->grade = $grade;
+                $academicResult->point = $point;
+                $academicResult->save();
             } else {
-                // If the result does not exist, create a new one
+                // Create a new result
                 AcademicResult::create([
                     'student_id' => $studentId,
                     'course_code' => $courseCode,
-                    'semester_id' => $semesterId, // Use the correct semester_id here
+                    'semester_id' => $semesterId,
                     'grade' => $grade,
                     'point' => $point,
                 ]);
             }
         }
+
 
         // Redirect to the academic results page with a success message
         return redirect()->route('academic-result.index', ['studentId' => $studentId])

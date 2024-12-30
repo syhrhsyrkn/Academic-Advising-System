@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
+
 
 class AcademicResult extends Model
 {
@@ -66,9 +68,9 @@ class AcademicResult extends Model
             'F' => 0.00,
         ];
 
-        return $gradePoints[$grade] ?? 0; 
+        return $gradePoints[$grade] ?? 0;
     }
-    
+
     public static function setGradeAndPoint($grade)
     {
         $point = self::getGradePoint($grade);
@@ -77,5 +79,11 @@ class AcademicResult extends Model
             'grade' => $grade,
             'point' => $point
         ];
+    }
+    protected function setKeysForSaveQuery($query)
+    {
+        return $query->where('student_id', $this->getAttribute('student_id'))
+                     ->where('course_code', $this->getAttribute('course_code'))
+                     ->where('semester_id', $this->getAttribute('semester_id'));
     }
 }
