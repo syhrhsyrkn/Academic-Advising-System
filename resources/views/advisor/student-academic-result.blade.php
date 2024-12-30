@@ -31,19 +31,24 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php 
-                                            $totalCredit = 0; 
-                                            $totalGradePoint = 0; 
+                                        @php
+                                            $totalCredit = 0;
+                                            $totalGradePoint = 0;
                                         @endphp
                                         @foreach ($semesterSchedules[$sem + (($year - 1) * 3)] ?? [] as $schedule)
                                             <tr>
                                                 <td>{{ $schedule->course_code }}</td>
                                                 <td>{{ $schedule->course->name }}</td>
                                                 <td>{{ $schedule->course->credit_hour }}</td>
-                                                <td>{{ $schedule->academicResults ? $schedule->academicResults->grade : '-' }}</td>
-                                                <td>{{ $schedule->academicResults ? $schedule->academicResults->point : '-' }}</td>
+                                                @php
+                                                // Construct the key based on course_code and semester_id
+                                                $academicResultKey = $schedule->course_code . '-' . $sem;
+                                                $academicResult = $academicResults->get($academicResultKey);
+                                                @endphp
+                                                <td>{{ $academicResult ? $academicResult->grade : '-' }}</td>
+                                                <td>{{ $academicResult ? $academicResult->point : '-' }}</td>
                                             </tr>
-                                            @php 
+                                            @php
                                                 $totalCredit += $schedule->course->credit_hour;
                                                 $totalGradePoint += ($schedule->academicResults->point ?? 0) * $schedule->course->credit_hour;
                                             @endphp
