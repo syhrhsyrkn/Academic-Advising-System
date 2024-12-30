@@ -7,6 +7,8 @@ use App\Models\AcademicYear;
 use App\Models\Appointment;
 use App\Models\Student;
 use App\Models\StudentCourseSchedule;
+use App\Models\AcademicResult;
+
 use Illuminate\Http\Request;
 
 class AdvisorController extends Controller
@@ -33,8 +35,8 @@ class AdvisorController extends Controller
     public function viewStudentProfile(User $student)
     {
         $studentDetails = $student->student;
-        $academicResults = $studentDetails ? $studentDetails->academicResults : []; 
-    
+        $academicResults = $studentDetails ? $studentDetails->academicResults : [];
+
         return view('advisor.student-profile', [
             'student' => $student,
             'studentDetails' => $studentDetails,
@@ -46,35 +48,40 @@ class AdvisorController extends Controller
    {
 
         $student->load('student.courseSchedules.course', 'student.courseSchedules.semester');
-   
+
        $semesterSchedules = $this->organizeSchedule($student);
-   
+
        return view('advisor.student-schedule', compact('student', 'semesterSchedules'));
    }
-   
+
    private function organizeSchedule($student)
    {
        $semesterSchedules = [];
-   
+
        foreach ($student->student->courseSchedules as $schedule) {
            $semesterSchedules[$schedule->semester_id][] = $schedule;
        }
-   
+
        return $semesterSchedules;
    }
-   
+
    public function viewStudentAcademicResult($studentId)
    {
        $student = Student::findOrFail($studentId);
-       
+
        $semesterSchedules = StudentCourseSchedule::with(['course', 'academicResults'])
            ->where('student_id', $studentId)
            ->get()
            ->groupBy('semester_id');
-   
-       return view('advisor.student-academic-result', compact('semesterSchedules', 'student'));
+
+        $academicResults = AcademicResult::where('student_id', $studentId)
+           ->get()
+           ->keyBy(function ($item) {
+               return $item->course_code . '-' . $item->semester_id;
+        });
+       return view('advisor.student-academic-result', compact('semesterSchedules', 'student', 'academicResults'));
    }
-   
+
 
     private function organizeAcademicResults($student)
     {
@@ -98,8 +105,8 @@ class AdvisorController extends Controller
     private function getSemesterSchedules(Student $student)
     {
         return $student->courseSchedules()
-            ->with(['course', 'academicResults']) 
-            ->where('student_id', $student->id) 
+            ->with(['course', 'academicResults'])
+            ->where('student_id', $student->id)
             ->get()
             ->groupBy('semester_id');
     }
