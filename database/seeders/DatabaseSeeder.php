@@ -22,7 +22,10 @@ class DatabaseSeeder extends Seeder
             AppointmentSeeder::class,
             CourseScheduleSeeder::class,
             AcademicResultSeeder::class,
+<<<<<<< Updated upstream
             AppointmentSeeder::class,
+=======
+>>>>>>> Stashed changes
         ]);
     }
 }
