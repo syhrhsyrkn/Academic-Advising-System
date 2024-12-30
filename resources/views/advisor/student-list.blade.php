@@ -18,7 +18,7 @@
     </form>
 
     <!-- Student Table -->
-    <table cellpadding="10" cellspacing="0">
+    <table cellpadding="10" cellspacing="0" class="table table-bordered">
         <thead>
             <tr>
                 <th>#</th>
