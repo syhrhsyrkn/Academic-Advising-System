@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>KICT Dashboard</title>
-    <link rel="shortcut icon" href="{{asset('assets/img/favicon.png')}}">
+    <title>i-Plan</title>
+    <link rel="shortcut icon" href="{{asset('assets/img/logo-small.png')}}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap"rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/feather/feather.css') }}">
@@ -236,16 +236,18 @@
                                 </select>
                             </div>
 
-                            <!-- Specialisation -->
-                            <div class="form-group mb-3">
-                                <label for="specialisation">Specialisation</label>
-                                <input 
-                                    type="text" 
-                                    name="specialisation" 
-                                    id="specialisation" 
-                                    class="form-control" 
-                                    value="{{ old('specialisation', $profile->specialisation ?? '') }}">
-                            </div>
+                        <!-- Specialisation -->
+                        <div class="form-group mb-3">
+                            <label for="specialisation">Specialisation</label>
+                            <select name="specialisation" id="specialisation" class="form-control">
+                                <option value="-">-</option>
+                                <option value="Cybersecurity" {{ old('specialisation', $profile->specialisation ?? '') == 'Cybersecurity' ? 'selected' : '' }}>Cybersecurity</option>
+                                <option value="Cloud Computing and System Paradigm" {{ old('specialisation', $profile->specialisation ?? '') == 'Cloud Computing and System Paradigm' ? 'selected' : '' }}>Cloud Computing and System Paradigm</option>
+                                <option value="Innovative Digital Experience (IDEx)" {{ old('specialisation', $profile->specialisation ?? '') == 'Innovative Digital Experience (IDEx)' ? 'selected' : '' }}>Innovative Digital Experience (IDEx)</option>
+                                <option value="Data Analytics" {{ old('specialisation', $profile->specialisation ?? '') == 'Data Analytics' ? 'selected' : '' }}>Data Analytics</option>
+                                <option value="Digital Transformation" {{ old('specialisation', $profile->specialisation ?? '') == 'Digital Transformation' ? 'selected' : '' }}>Digital Transformation</option>
+                            </select>
+                        </div>
 
                         @elseif (auth()->user()->hasRole(['admin', 'advisor']))
                             <!-- Staff ID -->

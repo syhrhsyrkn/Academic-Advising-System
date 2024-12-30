@@ -43,7 +43,7 @@ class ProfileController extends Controller
 
         if ($user->hasRole('student')) {
             $rules['matric_no'] = 'required|string|max:50';
-            $rules['specialisation'] = 'nullable|string|max:255';
+            $rules['specialisation'] ='required|in:Cybersecurity,Cloud Computing and System Paradigm,Innovative Digital Experience (IDEx),Data Analytics,Digital Transformation,-';
             $rules['semester'] = 'required|integer|min:1|max:3';
             $rules['year'] = 'required|integer|min:1|max:4';
         } else {

@@ -8,7 +8,6 @@ use App\Models\Appointment;
 use App\Models\Student;
 use App\Models\StudentCourseSchedule;
 use App\Models\AcademicResult;
-
 use Illuminate\Http\Request;
 
 class AdvisorController extends Controller
