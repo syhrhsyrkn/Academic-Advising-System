@@ -23,9 +23,9 @@
             <tr>
                 <th>#</th>
                 <th>Name</th>
-                <th>Email</th>
                 <th>Matric No</th>
                 <th>Contact No</th>
+                <th>Email</th>
                 <th>Year</th>
                 <th>Semester</th>
                 <th class="text-center">Actions</th>
@@ -36,9 +36,9 @@
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $student->name }}</td>
-                    <td>{{ $student->email }}</td>
                     <td class="text-center">{{ $student->student->matric_no ?? 'N/A' }}</td>
                     <td class="text-center">{{ $student->student->contact_no ?? 'N/A' }}</td>
+                    <td>{{ $student->email }}</td>
                     <td class="text-center">{{ $student->student->year ?? 'N/A' }}</td>
                     <td class="text-center">{{ $student->student->semester ?? 'N/A' }}</td>
                     <td>

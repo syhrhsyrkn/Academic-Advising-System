@@ -27,7 +27,7 @@
                     <div class="login-right-wrap">
                         <h1>Welcome to i-Plan</h1>
                         <p class="account-subtitle">Need an account? <a href="register">Sign Up</a></p>
-                        <h2>Sign in</h2>
+                        <h1>Log in</h1><br>
 
                         @if (session('status'))
                             <div class="alert alert-success mb-4">
@@ -37,7 +37,8 @@
 
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
-
+                            
+                            <br>
                             <div class="form-group">
                                 <label>Email <span class="login-danger">*</span></label>
                                 <input id="email" class="form-control" type="email" name="email" :value="old('email')" required autofocus autocomplete="username">
@@ -50,7 +51,7 @@
                                 <span class="profile-views feather-eye toggle-password"></span>
                             </div>
 
-                            <div class="forgotpass">
+                            <!-- <div class="forgotpass">
                                 <div class="remember-me">
                                     <label class="custom_check mr-2 mb-0 d-inline-flex remember-me"> Remember me
                                         <input type="checkbox" id="remember_me" name="remember">
@@ -60,7 +61,7 @@
                                 @if (Route::has('password.request'))
                                     <a href="{{ route('password.request') }}">Forgot Password?</a>
                                 @endif
-                            </div>
+                            </div> -->
 
                             <div class="form-group">
                                 <button class="btn btn-primary btn-block" type="submit">Log in</button>

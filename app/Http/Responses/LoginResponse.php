@@ -17,7 +17,7 @@ class LoginResponse implements LoginResponseContract
             return redirect('/advisor/student-list');
         } elseif ($user->hasRole('student')) {
             if ($user->student && $user->student->student_id) {
-                return redirect('/student-dashboard');
+                return redirect('/course');
             } else {
                 return redirect('/profile/edit'); 
             }
