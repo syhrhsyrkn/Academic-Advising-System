@@ -21,7 +21,7 @@
         <div class="container">
             <div class="loginbox">
                 <div class="login-left">
-                    <img class="img-fluid" src="assets/img/login.png" alt="Logo">
+                    <img class="img-fluid" src="assets/img/login.jpg" alt="Logo" style="width: 100%; height: auto; object-fit: cover; border-radius: inherit;">
                 </div>
                 <div class="login-right">
                     <div class="login-right-wrap">
@@ -78,5 +78,6 @@
 <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/feather.min.js"></script>
 <script src="assets/js/script.js"></script>
+
 </body>
 </html>

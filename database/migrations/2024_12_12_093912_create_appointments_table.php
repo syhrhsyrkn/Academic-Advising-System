@@ -10,11 +10,10 @@ class CreateAppointmentsTable extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');          
             $table->string('advising_reason');
             $table->text('details'); 
-            $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])
-                  ->default('pending');  
+            $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
             $table->dateTime('appointment_date');            
             $table->timestamps(); 
         });

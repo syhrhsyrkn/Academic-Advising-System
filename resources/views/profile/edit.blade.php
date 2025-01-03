@@ -123,7 +123,6 @@
                     <li class="submenu">
                         <a href="#"><i class="fas fa-graduation-cap"></i> <span> Course Schedule</span> <span class="menu-arrow"></span></a>
                         <ul>
-                            <li><a href="{{ route('student_course_schedule.index', ['studentId' => auth()->user()->student->student_id]) }}">Course Schedule View</a></li>
                         </ul>
                     </li>
                     @endrole
@@ -131,7 +130,6 @@
                     <li class="submenu">
                         <a href="#"><i class="fas fa-graduation-cap"></i> <span>Academic Result</span> <span class="menu-arrow"></span></a>
                         <ul>
-                            <li><a href="{{ route('academic-result.index', ['studentId' => auth()->user()->student->student_id]) }}">Academic Result View</a></li>
                         </ul>
                     </li>
                     @endrole
@@ -324,9 +322,6 @@
 </body>
 
 <style>
-    .container {
-        padding-top: 80px;
-    }
 
     .sidebar {
         display: none;

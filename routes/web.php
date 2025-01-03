@@ -78,12 +78,13 @@ Route::middleware([
     Route::get('/advisor/student-schedule/{student}', [AdvisorController::class, 'viewStudentSchedule'])->name('advisor.student-schedule')->middleware('role:advisor');
     Route::get('advisor/student/{studentId}/academic-results', [AdvisorController::class, 'viewStudentAcademicResult'])->name('advisor.student-academic-result')->middleware('role:advisor');
     Route::get('/appointments/latest/{student}', [AppointmentController::class, 'latestAppointmentByStudent'])->name('appointments.latest')->middleware('role:advisor'); 
-    //appointment
+    // Appointment Routes
     Route::middleware(['auth'])->group(function () {
         // Advisor Routes
         Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index')->middleware('role:advisor');
         Route::get('/appointments/{appointment}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit')->middleware('role:advisor');
         Route::put('/appointments/{appointment}', [AppointmentController::class, 'update'])->name('appointments.update')->middleware('role:advisor');
+        
         // Student Routes
         Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('role:student');
         Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('role:student');

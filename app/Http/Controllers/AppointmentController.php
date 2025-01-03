@@ -61,7 +61,8 @@ class AppointmentController extends Controller
 
     public function show($id)
     {
-        $appointment = Appointment::findOrFail($id); // Find appointment by ID
+        $appointment = Appointment::findOrFail($id); 
+
         return view('appointments.show', compact('appointment'));
     }
 
@@ -72,21 +73,22 @@ class AppointmentController extends Controller
         if (!auth()->user()->hasRole('advisor')) {
             abort(403, 'Unauthorized action.');
         }
-
+    
         return view('appointments.edit', compact('appointment'));
     }
 
     public function update(Request $request, $id)
     {
+
+        $appointment = Appointment::findOrFail($id);
+
         $request->validate([
             'advising_reason' => 'required|string|max:255',
             'details' => 'required|string',
             'appointment_date' => 'required|date|after:today',
             'status' => 'required|in:pending,confirmed,completed,cancelled',
         ]);
-
-        $appointment = Appointment::findOrFail($id);
-
+    
         $appointment->advising_reason = $request->advising_reason;
         $appointment->details = $request->details;
         $appointment->appointment_date = $request->appointment_date;

@@ -18,7 +18,7 @@ class AdvisorController extends Controller
         $years = range(1, 4);
 
         $students = User::role('student')
-            ->with(['student', 'appointments' => function ($query) {
+            ->with(['student', 'appointments' => function ($query) {                
                 $query->latest();
             }])
             ->when($request->filled('year'), function ($query) use ($request) {
