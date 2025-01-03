@@ -15,7 +15,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('course.update', $course->id) }}" method="POST">
+                    <form action="{{ route('course.update', $course->course_code) }}" method="POST">
                         @csrf
                         @method('PUT')
 
@@ -44,7 +44,7 @@
                         <!-- Credit Hour -->
                         <div class="form-group">
                             <label for="credit_hour">Credit Hour</label>
-                            <input type="number" name="credit_hour" class="form-control @error('credit_hour') is-invalid @enderror" value="{{ old('credit_hour', $course->credit_hour) }}" min="1" required>
+                            <input type="decimal" name="credit_hour" class="form-control @error('credit_hour') is-invalid @enderror" value="{{ old('credit_hour', $course->credit_hour) }}" max="20" required>
                             @error('credit_hour')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -56,14 +56,13 @@
                         <div class="form-group">
                             <label for="classification">Classification</label>
                             <select name="classification" class="form-select" required>
-                                <option value="" disabled selected>Select Classification</option>
-                                <option value="URC" {{ old('classification', $course->classification ?? '') == 'URC' ? 'selected' : '' }}>University Required Courses (URC)</option>
-                                <option value="CCC" {{ old('classification', $course->classification ?? '') == 'CCC' ? 'selected' : '' }}>Core Computing Courses (CCC)</option>
-                                <option value="DCC" {{ old('classification', $course->classification ?? '') == 'DCC' ? 'selected' : '' }}>Discipline Core Courses (DCC)</option>
-                                <option value="Field Electives" {{ old('classification', $course->classification ?? '') == 'Field Electives' ? 'selected' : '' }}>Field Electives</option>
-                                <option value="Free Electives" {{ old('classification', $course->classification ?? '') == 'Free Electives' ? 'selected' : '' }}>Free Electives</option>
-                                <option value="FYP" {{ old('classification', $course->classification ?? '') == 'FYP' ? 'selected' : '' }}>Final Year Project (FYP)</option>
-                                <option value="IAP" {{ old('classification', $course->classification ?? '') == 'IAP' ? 'selected' : '' }}>Industrial Attachment (IAP)</option>
+                                <option value="" disabled>Select Classification</option>
+                                <option value="URC" {{ old('classification', $course->classification) == 'URC' ? 'selected' : '' }}>University Required Courses (URC)</option>
+                                <option value="CCC" {{ old('classification', $course->classification) == 'CCC' ? 'selected' : '' }}>Core Computing Courses (CCC)</option>
+                                <option value="DCC" {{ old('classification', $course->classification) == 'DCC' ? 'selected' : '' }}>Discipline Core Courses (DCC)</option>
+                                <option value="Electives" {{ old('classification', $course->classification) == 'Electives' ? 'selected' : '' }}>Electives</option>
+                                <option value="FYP" {{ old('classification', $course->classification) == 'FYP' ? 'selected' : '' }}>Final Year Project (FYP)</option>
+                                <option value="IAP" {{ old('classification', $course->classification) == 'IAP' ? 'selected' : '' }}>Industrial Attachment (IAP)</option>
                             </select>
                             @error('classification')
                                 <span class="invalid-feedback" role="alert">
@@ -71,11 +70,19 @@
                                 </span>
                             @enderror
                         </div>
-                        <!-- Prerequisite -->
+
+                        <!-- Prerequisites -->
                         <div class="form-group">
-                            <label for="prerequisite">Prerequisite</label>
-                            <input type="text" name="prerequisite" class="form-control @error('prerequisite') is-invalid @enderror" value="{{ old('prerequisite', $course->prerequisite) }}">
-                            @error('prerequisite')
+                            <label for="prerequisites">Prerequisites</label>
+                            <select name="prerequisites[]" id="prerequisites" class="form-control" multiple>
+                                @foreach($availableCourses as $availableCourse)
+                                    <option value="{{ $availableCourse->course_code }}" 
+                                        {{ in_array($availableCourse->course_code, old('prerequisites', $course->prerequisites->pluck('prerequisite_code')->toArray() ?? [])) ? 'selected' : '' }}>
+                                        {{ $availableCourse->course_code }} - {{ $availableCourse->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('prerequisites')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>

@@ -13,9 +13,16 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
+            StudentSeeder::class,
+            StaffSeeder::class,
             CourseSeeder::class,
-            ProfileSeeder::class,
+            PrerequisiteSeeder::class,
+            AcademicYearSeeder::class,
+            SemesterSeeder::class,
+            // AppointmentSeeder::class,
+            CourseScheduleSeeder::class,
+            AcademicResultSeeder::class,
+            // AppointmentSeeder::class,
         ]);
-
     }
 }
