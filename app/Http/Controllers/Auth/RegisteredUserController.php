@@ -28,10 +28,8 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        // Assign the role
         $user->assignRole('student');
 
-        // Dispatch Registered event
         event(new Registered($user));
 
         return $user;
@@ -46,6 +44,6 @@ class RegisteredUserController extends Controller
     {
         $this->create($request->all());
 
-        return redirect()->route('login')->with('status', 'Registration successful! Please login.');
+        return redirect()->route('profile/edit')->with('status', 'Registration successful! Please login.');
     }
 }

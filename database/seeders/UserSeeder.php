@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
         $admin = User::firstOrCreate(
             ['email' => 'admin@gmail.com'],
             [
-                'name' => 'Admin',
+                'name' => 'Admin A',
                 'password' => Hash::make('12345678'),
             ]
         );
@@ -24,7 +24,16 @@ class UserSeeder extends Seeder
         $student = User::firstOrCreate(
             ['email' => 'student@gmail.com'],
             [
-                'name' => 'Student',
+                'name' => 'Student A',
+                'password' => Hash::make('12345678'),
+            ]
+        );
+        $student->assignRole('student');
+
+        $student = User::firstOrCreate(
+            ['email' => 'student2@gmail.com'],
+            [
+                'name' => 'Student B',
                 'password' => Hash::make('12345678'),
             ]
         );
@@ -34,7 +43,7 @@ class UserSeeder extends Seeder
         $advisor = User::firstOrCreate(
             ['email' => 'advisor@gmail.com'],
             [
-                'name' => 'Advisor',
+                'name' => 'Advisor A',
                 'password' => Hash::make('12345678'),
             ]
         );

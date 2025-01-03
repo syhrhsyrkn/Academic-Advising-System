@@ -35,8 +35,18 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function profile()
+    public function student()
     {
-        return $this->hasOne(Profile::class);
+        return $this->hasOne(Student::class);
+    }
+
+    public function staff()
+    {
+        return $this->hasOne(Staff::class);
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
     }
 }

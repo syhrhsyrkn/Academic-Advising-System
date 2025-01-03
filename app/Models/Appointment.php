@@ -5,23 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Profile extends Model
+class Appointment extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'full_name',
-        'email',
-        'contact_number',
-        'kulliyyah',
-        'department',
-        'specialisation',
-        'matric_no',
-        'year',
-        'semester',
-        'staff_id',
+        'advising_reason',
+        'details', 
+        'status',
+        'appointment_date',
     ];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
 
     public function user()
     {

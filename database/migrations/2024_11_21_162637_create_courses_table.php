@@ -11,11 +11,9 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->string('course_code')->primary();
             $table->string('name');
-            $table->unsignedTinyInteger('credit_hour');
-            $table->string('prerequisite')->nullable();
-            $table->enum('classification', [ 'URC' , 'CCC', 'DCC' , 'Field Electives', 'Free Electives', 'FYP' , 'IAP',]);
+            $table->unsignedDecimal('credit_hour', 2, 1); 
+            $table->enum('classification', ['URC', 'CCC', 'DCC', 'Electives', 'FYP', 'IAP']);
             $table->text('description')->nullable();
-            $table->timestamps();
         });
     }
 
