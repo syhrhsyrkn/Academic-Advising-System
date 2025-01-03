@@ -16,10 +16,6 @@
                     @endif
 
                     @role('admin')
-                        <a href="{{ route('course.create') }}" class="btn btn-primary mb-3">Add New Course</a>
-                    @endrole
-
-                    @role('admin')
                     <a href="{{ route('course.create') }}" class="btn btn-primary mb-3">Add New Course</a>
                     @endrole
 
@@ -89,9 +85,6 @@
                                             </form>
                                         @endrole
 
-                                        @role('advisor|student')
-                                            <a href="{{ route('course.show', $course) }}" class="btn btn-info btn-sm">View</a>
-                                        @endrole
                                     </td>
                                 </tr>
                             @empty
