@@ -21,7 +21,7 @@
         <div class="container">
             <div class="loginbox">
                 <div class="login-left">
-                    <img class="img-fluid" src="assets/img/login.jpg" alt="Logo" style="width: 100%; height: auto; object-fit: cover; border-radius: inherit;">
+                <img class="img-fluid" src="assets/img/login.jpg" alt="Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 20px 20px 8px;">                
                 </div>
                 <div class="login-right">
                     <div class="login-right-wrap">
