@@ -91,7 +91,7 @@
 
                         <!-- Description -->
                         <div class="form-group">
-                            <label for="description">Description</label>
+                            <label for="description">Synopsis</label>
                             <textarea name="description" class="form-control @error('description') is-invalid @enderror" rows="4">{{ old('description', $course->description) }}</textarea>
                             @error('description')
                                 <span class="invalid-feedback" role="alert">

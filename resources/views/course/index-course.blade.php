@@ -49,7 +49,7 @@
                                 </th>
 
                                 <th>Prerequisite</th>
-                                <th>Description</th>
+                                <th>Synopsis</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>

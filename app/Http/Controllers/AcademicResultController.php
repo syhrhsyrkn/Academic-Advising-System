@@ -207,9 +207,6 @@ class AcademicResultController extends Controller
 
     public function update(Request $request, $studentId)
     {
-        // Debugging step to check the semester_id value (you can remove this later)
-        // dd($request->input('semester_id'));
-        // dd($request->all());
 
         $validated = $request->validate([
             'grades' => 'required|array',
@@ -220,13 +217,10 @@ class AcademicResultController extends Controller
 
 
         foreach ($request->input('grades') as $courseCode => $grade) {
-            // Retrieve semester_id for the course
             $semesterId = $request->input("semester_id.$courseCode");
             $point = AcademicResult::getGradePoint($grade);
-            // dd($point, $grade, $courseCode, $semesterId);
 
 
-            // Check if an academic result exists
             $academicResult = AcademicResult::where('student_id', $studentId)
                 ->where('course_code', $courseCode)
                 ->where('semester_id', $semesterId)
@@ -240,7 +234,6 @@ class AcademicResultController extends Controller
                 $academicResult->point = $point;
                 $academicResult->save();
             } else {
-                // Create a new result
                 AcademicResult::create([
                     'student_id' => $studentId,
                     'course_code' => $courseCode,
@@ -251,8 +244,6 @@ class AcademicResultController extends Controller
             }
         }
 
-
-        // Redirect to the academic results page with a success message
         return redirect()->route('academic-result.index', ['studentId' => $studentId])
             ->with('success', 'Results updated successfully.');
     }

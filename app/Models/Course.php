@@ -11,6 +11,7 @@ class Course extends Model
 
     protected $primaryKey = 'course_code'; 
     public $incrementing = false; 
+    public $timestamps = false;
     protected $keyType = 'string'; 
 
     protected $fillable = [
