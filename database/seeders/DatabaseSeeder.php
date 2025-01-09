@@ -19,10 +19,8 @@ class DatabaseSeeder extends Seeder
             PrerequisiteSeeder::class,
             AcademicYearSeeder::class,
             SemesterSeeder::class,
-            // AppointmentSeeder::class,
             CourseScheduleSeeder::class,
             AcademicResultSeeder::class,
-            // AppointmentSeeder::class,
         ]);
     }
 }

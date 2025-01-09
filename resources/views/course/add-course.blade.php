@@ -99,7 +99,7 @@
 
                         <!-- Description -->
                         <div class="form-group">
-                            <label for="description">Description</label>
+                            <label for="description">Synopsis</label>
                             <textarea name="description" class="form-control @error('description') is-invalid @enderror" rows="4">{{ old('description') }}</textarea>
                             @error('description')
                                 <span class="invalid-feedback" role="alert">
@@ -118,9 +118,9 @@
 </div>
 @endsection
 
-<!-- Bootstrap JS and dependencies (Optional) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

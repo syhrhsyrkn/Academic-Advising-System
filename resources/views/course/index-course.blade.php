@@ -15,10 +15,33 @@
                         </div>
                     @endif
 
+                    <form method="GET" action="{{ route('course.index') }}" class="mb-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search" placeholder="Search by course name or course code" value="{{ $search }}">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </form>
+
+                    @if($search)
+                        <a href="{{ route('course.index') }}" class="btn btn-secondary mb-3">Clear Search</a>
+                    @endif
+
                     @role('admin')
                     <a href="{{ route('course.create') }}" class="btn btn-primary mb-3">Add New Course</a>
                     @endrole
 
+                    <div class="card mb-3">
+                        <div class="card-body" style="background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 5px;">
+                            <strong>Classification Details:</strong><br>
+                            <strong>URC:</strong> University Required Courses &nbsp; |
+                            <strong>CCC:</strong> Core Computing Courses &nbsp; |
+                            <strong>DCC:</strong> Discipline Core Courses &nbsp; |
+                            <strong>Electives:</strong> According to specialisation &nbsp; |
+                            <strong>FYP:</strong> Final Year Project &nbsp; | 
+                            <strong>IAP:</strong> Industrial Attachment Program
+                        </div>
+                    </div>
+                    
                     <table class="table table-striped">
                         <thead>
                             <tr>
